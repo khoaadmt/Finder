@@ -1,0 +1,61 @@
+.react-switch {
+    position: relative;
+    display: inline-block;
+    text-align: left;
+    opacity: 1;
+    direction: ltr;
+    border-radius: 10px;
+    transition: opacity 0.25s ease 0s;
+    touch-action: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    user-select: none;
+}
+.react-switch input {
+    border: 0px;
+    clip: rect(0px, 0px, 0px, 0px);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0px;
+    position: absolute;
+    width: 1px;
+}
+.react-switch-bg {
+    height: 20px;
+    width: 40px;
+    margin: 0;
+    position: relative;
+    background-color: rgb(229, 231, 235);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.react-switch-handle {
+    height: 20px;
+    width: 20px;
+    background-color: rgb(255, 255, 255);
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    transform: translateX(0);
+    top: 0;
+    outline: none;
+    border: none;
+    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.15s ease;
+}
+.btn-active {
+    color: white;
+    background-color: #f5002f;
+    border-color: #f5002f;
+}
+.date-picker {
+    padding-top: 4px;
+    position: absolute;
+}
+.time-picker {
+    width: 30px !important;
+    padding-top: 4px;
+    position: absolute;
+}
