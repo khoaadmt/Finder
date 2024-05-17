@@ -7,6 +7,7 @@ import { Home_Page } from "./components/HomePage/Home_Page";
 import { Not_found_page } from "./components/NotFound/Not_found_page";
 import { Facilities_page_index } from "./components/SearchPage/facilities_page/Facilities_page_index";
 import { Sessions_page_index } from "./components/SearchPage/sessions_page/Sessions_page_index";
+import { Login_page } from "./components/Auth/LoginPage/Login_page";
 
 const App: React.FC = () => {
     return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
                     <Route path="facilities" element={<Facilities_page_index />} />
                     <Route path="sessions" element={<Sessions_page_index />} />
                 </Route>
+                <Route path="login" element={<Login_page />} />
                 <Route path="*" element={<Not_found_page />} />
             </Routes>
         </div>

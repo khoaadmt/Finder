@@ -49,9 +49,6 @@ export const Header_options: React.FC = () => {
                 <Option_button value="Khoảng cách" items_value={Distance_value} />
                 <Option_button value="Trình độ" items_value={Level_value} />
                 <div
-                    onBlur={() => {
-                        setIsShowDatePickerDialog(false);
-                    }}
                     className="">
                     <div>
                         <button
@@ -68,9 +65,7 @@ export const Header_options: React.FC = () => {
                 </div>
 
                 <div
-                    onBlur={() => {
-                        setIsShowTimePickerDialog(false);
-                    }}
+                   
                     className="">
                     <div>
                         <button

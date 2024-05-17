@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Search_page_card } from "../card/Search_page_card";
 import { ResponseLocation } from "../../../interface";
 import { Time_picker_dialog } from "../header/Time_picker_dialog";
+import { Button } from "antd";
+import axios from "axios";
 
 export const Sessions_page_index = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -40,9 +42,12 @@ export const Sessions_page_index = () => {
     //         }
     //     });
     // }, [latitude, longitude]);
-
+    
+        const handleClick = () => {
+          window.open("http://localhost:5000/auth/google/login", "_self");
+        };
     return (
-        <>page</>
+        <> <Button onClick={handleClick} > Login</Button>  </>
         // <div className="min-h-screen flex gap-4">
         //     <div className="relative w-full">
         //         <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh-192px)]">
