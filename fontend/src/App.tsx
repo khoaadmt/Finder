@@ -8,6 +8,7 @@ import { Not_found_page } from "./components/NotFound/Not_found_page";
 import { Facilities_page_index } from "./components/SearchPage/facilities_page/Facilities_page_index";
 import { Sessions_page_index } from "./components/SearchPage/sessions_page/Sessions_page_index";
 import { Login_page } from "./components/Auth/LoginPage/Login_page";
+import { GoogleRedirect } from "./components/Auth/GoogleRedirect/GoogleRedirect";
 
 const App: React.FC = () => {
     return (
@@ -19,6 +20,9 @@ const App: React.FC = () => {
                     <Route path="sessions" element={<Sessions_page_index />} />
                 </Route>
                 <Route path="login" element={<Login_page />} />
+                <Route path="auth">
+                    <Route path="google/redirect" element={<GoogleRedirect />} />
+                </Route>
                 <Route path="*" element={<Not_found_page />} />
             </Routes>
         </div>

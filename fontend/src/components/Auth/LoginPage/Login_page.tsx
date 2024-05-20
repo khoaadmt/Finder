@@ -2,28 +2,32 @@ import React, { useEffect, useState } from "react";
 import "./login_page.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { passwordSchema, usernameSchema } from "../validationSchema";
+import { loginUser, registerUser } from "../../redux/apiRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../interface";
 var facebook_logo = require("../../../assets/images/facebook-logo.png");
 var google_logo = require("../../../assets/images/google-logo.png");
 
 export const Login_page = () => {
     const [isSwitch, setIsSwitch] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.auth.login.currentUser);
+    const isFetching = useSelector((state: RootState) => state.auth.login.isFetching);
+
     const singInForm = useFormik({
         initialValues: {
             username: "",
             password: "",
         },
         validationSchema: Yup.object({
-            username: Yup.string().required("Required").min(4, "Must be 4 characters or more"),
-            password: Yup.string()
-                .required("Required")
-                .matches(
-                    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,14}$/,
-                    "password must be 6 - 14 characters and has numeric characters"
-                ),
+            username: usernameSchema,
+            password: passwordSchema,
         }),
-        onSubmit: (values) => {
-            console.log(values);
+        onSubmit: async (values) => {
+            loginUser(values, dispatch, navigate);
         },
     });
 
@@ -35,28 +39,26 @@ export const Login_page = () => {
             confirmPassword: "",
         },
         validationSchema: Yup.object({
-            username: Yup.string().required("Required").min(4, "Must be 4 characters or more"),
+            username: usernameSchema,
             displayName: Yup.string().required("Required").min(4, "Must be 4 characters or more"),
-            password: Yup.string()
-                .required("Required")
-                .matches(
-                    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,14}$/,
-                    "password must be 6 - 14 characters and has numeric characters"
-                ),
+            password: passwordSchema,
             confirmPassword: Yup.string()
                 .required("Required")
                 .oneOf([Yup.ref("password"), ""], "passwords must match"),
         }),
-        onSubmit: (values) => {},
+        onSubmit: async (values) => {
+            await registerUser(values, dispatch, navigate);
+        },
     });
 
     const changeForm = (e: any) => {
         e.preventDefault();
         setIsSwitch(!isSwitch);
     };
-    useEffect(() => {
-        console.log(singInForm.errors.username);
-    }, [singInForm.errors.username]);
+
+    const HandleLoginWithFacebook = () => {
+        window.location.href = "http://localhost:5000/api/auth/facebook/login";
+    };
 
     return (
         <div className="login-page">
@@ -123,7 +125,12 @@ export const Login_page = () => {
                         <p>or use your social account</p>
                         <div className="form__icons">
                             <div className="form__icon">
-                                <img className="poiter" alt="img" src={facebook_logo} />
+                                <img
+                                    onClick={HandleLoginWithFacebook}
+                                    className="poiter"
+                                    alt="img"
+                                    src={facebook_logo}
+                                />
                             </div>
                             <div className="form__icon">
                                 <img className="poiter" alt="img" src={google_logo} />
@@ -153,9 +160,10 @@ export const Login_page = () => {
                         {singInForm.errors.password && (
                             <p className="text-danger">{`*${singInForm.errors.password}`}</p>
                         )}
+                        <p>khoaAa@123</p>
 
                         <button className="form__button button submit" type="submit">
-                            SIGN IN
+                            {isFetching && <i className="fas fa-spinner fa-pulse"></i>} SIGN IN
                         </button>
                     </form>
                 </div>

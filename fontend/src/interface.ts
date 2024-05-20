@@ -37,3 +37,24 @@ export interface ResponseLocation {
         value: number;
     };
 }
+export interface AuthState {
+    login: {
+        currentUser: {
+            id: string;
+            displayName: string;
+            avaUrl: string;
+            access_token: string;
+            refresh_token: string;
+        } | null;
+        isFetching: boolean;
+        error: boolean;
+    };
+    register: {
+        isFetching: false;
+        error: false;
+    };
+    mgs: string;
+}
+export interface RootState {
+    auth: AuthState;
+}
