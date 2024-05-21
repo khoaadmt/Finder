@@ -42,8 +42,11 @@ export class AuthController {
 
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req): Promise<any> {
-    return await this.authService.loginWithFacebook(req.user);
+  async facebookLoginRedirect(@Req() req, @Res() res): Promise<any> {
+    const token = await this.authService.loginWithFacebook(req.user);
+    res.redirect(
+      `http://localhost:3000/auth/social/redirect?access_token=${token.access_token}&refresh_token=${token.refresh_token}`,
+    );
   }
 
   @Get('google/login')
@@ -56,9 +59,8 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async GoogleRedirect(@Req() req, @Res() res) {
     const token = await this.authService.loginWithGoogle(req.user);
-    console.log(token);
     res.redirect(
-      `http://localhost:3000/auth/google/redirect?access_token=${token.access_token}&refresh_token=${token.refresh_token}`,
+      `http://localhost:3000/auth/social/redirect?access_token=${token.access_token}&refresh_token=${token.refresh_token}`,
     );
   }
 

@@ -59,6 +59,9 @@ export const Login_page = () => {
     const HandleLoginWithFacebook = () => {
         window.location.href = "http://localhost:5000/api/auth/facebook/login";
     };
+    const HandleLoginWithGoogle = () => {
+        window.location.href = "http://localhost:5000/api/auth/google/login";
+    };
 
     return (
         <div className="login-page">
@@ -133,7 +136,7 @@ export const Login_page = () => {
                                 />
                             </div>
                             <div className="form__icon">
-                                <img className="poiter" alt="img" src={google_logo} />
+                                <img onClick={HandleLoginWithGoogle} className="poiter" alt="img" src={google_logo} />
                             </div>
                         </div>
 

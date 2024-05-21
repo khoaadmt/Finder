@@ -40,7 +40,6 @@ export interface ResponseLocation {
 export interface AuthState {
     login: {
         currentUser: {
-            id: string;
             displayName: string;
             avaUrl: string;
             access_token: string;
@@ -57,4 +56,8 @@ export interface AuthState {
 }
 export interface RootState {
     auth: AuthState;
+}
+export interface Token {
+    access_token: string;
+    refresh_token: string;
 }
