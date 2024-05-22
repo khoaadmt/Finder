@@ -3,6 +3,9 @@ import { Header_options } from "./Header_options";
 import { Input_Search } from "../input-search/Input_Search";
 import { useSearchParams } from "react-router-dom";
 import { Switch } from "antd";
+import useSelection from "antd/es/table/hooks/useSelection";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../interface";
 interface Props {
     hasOptions: boolean;
 }
@@ -11,6 +14,8 @@ export const Search_Page_header: React.FC<Props> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = searchParams.get("location");
     const type = searchParams.get("type");
+    const user = useSelector((state: RootState) => state.auth.login.currentUser);
+
     return (
         <header className="sticky top-0 z-10 bg-white shadow-[rgba(0,0,0,0.1)_0px_10px_20px_-8px] pt-2">
             <nav className="sticky top-0 z-10 w-full bg-white py-3 sm:py-4">
@@ -42,7 +47,7 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                                 <div className="flex flex-row items-center gap-3">
                                     <button className="p-1 sm:p-2 md:py-2 md:pl-4 md:pr-3 border border-neutral-200 flex flex-row items-center gap-2 rounded-full cursor-pointer hover:shadow-md transition">
                                         <div className="font-semibold hidden lg:block whitespace-nowrap truncate">
-                                            tran khoa
+                                            {user?.displayName}
                                         </div>
                                         <div className="flex-shrink-0">
                                             <img

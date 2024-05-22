@@ -1,0 +1,56 @@
+@media (max-width: 1400px) {
+    .create-post-form {
+        transform: scale(0.9);
+    }
+}
+.border-2 {
+    border-style: solid;
+    border-color: #e5e7eb !important;
+}
+.input-post-description {
+    height: 100px;
+}
+.input-post {
+    height: 68px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.input-post .ant-select-selector {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 450;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+
+.tag-post {
+    width: 60px;
+    height: 35px;
+    margin-left: 15px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.agreed-checkbox-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.agreed-checkbox {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+}
+.agreed-checkbox:hover {
+    border-color: blue;
+}

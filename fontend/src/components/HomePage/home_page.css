@@ -1,8 +1,35 @@
 .home-page-container {
-    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url("../../assets//images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 15%;
+    flex-direction: column;
+}
+.input-search-home-page {
+    margin-top: -50px;
+}
+.title-container {
+    margin-top: -120px;
+    padding-bottom: 80px;
+}
+.title-home-page {
+    font-size: 45px;
+    font-family: "Kanit", sans-serif;
+    font-weight: 900;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 2px;
+}
+.description-home-page {
+    font-size: 20px;
+    font-style: italic;
+    font-family: "Kanit", sans-serif;
+    font-weight: 200;
+    color: #fff;
+    text-align: center;
 }

@@ -4,7 +4,6 @@ import { ResponseLocation } from "../../../interface";
 import { Time_picker_dialog } from "../header/Time_picker_dialog";
 import { Button } from "antd";
 import axios from "axios";
-import { wait } from "@testing-library/user-event/dist/utils";
 
 export const Sessions_page_index = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -44,19 +43,8 @@ export const Sessions_page_index = () => {
     //     });
     // }, [latitude, longitude]);
 
-    const handleClick = async () => {
-        //window.open("http://localhost:5000/auth/google/login", "_self");
-        const res = await axios.post("api/auth/login", {
-            email: "khoaadmt@gmail.com",
-            password: "khoaAa@123",
-        });
-        console.log(res);
-    };
     return (
-        <>
-            {" "}
-            <Button onClick={handleClick}> Login</Button>{" "}
-        </>
+        <></>
         // <div className="min-h-screen flex gap-4">
         //     <div className="relative w-full">
         //         <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh-192px)]">

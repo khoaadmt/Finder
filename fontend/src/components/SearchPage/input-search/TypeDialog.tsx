@@ -12,14 +12,14 @@ const TypeDialog: React.FC<Props> = (props) => {
     };
 
     return (
-        <div className="shadow-md menu rounded-3xl w-full bg-white text-sm z-10 left-0 top-3 px-4 py-6 sm:px-6">
-            <div className="mb-[19px]">
-                <strong className="text-black-ish-200 text-[16px]">Loại</strong>
+        <div className="shadow-md menu rounded-3xl w-full bg-white text-sm z-10 left-0 top-3 px-4 py-4 sm:px-6">
+            <div className="mb-[10px]">
+                <strong className="text-black-ish-200 text-[14px]">Loại</strong>
             </div>
             <div className="space-y-[14px]">
                 <button
                     onMouseDown={() => handleMouseDown("Giao lưu")}
-                    className="menu-btn p-2 py-3 sm:p-4 sm:pt-5 border w-full rounded-2xl ">
+                    className="menu-btn p-2 py-2 sm:p-2 sm:pt-5 border w-full rounded-2xl ">
                     <div className="sm:flex space-y-2 sm:space-y-0">
                         <div className="px-[10px]">
                             <svg
@@ -47,14 +47,14 @@ const TypeDialog: React.FC<Props> = (props) => {
                             </svg>
                         </div>
                         <div className="text-left px-[10px] text-black-ish-200">
-                            <p className="pb-[5px] text-[16px] font-medium">Giao lưu</p>
-                            <p className="font-semibold">Tìm ca giao lưu (vãng lai) cầu lông gần bạn</p>
+                            <p className="pb-[5px] text-[14px] font-medium">Giao lưu</p>
+                            <p className="font-semibold text-[12px]">Tìm ca giao lưu (vãng lai) cầu lông gần bạn</p>
                         </div>
                     </div>
                 </button>
                 <button
                     onMouseDown={() => handleMouseDown("Sân đấu")}
-                    className="menu-btn p-2 py-3 sm:p-4 sm:pt-5 border w-full rounded-2xl ">
+                    className="menu-btn p-2 py-3 sm:p-2 sm:pt-5 border w-full rounded-2xl ">
                     <div className="sm:flex space-y-2 sm:space-y-0">
                         <div className="px-[10px]">
                             <svg
@@ -70,8 +70,8 @@ const TypeDialog: React.FC<Props> = (props) => {
                             </svg>
                         </div>
                         <div className="text-left px-[10px] text-black-ish-200">
-                            <p className="pb-[5px] text-[16px] font-medium">Sân đấu</p>
-                            <p className="font-semibold">Tìm sân cầu lông gần bạn</p>
+                            <p className="pb-[5px] text-[14px] font-medium">Sân đấu</p>
+                            <p className="font-semibold text-[12px]">Tìm sân cầu lông gần bạn</p>
                         </div>
                     </div>
                 </button>
