@@ -6,8 +6,13 @@ export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
   @Get('/facilities/countByCity')
-  countLocationsByCity(@Query('city') city){
+  countLocationsByCity(@Query('city') city) {
     return this.locationService.countLocationsByCity(city);
+  }
+
+  @Get('/locations')
+  getLocationOptions() {
+    return this.locationService.getLocationOptions();
   }
 
   @Get('/facilities')
@@ -17,11 +22,13 @@ export class LocationController {
     @Query('latitude') latitude: number,
     @Query('longitude') longitude: number,
   ) {
-   
-    return this.locationService.findByCity(city, pageNumber,latitude, longitude);
+    return this.locationService.findByCity(
+      city,
+      pageNumber,
+      latitude,
+      longitude,
+    );
   }
-
-  
 
   @Get('nearby')
   async getNearbyLocations(

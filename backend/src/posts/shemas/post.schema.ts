@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
-import {now} from "mongoose";
+
 @Schema({ timestamps: true })
 export class Post {
   @Prop()
@@ -10,24 +9,42 @@ export class Post {
   description: string;
 
   @Prop()
-  city: string;
+  memberCount: number;
 
   @Prop()
-  address: string;
+  date: string;
 
   @Prop()
-  img: string;
+  startTime: string;
 
   @Prop()
-  latitude: number;
+  gender: string[];
 
   @Prop()
-  longitude: number;
+  phones: string[];
+
+  @Prop({ default: '' })
+  images: string[];
+
+  @Prop()
+  levelMemberMin: number;
+
+  @Prop()
+  levelMemberMax: number;
+
+  @Prop()
+  priceMin: number;
+
+  @Prop()
+  priceMax: number;
+
+  @Prop()
+  agreement: boolean;
 
   @Prop()
   user_id: string;
 
   @Prop()
-  location_id: string; 
+  location_id: string;
 }
 export const PostSchema = SchemaFactory.createForClass(Post);

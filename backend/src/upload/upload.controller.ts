@@ -3,25 +3,30 @@ import {
   Post,
   UseInterceptors,
   UploadedFiles,
+  Body,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { storageOptions } from 'helpers/config';
+import { PostsService } from 'src/posts/services/posts.service';
 
 @Controller('upload')
 export class UploadController {
+  constructor(private readonly postService: PostsService) {}
+
   @Post('post')
   @UseInterceptors(
     FilesInterceptor('files', 10, { storage: storageOptions('post') }),
   )
-  uploadPostFiles(@UploadedFiles() files: Express.Multer.File[]) {
-    const uploadedFiles = files.map((file) => ({
-      url: `http://localhost:5000/api/uploads/post/${file.filename}`,
-      name: file.filename,
-      status: 'done',
-      uid: file.filename,
-    }));
+  async uploadPostFiles(
+    @Body('postId') postId: string,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    const urlFiles = files.map((file) => {
+      const url = `http://localhost:5000/api/uploads/post/${file.filename}`;
+      return url;
+    });
 
-    return { files: uploadedFiles };
+    return await this.postService.updateImagesOfPost(postId, urlFiles);
   }
 
   @Post('avatar')

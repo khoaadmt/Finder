@@ -61,3 +61,7 @@ export interface Token {
     access_token: string;
     refresh_token: string;
 }
+export interface optional {
+    label: string;
+    value: string;
+}

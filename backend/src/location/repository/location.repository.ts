@@ -6,13 +6,13 @@ require('dotenv').config();
 
 @Injectable()
 export class LocationRepository {
-  private readonly pageLimit = 3
+  private readonly pageLimit = 3;
   constructor(
     @InjectModel(Location.name)
     private LocationModel: Model<Location>,
   ) {}
 
-  async countLocationsByCity(city: string){
+  async countLocationsByCity(city: string) {
     return await this.LocationModel.countDocuments({ city: city });
   }
 
@@ -21,10 +21,10 @@ export class LocationRepository {
   }
 
   async findByCity(city: string, pageNumber: number) {
-
     const locations = await this.LocationModel.find({ city: city })
       .skip((pageNumber - 1) * this.pageLimit)
-      .limit(this.pageLimit).lean();
+      .limit(this.pageLimit)
+      .lean();
     return locations;
   }
 }

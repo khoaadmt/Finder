@@ -1,43 +1,68 @@
-import { TimePicker, Select, DatePicker } from "antd";
+import { TimePicker, Select, DatePicker, UploadFile } from "antd";
 import React, { useEffect, useState } from "react";
 import { CustomDynamicForm } from "./form/CustomDynamicForm";
 import { PicturesWall } from "./PictureWall/PicturesWall";
-import { genderOptions, locationOptions, memberLevel } from "./options";
+import { genderOptions, memberLevel } from "./options";
 import { tagRender } from "./tagRender";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Dayjs } from "dayjs";
 import "./createpost.css";
 import { disabledDate, filterOption } from "./FunctionHandler";
+import axios from "axios";
+import { optional } from "../../interface";
 
 export const CreatePostPage: React.FC = () => {
     const [phones, setPhones] = useState([""]);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [locationOptions, setLocationOptions] = useState();
 
     const createPostForm = useFormik({
         initialValues: {
             title: "",
             description: "",
-            location: "",
             memberCount: "",
             date: "",
             startTime: "",
-            gender: "",
+            gender: 0,
             phones: [""],
             images: "",
-            levelMemberMin: "",
-            levelMemberMax: "",
-            priceMin: "",
-            priceMax: "",
+            levelMemberMin: 0,
+            levelMemberMax: 0,
+            priceMin: 0,
+            priceMax: 0,
             agreement: false,
+            location_id: "",
+            user_id: "user id",
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Required"),
             description: Yup.string().required("Required"),
         }),
-        onSubmit: async (values) => {},
+        onSubmit: async (values) => {
+            const formData = new FormData();
+            fileList.forEach((file) => {
+                formData.append("files", file.originFileObj as File);
+            });
+
+            const resPostId = await axios.post("http://localhost:5000/api/posts", {
+                values,
+            });
+
+            const postId = resPostId.data;
+            console.log("postId :", postId);
+            formData.append("postId", String(postId));
+            console.log("formData :", formData);
+
+            const responseUpload = await axios.post("http://localhost:5000/api/upload/post", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+        },
     });
     const HandleLocationOnChange = (value: string) => {
-        createPostForm.setFieldValue("location", value);
+        createPostForm.setFieldValue("location_id", value);
     };
 
     const handleGenderChange = (value: any) => {
@@ -68,12 +93,23 @@ export const CreatePostPage: React.FC = () => {
         createPostForm.setFieldValue("phones", phones);
     }, [phones]);
 
-    console.log(createPostForm.values);
+    useEffect(() => {
+        const getLocationOptions = async () => {
+            const locations = await axios.get("http://localhost:5000/api/search/locations");
+            return locations;
+        };
+        getLocationOptions().then((res) => {
+            setLocationOptions(res.data);
+        });
+    }, []);
 
+    console.log(createPostForm.values);
     return (
         <div className="create-post-form max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4">
-            <form className="my-4 sm:my-6 rounded-2xl border-2 flex flex-col md:flex-row gap-6 p-4 sm:p-6">
-                <div className="flex-1 flex flex-col gap-4">
+            <form
+                onSubmit={createPostForm.handleSubmit}
+                className="my-4 sm:my-6 rounded-2xl border-2 flex flex-col md:flex-row gap-6 p-4 sm:p-6">
+                <div className="flex-1 flex flex-col gap-4 md:w-3/5">
                     <div className="font-semibold text-lg text-black-ish-200">Thông tin chung</div>
 
                     <div className="w-full relative">
@@ -106,10 +142,11 @@ export const CreatePostPage: React.FC = () => {
                         <Select
                             showSearch
                             className="input-location"
-                            placeholder="Select a person"
+                            placeholder="Tìm kiếm sân đấu"
                             optionFilterProp="children"
                             onChange={HandleLocationOnChange}
                             filterOption={filterOption}
+                            dropdownRender={(menu) => <div className="custom-dropdown">{menu}</div>}
                             options={locationOptions}
                         />
                     </div>
@@ -246,7 +283,7 @@ export const CreatePostPage: React.FC = () => {
                     </div>
                     <div className="font-semibold text-lg text-black-ish-200 mt-2">Hình ảnh mô tả</div>
                     <div className="flex flex-wrap gap-3">
-                        <PicturesWall />
+                        <PicturesWall fileList={fileList} setFileList={setFileList} />
                     </div>
                 </div>
             </form>

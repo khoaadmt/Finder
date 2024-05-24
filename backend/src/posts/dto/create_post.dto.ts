@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString, isNumber } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -7,21 +7,42 @@ export class CreatePostDto {
   @IsString()
   description: string;
 
-  @IsString()
-  city: string;
+  @IsNumber()
+  memberCount: number;
 
   @IsString()
-  address: string;
+  date: string;
 
   @IsString()
-  img: string;
+  startTime: string;
+
+  @IsString()
+  gender: string[];
+
+  @IsString()
+  phones: string[];
+
+  @IsString()
+  images: string[];
 
   @IsNumber()
-  latitude: number;
+  levelMemberMin: number;
 
   @IsNumber()
-  longitude: number;
+  levelMemberMax: number;
 
+  @IsNumber()
+  priceMin: number;
+
+  @IsNumber()
+  priceMax: number;
+
+  @IsBoolean()
+  agreement: boolean;
+
+  @IsString()
   user_id: string;
+
+  @IsString()
   location_id: string;
 }

@@ -15,10 +15,14 @@ const getBase64 = (file: FileType): Promise<string> =>
         reader.onerror = (error) => reject(error);
     });
 
-export const PicturesWall = () => {
+interface Props {
+    fileList: UploadFile<any>[];
+    setFileList: React.Dispatch<React.SetStateAction<UploadFile<any>[]>>;
+}
+export const PicturesWall: React.FC<Props> = (props) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const { fileList, setFileList } = props;
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -88,9 +92,6 @@ export const PicturesWall = () => {
                     src={previewImage}
                 />
             )}
-            <Button type="primary" onClick={handleUpload} disabled={fileList.length === 0} style={{ marginTop: 16 }}>
-                Submit
-            </Button>
         </>
     );
 };

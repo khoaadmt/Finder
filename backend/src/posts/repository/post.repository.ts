@@ -37,11 +37,10 @@ export class PostRepository {
   }
 
   async createPost(createPostDto: CreatePostDto) {
-    const newPost = await this.Post.create(createPostDto);
+    return await this.Post.create(createPostDto);
+  }
 
-    // Tạo TTL index trên trường createdAt
-    //this.Post.createIndex({ "closeOfferAt": 1 }, { expireAfterSeconds: 0 })
-
-    return newPost;
+  async updateImagesOfPost(postId: string, urlImage: string[]) {
+    await this.Post.updateOne({ _id: postId }, { images: urlImage });
   }
 }

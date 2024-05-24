@@ -10,7 +10,6 @@ import { Sessions_page_index } from "./components/SearchPage/sessions_page/Sessi
 import { Login_page } from "./components/Auth/LoginPage/Login_page";
 import { SocialRedirect } from "./components/Auth/GoogleRedirect/SocialRedirect";
 import { CreatePostPage } from "./components/Posts/CreatePostPage";
-import { PicturesWall } from "./components/Posts/PictureWall/PicturesWall";
 
 const App: React.FC = () => {
     return (
@@ -24,7 +23,6 @@ const App: React.FC = () => {
 
                 <Route path="post">
                     <Route path="create" element={<CreatePostPage />} />
-                    <Route path="picturewall" element={<PicturesWall />} />
                 </Route>
                 <Route path="login" element={<Login_page />} />
                 <Route path="auth">

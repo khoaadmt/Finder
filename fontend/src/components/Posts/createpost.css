@@ -3,6 +3,15 @@
         transform: scale(0.9);
     }
 }
+
+.custom-dropdown .ant-select-item {
+    max-height: 40px; /* Chiều cao tối đa của mỗi item */
+}
+
+.custom-dropdown {
+    max-height: 130px; /* Giới hạn chiều cao của dropdown */
+    overflow-y: auto; /* Thêm scroll khi vượt quá chiều cao */
+}
 .border-2 {
     border-style: solid;
     border-color: #e5e7eb !important;
