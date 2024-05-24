@@ -1,76 +1,88 @@
-import { TimePicker, Select, Tag, DatePicker, Checkbox } from "antd";
-import React, { useState } from "react";
-import type { CustomTagProps } from "rc-select/lib/BaseSelect";
+import { TimePicker, Select, DatePicker } from "antd";
+import React, { useEffect, useState } from "react";
 import { CustomDynamicForm } from "./form/CustomDynamicForm";
+import { PicturesWall } from "./PictureWall/PicturesWall";
+import { genderOptions, locationOptions, memberLevel } from "./options";
+import { tagRender } from "./tagRender";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Dayjs } from "dayjs";
 import "./createpost.css";
+import { disabledDate, filterOption } from "./FunctionHandler";
 
 export const CreatePostPage: React.FC = () => {
-    const memberLevel = [
-        { value: "1", label: "Y" },
-        { value: "2", label: "TBY" },
-        { value: "3", label: "TB-" },
-        { value: "4", label: "TB" },
-        { value: "5", label: "TB+" },
-        { value: "6", label: "TBK" },
-        { value: "7", label: "Khá" },
-        { value: "8", label: "Chuyên nghiệp" },
-    ];
-    const genderOptions = [
-        { value: 1, label: "Nam" },
-        { value: 2, label: "Nữ" },
-    ];
-
     const [phones, setPhones] = useState([""]);
 
-    const tagRender = (props: CustomTagProps) => {
-        const { label, value, closable, onClose } = props;
-        let color;
-        const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-            event.preventDefault();
-            event.stopPropagation();
-        };
-        if (value === 1) {
-            color = "gold";
-        } else {
-            color = "green";
+    const createPostForm = useFormik({
+        initialValues: {
+            title: "",
+            description: "",
+            location: "",
+            memberCount: "",
+            date: "",
+            startTime: "",
+            gender: "",
+            phones: [""],
+            images: "",
+            levelMemberMin: "",
+            levelMemberMax: "",
+            priceMin: "",
+            priceMax: "",
+            agreement: false,
+        },
+        validationSchema: Yup.object({
+            title: Yup.string().required("Required"),
+            description: Yup.string().required("Required"),
+        }),
+        onSubmit: async (values) => {},
+    });
+    const HandleLocationOnChange = (value: string) => {
+        createPostForm.setFieldValue("location", value);
+    };
+
+    const handleGenderChange = (value: any) => {
+        createPostForm.setFieldValue("gender", value);
+    };
+
+    const handleDateChange = (date: Dayjs, dateString: string | string[]) => {
+        createPostForm.setFieldValue("date", dateString);
+    };
+    const handleStartTimeChange = (time: Dayjs, timeString: string | string[]) => {
+        createPostForm.setFieldValue("startTime", timeString);
+    };
+    const handleLevelMemberMinChange = (value: any) => {
+        createPostForm.setFieldValue("levelMemberMin", value);
+    };
+    const handleLevelMemberMaxChange = (value: any) => {
+        createPostForm.setFieldValue("levelMemberMax", value);
+    };
+    const handleAgreementChange = (e: any) => {
+        createPostForm.setFieldValue("agreement", e.target.checked);
+        if (e.target.checked) {
+            createPostForm.setFieldValue("priceMin", "");
+            createPostForm.setFieldValue("priceMax", "");
         }
-        return (
-            <Tag
-                className="tag-post"
-                color={color}
-                onMouseDown={onPreventMouseDown}
-                closable={closable}
-                onClose={onClose}>
-                {label}
-            </Tag>
-        );
     };
-    const handleChange = () => {};
-    const disabledDate = (current: any) => {
-        const today = new Date();
-        return current && current < today.setHours(0, 0, 0, 0);
-    };
+
+    useEffect(() => {
+        createPostForm.setFieldValue("phones", phones);
+    }, [phones]);
+
+    console.log(createPostForm.values);
 
     return (
         <div className="create-post-form max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4">
             <form className="my-4 sm:my-6 rounded-2xl border-2 flex flex-col md:flex-row gap-6 p-4 sm:p-6">
                 <div className="flex-1 flex flex-col gap-4">
                     <div className="font-semibold text-lg text-black-ish-200">Thông tin chung</div>
+
                     <div className="w-full relative">
                         <input
-                            placeholder=" "
                             className="peer w-full p-4 pt-6 bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed pl-4"
                             type="text"
-                        />
-                        <label className="absolute text-md duration-150 transform -translate-y-3 top-5 origin-[0] whitespace-nowrap left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 hover:cursor-text text-black-ish-100">
-                            Địa chỉ sân<span className="text-red-500"> *</span>
-                        </label>
-                    </div>
-                    <div className="w-full relative">
-                        <input
-                            placeholder=" "
-                            className="peer w-full p-4 pt-6 bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed pl-4"
-                            type="text"
+                            value={createPostForm.values.title}
+                            name="title"
+                            onChange={createPostForm.handleChange}
                         />
                         <label className="absolute text-md duration-150 transform -translate-y-3 top-5 origin-[0] whitespace-nowrap left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 hover:cursor-text text-black-ish-100">
                             Tiêu đề<span className="text-red-500"> *</span>
@@ -78,6 +90,9 @@ export const CreatePostPage: React.FC = () => {
                     </div>
                     <div className="w-full relative">
                         <textarea
+                            value={createPostForm.values.description}
+                            name="description"
+                            onChange={createPostForm.handleChange}
                             id="input-post-description"
                             placeholder=" "
                             className="peer w-full p-4 pt-6 bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed pl-4"></textarea>
@@ -85,15 +100,28 @@ export const CreatePostPage: React.FC = () => {
                             Mô tả chi tiết<span className="text-red-500"> *</span>
                         </label>
                     </div>
+
+                    <div className="font-semibold text-md text-black-ish-200">Sân đấu:</div>
+                    <div className=" w-full relative">
+                        <Select
+                            showSearch
+                            className="input-location"
+                            placeholder="Select a person"
+                            optionFilterProp="children"
+                            onChange={HandleLocationOnChange}
+                            filterOption={filterOption}
+                            options={locationOptions}
+                        />
+                    </div>
                     <div className="font-semibold text-md text-black-ish-200">Yêu cầu về thành viên:</div>
                     <div className="flex flex-col sm:grid grid-cols-2 gap-4">
                         <div className="w-full relative">
                             <input
-                                id="input-post-recruit-numb"
-                                placeholder=" "
                                 className="peer w-full p-4 pt-6 bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed pl-4"
                                 type="number"
-                                defaultValue={1}
+                                name="memberCount"
+                                value={createPostForm.values.memberCount}
+                                onChange={createPostForm.handleChange}
                                 min="1"
                             />
                             <label className="absolute text-md duration-150 transform -translate-y-3 top-5 origin-[0] whitespace-nowrap left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 hover:cursor-text text-black-ish-100">
@@ -108,6 +136,7 @@ export const CreatePostPage: React.FC = () => {
                                 tagRender={tagRender}
                                 style={{ border: "2px solid #e5e7eb", width: "100%" }}
                                 options={genderOptions}
+                                onChange={handleGenderChange}
                             />
                         </div>
                     </div>
@@ -117,7 +146,7 @@ export const CreatePostPage: React.FC = () => {
                             <Select
                                 placeholder="Trình độ tối thiểu"
                                 className="input-post w-full"
-                                onChange={handleChange}
+                                onChange={handleLevelMemberMinChange}
                                 options={memberLevel}
                                 style={{ border: "2px solid #e5e7eb" }}
                             />
@@ -126,7 +155,7 @@ export const CreatePostPage: React.FC = () => {
                             <Select
                                 placeholder="Trình độ tối đa"
                                 className="input-post  w-full"
-                                onChange={handleChange}
+                                onChange={handleLevelMemberMaxChange}
                                 options={memberLevel}
                             />
                         </div>
@@ -141,18 +170,20 @@ export const CreatePostPage: React.FC = () => {
                                 style={{ width: "100%", height: "65px" }}
                                 format={"HH:mm"}
                                 inputReadOnly
+                                onChange={handleStartTimeChange}
                             />
                         </div>
                         <div className="w-full relative">
                             <DatePicker
-                                className="custom-time-picker"
+                                className="custom-date-picker"
                                 format={{
                                     format: "DD-MM-YYYY",
                                 }}
                                 disabledDate={disabledDate}
                                 placeholder="Ngày diễn ra"
                                 inputReadOnly
-                                style={{ width: "100%", height: "65px", fontSize: "20px" }}
+                                style={{ width: "100%", height: "65px" }}
+                                onChange={handleDateChange}
                             />
                         </div>
                     </div>
@@ -160,18 +191,24 @@ export const CreatePostPage: React.FC = () => {
                     <div className="flex flex-col sm:grid grid-cols-3 gap-4">
                         <div className="w-full relative">
                             <input
-                                id="input-post-recruit-numb"
                                 placeholder="Từ"
                                 className="peer w-full p-4 pt-6 bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed pl-4"
                                 type="number"
+                                name="priceMin"
+                                min={1}
+                                value={createPostForm.values.priceMin}
+                                onChange={createPostForm.handleChange}
                             />
                         </div>
                         <div className="w-full relative">
                             <input
-                                id="input-post-recruit-numb"
                                 placeholder="Đến"
                                 className="peer w-full p-4 pt-6 bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed pl-4"
                                 type="number"
+                                name="priceMax"
+                                min={1}
+                                value={createPostForm.values.priceMax}
+                                onChange={createPostForm.handleChange}
                             />
                         </div>
                         <div className="w-full relative agreed-checkbox-container">
@@ -179,9 +216,8 @@ export const CreatePostPage: React.FC = () => {
                             <input
                                 className="agreed-checkbox"
                                 type="checkbox"
-                                id="price"
-                                name="price"
                                 value="thỏa thuận"
+                                onChange={handleAgreementChange}
                             />
                             <div className="text-md ">Thỏa thuận</div>
                         </div>
@@ -191,13 +227,13 @@ export const CreatePostPage: React.FC = () => {
                             <button
                                 id="cancel-post"
                                 type="button"
-                                className="relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full bg-white border-black text-black text-md py-3 font-semibold border-2">
+                                className="relative bg-primary text-white disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full bg-white border-black text-black text-md py-3 font-semibold border-2">
                                 Hủy
                             </button>
                             <button
                                 id="submit-post"
                                 type="submit"
-                                className="relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full bg-primary border-primary text-white text-md py-3 font-semibold border-2">
+                                className="relative ant-btn-primary disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full  border-primary text-white text-md py-3 font-semibold border-2">
                                 Đăng tin
                             </button>
                         </div>
@@ -210,44 +246,7 @@ export const CreatePostPage: React.FC = () => {
                     </div>
                     <div className="font-semibold text-lg text-black-ish-200 mt-2">Hình ảnh mô tả</div>
                     <div className="flex flex-wrap gap-3">
-                        <div className="relative transition border-dashed border-2 border-neutral-300 flex flex-col justify-center items-center gap-4 text-black-ish-100 cursor-pointer hover:opacity-70 w-full h-[35vh]">
-                            <svg
-                                stroke="currentColor"
-                                fill="none"
-                                stroke-width="2"
-                                viewBox="0 0 24 24"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                height="50"
-                                width="50"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M15 8h.01"></path>
-                                <path d="M12.5 21h-6.5a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v6.5"></path>
-                                <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l4 4"></path>
-                                <path d="M14 14l1 -1c.67 -.644 1.45 -.824 2.182 -.54"></path>
-                                <path d="M16 19h6"></path>
-                                <path d="M19 16v6"></path>
-                            </svg>
-                            <div className="font-semibold text-lg">Thêm hình ảnh</div>
-                        </div>
-                        <input />
-                    </div>
-                    <div className="flex md:hidden justify-end mt-2">
-                        <div className="w-full flex gap-4">
-                            <button
-                                id="cancel-post"
-                                type="button"
-                                className="relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full bg-white border-black text-black text-md py-3 font-semibold border-2">
-                                Hủy
-                            </button>
-                            <button
-                                id="submit-post"
-                                type="submit"
-                                className="relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full bg-primary border-primary text-white text-md py-3 font-semibold border-2">
-                                Đăng tin
-                            </button>
-                        </div>
+                        <PicturesWall />
                     </div>
                 </div>
             </form>

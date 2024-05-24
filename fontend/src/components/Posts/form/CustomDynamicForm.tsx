@@ -22,14 +22,9 @@ export const CustomDynamicForm: React.FC<Props> = (props) => {
 
     const handleRemoveField = (index: number) => {
         const newPhones = values.filter((_, i) => i !== index);
+
         setValues(newPhones);
     };
-
-    const handleSubmit = () => {
-        console.log("Phone values:", values);
-        alert(`Phone values: ${values.join(", ")}`);
-    };
-
     return (
         <div className="dynamic-form-container">
             {values.map((value, index) => (
@@ -44,8 +39,6 @@ export const CustomDynamicForm: React.FC<Props> = (props) => {
             <Button type="dashed" onClick={addField} icon={<PlusOutlined />}>
                 Add field
             </Button>
-
-            <button onClick={handleSubmit}>Get Phone Values</button>
         </div>
     );
 };

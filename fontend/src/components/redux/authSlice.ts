@@ -38,7 +38,6 @@ export const authSlice = createSlice({
             state.mgs = actions.payload.message;
         },
         RegisterFailure: (state, actions) => {
-            console.log(actions, "actions register");
             state.register.isFetching = false;
             state.register.error = true;
             state.mgs = actions.payload.message;

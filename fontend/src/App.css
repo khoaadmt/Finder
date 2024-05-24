@@ -11,3 +11,6 @@
 body {
     font-family: "Sora", sans-serif;
 }
+.ant-btn-primary {
+    background-color: #1677ff;
+}
