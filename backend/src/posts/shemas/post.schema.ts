@@ -1,4 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Date } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Post {
@@ -16,6 +17,9 @@ export class Post {
 
   @Prop()
   startTime: string;
+
+  @Prop({ type: Date })
+  dateValue: Date;
 
   @Prop()
   gender: string[];
@@ -42,7 +46,7 @@ export class Post {
   agreement: boolean;
 
   @Prop()
-  user_id: string;
+  username: string;
 
   @Prop()
   location_id: string;

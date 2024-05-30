@@ -1,12 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostRepository } from '../repository/post.repository';
 import { CreatePostDto } from '../dto/create_post.dto';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class PostsService {
+  private readonly pageLimit = 6;
   constructor(private readonly postRepository: PostRepository) {}
-  async getAllPosts() {
-    return await this.postRepository.finAllPost();
+
+  async getAllPosts(pageNumber: number, city: string) {
+    const posts = await this.postRepository.finAllPost(city);
+    let skip = (pageNumber - 1) * this.pageLimit;
+    // if (skip - 1 > 0) {
+    //   skip--;
+    // }
+    const result = posts.slice(skip, skip + this.pageLimit);
+    return result;
+  }
+
+  async countPosts(pageNumber: number, city: string) {
+    const post = await this.postRepository.finAllPost(city);
+    return post.length;
   }
 
   async createPost(CreatePostDto: CreatePostDto) {
@@ -15,7 +29,6 @@ export class PostsService {
   }
 
   async updateImagesOfPost(postId: string, urlImage: string[]) {
-    console.log(postId);
     await this.postRepository
       .updateImagesOfPost(postId, urlImage)
       .then(() => {

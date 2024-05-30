@@ -11,6 +11,20 @@ export class AuthRepository {
     private UserModel: Model<User>,
   ) {}
 
+  async findUserAndUpdateToken(
+    username: string,
+    accessToken: string,
+    refreshToken: string,
+  ) {
+    await this.UserModel.findOneAndUpdate(
+      { username: username },
+      {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    );
+  }
+
   async findUserByFacebookType(username: string) {
     return await this.UserModel.findOne({
       type: 'FACEBOOK',

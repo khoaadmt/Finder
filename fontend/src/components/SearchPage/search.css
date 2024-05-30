@@ -9,6 +9,9 @@
     background-color: #fef2f4;
     border-color: #f5002f;
 }
+.search-location-input {
+    border-right: 1px solid #222222;
+}
 
 .search-location-input:focus {
     border-color: inherit;

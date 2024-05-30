@@ -6,6 +6,7 @@ interface Props {
     totalFacility: number;
 }
 export const Pagination_search_page: React.FC<Props> = (props) => {
+    const pageSize = 6;
     const { setPageNumber, totalFacility } = props;
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -15,7 +16,7 @@ export const Pagination_search_page: React.FC<Props> = (props) => {
     };
     return (
         <div className="w-full flex justify-center pt-[20px] pb-[48px]">
-            <Pagination onChange={handleOnChange} defaultCurrent={1} pageSize={3} total={totalFacility} />
+            <Pagination onChange={handleOnChange} defaultCurrent={1} pageSize={pageSize} total={totalFacility} />
         </div>
     );
 };

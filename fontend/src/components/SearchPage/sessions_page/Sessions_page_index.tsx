@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Search_page_card } from "../card/Search_page_card";
-import { ResponseLocation } from "../../../interface";
+import { Pots, ResponseLocation, RootState } from "../../../interface";
 import { Time_picker_dialog } from "../header/Time_picker_dialog";
 import { Button } from "antd";
 import axios from "axios";
+import { Pagination_search_page } from "../pagination/Pagination_search_page";
+import { useSearchParams } from "react-router-dom";
+import { Post_Card } from "./Post_Card";
+import { Post_options } from "../header/Post_options";
+import { useSelector } from "react-redux";
 
 export const Sessions_page_index = () => {
     const [latitude, setLat] = useState<number | null>(null);
     const [longitude, setLong] = useState<number | null>(null);
-    const radius = 5;
-    const [data, setData] = useState<ResponseLocation[] | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [pageNumber, setPageNumber] = useState(1);
+    const [totalPosts, setTotalPosts] = useState(5);
+    const [data, setData] = useState<Pots[] | null>();
+
+    const location = searchParams.get("location");
 
     useEffect(() => {
         const getLocation = () => {
@@ -22,63 +31,67 @@ export const Sessions_page_index = () => {
         getLocation();
     }, []);
 
-    // useEffect(() => {
-    //     async function getData() {
-    //         if (latitude !== null && longitude !== null) {
-    //             const res = await axios.get("api/search/nearby", {
-    //                 params: {
-    //                     radius: radius,
-    //                     latitude: latitude,
-    //                     longitude: longitude,
-    //                 },
-    //             });
-    //             return res;
-    //         }
-    //     }
+    useEffect(() => {
+        const newSearchParams = new URLSearchParams();
 
-    //     getData().then((res) => {
-    //         if (res?.data) {
-    //             setData(res.data);
-    //         }
-    //     });
-    // }, [latitude, longitude]);
+        searchParams.forEach((value, key) => {
+            newSearchParams.set(key, value);
+        });
+        newSearchParams.set("page", pageNumber.toString());
+        setSearchParams(newSearchParams.toString());
+    }, [pageNumber]);
+
+    useEffect(() => {
+        axios
+            .get("api/posts/count", {
+                params: {
+                    page: pageNumber,
+                    city: location,
+                },
+            })
+            .then((response) => {
+                setTotalPosts(response.data);
+            });
+    }, []);
+
+    useEffect(() => {
+        const getData = async () => {
+            return await axios.get("http://localhost:5000/api/posts", {
+                params: {
+                    page: pageNumber,
+                    city: location,
+                },
+            });
+        };
+        getData()
+            .then((res) => {
+                setData(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [pageNumber, searchParams]);
 
     return (
-        <></>
-        // <div className="min-h-screen flex gap-4">
-        //     <div className="relative w-full">
-        //         <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh-192px)]">
-        //             <div className="flex justify-center sm:hidden">
-        //                 <button>
-        //                     <svg
-        //                         stroke="currentColor"
-        //                         fill="currentColor"
-        //                         strokeWidth="0"
-        //                         viewBox="0 0 1024 1024"
-        //                         className="fill-[#c6c6c6]"
-        //                         height="32"
-        //                         width="32"
-        //                         xmlns="http://www.w3.org/2000/svg">
-        //                         <path d="M872 474H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h720c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"></path>
-        //                     </svg>
-        //                 </button>
-        //             </div>
-        //             <div className="sm:hidden pb-[15px] w-full text-center relative -top-1">
-        //                 <span className="text-sm">Tìm thêm hoạt động</span>
-        //             </div>
-        //             <div className="py-[15px] pl-[23px]">
-        //                 <span className="text-lg sm:text-xl font-semibold">Tìm thấy 1 hoạt động</span>
-        //             </div>
+        <div className="min-h-screen flex gap-4">
+            <div className="relative w-full">
+                <Post_options />
+                <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh - 192px)]">
+                    <div className="py-[15px] pl-[23px]">
+                        <span className="text-lg sm:text-xl font-semibold">
+                            {data ? `Tìm thấy ${totalPosts} bài viết` : "Không tìm thấy sân đấu nào"}
+                        </span>
+                    </div>
+                    <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
+                        {data?.map((post) => {
+                            return <Post_Card key={post._id} post={post} />;
+                        })}
+                    </div>
 
-        //             <Search_page_card />
-
-        //             <div className="w-full flex justify-center pt-[20px] pb-[48px]">
-        //                 <button className="mt-[10px] py-[10px] px-[20px] font-semibold rounded-full text-center whitespace-nowrap hover:shadow-md transition bg-primary text-white">
-        //                     <span>Xem thêm</span>
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
+                    {/* PAGINATION */}
+                    <Pagination_search_page setPageNumber={setPageNumber} totalFacility={totalPosts} />
+                </div>
+            </div>
+        </div>
     );
 };

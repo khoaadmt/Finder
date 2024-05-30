@@ -3,7 +3,10 @@
         transform: scale(0.9);
     }
 }
-
+.create-post-form {
+    margin-top: -30px;
+    color: #303030;
+}
 .custom-dropdown .ant-select-item {
     max-height: 40px; /* Chiều cao tối đa của mỗi item */
 }
@@ -80,4 +83,10 @@
 }
 .input-location .ant-select-selector {
     font-size: 18px !important;
+}
+.textarea {
+    overflow: hidden;
+    resize: both;
+    font-size: 15px;
+    padding-top: 30px !important;
 }

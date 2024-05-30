@@ -24,7 +24,7 @@ export const Facilities_page_index: React.FC = () => {
             .then((response) => {
                 setTotalFacility(response.data);
             });
-    }, [searchParams]);
+    }, []);
 
     useEffect(() => {
         const newSearchParams = new URLSearchParams();
@@ -81,7 +81,7 @@ export const Facilities_page_index: React.FC = () => {
                     </div>
                     <div className="py-[15px] pl-[23px]">
                         <span className="text-lg sm:text-xl font-semibold">
-                            {data ? `Tìm thấy ${totalFacility} sân đấu` : "Không tìm thấy sân đấu nào"}
+                            {data ? `Tìm thấy ${data.length} sân đấu` : "Không tìm thấy sân đấu nào"}
                         </span>
                     </div>
                     <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">

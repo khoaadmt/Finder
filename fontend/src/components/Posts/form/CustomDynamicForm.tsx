@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { DynamicFieldItem } from "./DynamicFieldItem";
+
 import "./index.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
+import { DynamicFieldItem } from "./DynamicFieldItem";
 interface Props {
     values: string[];
     setValues: React.Dispatch<React.SetStateAction<string[]>>;

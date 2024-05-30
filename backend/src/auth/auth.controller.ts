@@ -16,6 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './services/auth.service';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -30,8 +31,13 @@ export class AuthController {
   }
 
   @Post('login')
-  login(@Body() loginUser: LoginUserDto) {
-    return this.authService.login(loginUser);
+  login(@Body() loginUser: LoginUserDto, @Res() res: Response) {
+    return this.authService.login(loginUser, res);
+  }
+
+  @Post('logout')
+  logOut() {
+    return { data: '123' };
   }
 
   @Get('/facebook/login')
@@ -45,7 +51,7 @@ export class AuthController {
   async facebookLoginRedirect(@Req() req, @Res() res): Promise<any> {
     const token = await this.authService.loginWithFacebook(req.user);
     res.redirect(
-      `http://localhost:3000/auth/social/redirect?access_token=${token.access_token}&refresh_token=${token.refresh_token}`,
+      `http://localhost:3000/auth/social/redirect?accessToken=${token.accessToken}&refresh_token=${token.refreshToken}`,
     );
   }
 
@@ -60,12 +66,13 @@ export class AuthController {
   async GoogleRedirect(@Req() req, @Res() res) {
     const token = await this.authService.loginWithGoogle(req.user);
     res.redirect(
-      `http://localhost:3000/auth/social/redirect?access_token=${token.access_token}&refresh_token=${token.refresh_token}`,
+      `http://localhost:3000/auth/social/redirect?accessToken=${token.accessToken}&refresh_token=${token.refreshToken}`,
     );
   }
 
-  @Post('refresh-token')
-  async refreshToken(@Body() { refresh_token }) {
-    return await this.authService.refreshToken(refresh_token);
+  @Post('refresh')
+  async refreshToken(@Req() req: Request) {
+    const refreshToken = req.cookies.refreshToken;
+    return await this.authService.refreshToken(refreshToken);
   }
 }

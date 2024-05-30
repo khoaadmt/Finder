@@ -29,6 +29,44 @@ export interface Facility {
     longitude: number;
     distance: { text: string; value: number };
 }
+interface userInfor {
+    type: string;
+    displayName: string;
+    username: string;
+    avaUrl: string;
+}
+export interface Pots {
+    _id: string;
+    title: string;
+
+    description: string;
+
+    memberCount: number;
+
+    date: string;
+
+    startTime: string;
+
+    gender: string[];
+
+    phones: string[];
+
+    images: string[];
+
+    levelMemberMin: number;
+
+    levelMemberMax: number;
+
+    priceMin: number;
+
+    priceMax: number;
+
+    agreement: boolean;
+
+    user: userInfor;
+
+    location: Facility;
+}
 
 export interface ResponseLocation {
     location: Location;
@@ -40,10 +78,11 @@ export interface ResponseLocation {
 export interface AuthState {
     login: {
         currentUser: {
+            username: string;
             displayName: string;
             avaUrl: string;
-            access_token: string;
-            refresh_token: string;
+            accessToken: string;
+            refreshToken: string;
         } | null;
         isFetching: boolean;
         error: boolean;
@@ -58,8 +97,8 @@ export interface RootState {
     auth: AuthState;
 }
 export interface Token {
-    access_token: string;
-    refresh_token: string;
+    accessToken: string;
+    refreshToken: string;
 }
 export interface optional {
     label: string;

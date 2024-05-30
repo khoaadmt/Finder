@@ -14,15 +14,21 @@ import { Token } from "../../interface";
 export const loginUser = async (user: any, dispatch: any, navigate: any) => {
     dispatch(setFetchingState);
     try {
-        const res = await axios.post("http://localhost:5000/api/auth/login", {
-            username: user.username,
-            password: user.password,
-        });
-        const payload = jwtDecode(res.data.access_token) as { [key: string]: any };
-        let { iat, exp, ...newPayload } = payload;
-        newPayload.access_token = res.data.access_token;
-        newPayload.refresh_token = res.data.refresh_token;
+        const res = await axios.post(
+            "http://localhost:5000/api/auth/login",
+            {
+                username: user.username,
+                password: user.password,
+            },
+            {
+                withCredentials: true,
+            }
+        );
 
+        const payload = jwtDecode(res.data.accessToken) as { [key: string]: any };
+        let { iat, exp, ...newPayload } = payload;
+        newPayload.accessToken = res.data.accessToken;
+        newPayload.refreshToken = res.data.refreshToken;
         dispatch(setSuccessState(newPayload));
 
         navigate("/");
@@ -35,10 +41,10 @@ export const loginUser = async (user: any, dispatch: any, navigate: any) => {
 export const loginWithSocial = async (token: Token, dispatch: any, navigate: any) => {
     dispatch(setFetchingState);
 
-    const payload = jwtDecode(token.access_token) as { [key: string]: any };
+    const payload = jwtDecode(token.accessToken) as { [key: string]: any };
     let { iat, exp, ...newPayload } = payload;
-    newPayload.access_token = token.access_token;
-    newPayload.refresh_token = token.refresh_token;
+    newPayload.accessToken = token.accessToken;
+    newPayload.refreshToken = token.refreshToken;
 
     dispatch(setSuccessState(newPayload));
 

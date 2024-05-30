@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 
 import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,6 +13,7 @@ import { FacebookStrategy } from './utils/FaceBookStrategy';
 import { User, UserSchema } from './schemas/user.schema';
 import { AuthService } from './services/auth.service';
 import { AuthRepository } from './repository/auth.repository';
+import { VerifyTokenMiddleware } from 'src/middlewares/logging.middleware';
 require('dotenv').config();
 
 @Module({
@@ -22,4 +28,10 @@ require('dotenv').config();
   providers: [AuthService, GoogleStrategy, FacebookStrategy, AuthRepository],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(VerifyTokenMiddleware)
+      .forRoutes({ path: 'auth/logout', method: RequestMethod.POST });
+  }
+}

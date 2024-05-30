@@ -18,10 +18,10 @@ export class User {
   avaUrl: string;
 
   @Prop({ default: 'refresh_token' })
-  refresh_token: string;
+  refreshToken: string;
 
   @Prop({ default: 'access_token' })
-  access_token: string;
+  accessToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

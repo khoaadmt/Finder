@@ -7,22 +7,13 @@ import { Outlet } from "react-router-dom";
 
 export const Search_page_index = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [hasOptions, setHasOptions] = useState(false);
     const location = searchParams.get("location");
     const type = searchParams.get("type");
     axios.defaults.baseURL = "http://localhost:5000";
 
-    useEffect(() => {
-        if (type === "Giao lưu") {
-            setHasOptions(true);
-        } else {
-            setHasOptions(false);
-        }
-    }, [searchParams]);
-
     return (
         <>
-            <Search_Page_header hasOptions={hasOptions} />
+            <Search_Page_header defaultSelectedKeys={"2"} />
             <Outlet />
         </>
     );

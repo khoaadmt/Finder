@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Res } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { LoginUserDto } from '../dto/login.dto';
 import { AuthRepository } from '../repository/auth.repository';
+import { Response } from 'express';
 require('dotenv').config();
 
 @Injectable()
@@ -83,7 +84,7 @@ export class AuthService {
     throw new HttpException('Register user success', HttpStatus.OK);
   }
 
-  async login(loginUserDto: LoginUserDto) {
+  async login(loginUserDto: LoginUserDto, @Res() res: Response) {
     const user = await this.authRepository.findByUserName(
       loginUserDto.username,
     );
@@ -111,12 +112,18 @@ export class AuthService {
     };
     const token = await this.genarateToken(payload);
 
-    return token;
+    res.cookie('refreshToken', token.refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict',
+    });
+
+    return res.status(HttpStatus.OK).json({ accessToken: token.accessToken });
   }
 
-  async refreshToken(refresh_token: string) {
+  async refreshToken(refreshToken: string) {
     try {
-      const verify = await this.jwtService.verifyAsync(refresh_token, {
+      const verify = await this.jwtService.verifyAsync(refreshToken, {
         secret: process.env.REFRESH_TOKEN_SECRET,
       });
       return this.genarateToken({
@@ -137,24 +144,25 @@ export class AuthService {
     displayName: string;
     avaUrl: string;
   }) {
-    const access_token = await this.jwtService.signAsync(payload);
-    const refresh_token = await this.jwtService.signAsync(payload, {
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      expiresIn: '10s',
+    });
+    const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.REFRESH_TOKEN_SECRET,
-      expiresIn: '1h',
+      expiresIn: '7d',
     });
 
-    return {
-      access_token,
-      refresh_token,
-    };
+    await this.authRepository.findUserAndUpdateToken(
+      payload.username,
+      accessToken,
+      refreshToken,
+    );
 
-    // await this.UserModel.findOneAndUpdate(
-    //   { _id: payload.id },
-    //   {
-    //     access_token: access_token,
-    //     refresh_token: refresh_token,
-    //   },
-    // );
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   private async haspassword(password: string) {

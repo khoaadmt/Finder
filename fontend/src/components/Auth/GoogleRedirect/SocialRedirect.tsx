@@ -5,14 +5,14 @@ import { useDispatch } from "react-redux";
 
 export const SocialRedirect: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const access_token = searchParams.get("access_token");
-    const refresh_token = searchParams.get("refresh_token");
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
         const token = {
-            access_token: access_token || "",
-            refresh_token: refresh_token || "",
+            accessToken: accessToken || "",
+            refreshToken: refreshToken || "",
         };
         loginWithSocial(token, dispatch, navigate);
     }, []);

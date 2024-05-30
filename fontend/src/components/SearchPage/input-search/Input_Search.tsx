@@ -61,10 +61,10 @@ export const Input_Search: React.FC = () => {
         <div className="input-search-container">
             <div className="flex flex-[2] items-center gap-2 w-full md:w-auto">
                 <div>
-                    <div className="shadow-[0_2px_20px_0_rgba(0,0,0,.1)] py-[3px] px-[6px] sm:py-[7px] sm:px-[10px] bg-white rounded-full">
+                    <div className="input-search-content shadow-[0_2px_20px_0_rgba(0,0,0,.1)] py-[3px] px-[6px] sm:py-[7px] sm:px-[10px] bg-white rounded-full">
                         <div className="h-[36px] w-full xl:w-[400px] flex justify-between items-center">
                             <div className="h-full flex-1 flex text-[16px] font-semibold">
-                                <div className="px-2 sm:pl-[17px] sm:pr-[10px] h-[36px] w-3/5 sm:w-1/2 border-r border-[#d7d7d7]">
+                                <div className="px-2 sm:pl-[17px] sm:pr-[10px] h-[36px] w-3/5 sm:w-1/2">
                                     <input
                                         placeholder="Nhập địa điểm"
                                         className="search-location-input w-full h-full border-none outline-none"
@@ -76,7 +76,7 @@ export const Input_Search: React.FC = () => {
                                         onChange={() => {}}
                                     />
                                 </div>
-                                <div className="px-2 sm:pl-[17px] sm:pr-[10px] h-full sm:flex-1 w-2/5 sm:w-1/2 truncate">
+                                <div className="px-2 sm:pl-[17px] sm:pr-[10px] h-full sm:flex-1 w-2/5 sm:w-1/2 truncate ">
                                     <button
                                         onClick={handleClickBtnType}
                                         onBlur={handleOnBlur}
