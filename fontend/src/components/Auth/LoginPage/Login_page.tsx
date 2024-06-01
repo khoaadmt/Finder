@@ -7,6 +7,7 @@ import { loginUser, registerUser } from "../../redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../interface";
+import { ArrowLeftOutlined, DoubleLeftOutlined } from "@ant-design/icons";
 var facebook_logo = require("../../../assets/images/facebook-logo.png");
 var google_logo = require("../../../assets/images/google-logo.png");
 
@@ -62,9 +63,18 @@ export const Login_page = () => {
     const HandleLoginWithGoogle = () => {
         window.location.href = "http://localhost:5000/api/auth/google/login";
     };
+    const handleBtnHomeClick = () => {
+        navigate("/");
+    };
 
     return (
         <div className="login-page">
+            <button onClick={handleBtnHomeClick} className="btn_Home  sm:w-[50px]" type="button">
+                <span>
+                    <DoubleLeftOutlined />
+                    Home
+                </span>
+            </button>
             <div className="main-login-page">
                 <div className={`a-container ${isSwitch && "is-txl is-z200"} `}>
                     <form className="form" onSubmit={singUpForm.handleSubmit}>

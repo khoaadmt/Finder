@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Search_page_card } from "../card/Search_page_card";
-import { Pots, ResponseLocation, RootState } from "../../../interface";
-import { Time_picker_dialog } from "../header/Time_picker_dialog";
-import { Button } from "antd";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { Pots, ResponseLocation, RootState, FilterOptions } from "../../../interface";
 import { Pagination_search_page } from "../pagination/Pagination_search_page";
 import { useSearchParams } from "react-router-dom";
-import { Post_Card } from "./Post_Card";
 import { Post_options } from "../header/Post_options";
-import { useSelector } from "react-redux";
+import { PostCard } from "./PostCard";
+import axios from "axios";
 
-export const Sessions_page_index = () => {
+export const SessionsPage = () => {
     const [latitude, setLat] = useState<number | null>(null);
     const [longitude, setLong] = useState<number | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const [pageNumber, setPageNumber] = useState(1);
     const [totalPosts, setTotalPosts] = useState(5);
     const [data, setData] = useState<Pots[] | null>();
+    const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
 
     const location = searchParams.get("location");
 
@@ -32,13 +29,11 @@ export const Sessions_page_index = () => {
     }, []);
 
     useEffect(() => {
-        const newSearchParams = new URLSearchParams();
-
-        searchParams.forEach((value, key) => {
-            newSearchParams.set(key, value);
+        setSearchParams((prevParams) => {
+            const newParams = new URLSearchParams(prevParams);
+            newParams.set("page", pageNumber.toString());
+            return newParams;
         });
-        newSearchParams.set("page", pageNumber.toString());
-        setSearchParams(newSearchParams.toString());
     }, [pageNumber]);
 
     useEffect(() => {
@@ -72,10 +67,14 @@ export const Sessions_page_index = () => {
             });
     }, [pageNumber, searchParams]);
 
+    useEffect(() => {
+        console.log(filterOptions);
+    }, [filterOptions]);
+
     return (
         <div className="min-h-screen flex gap-4">
             <div className="relative w-full">
-                <Post_options />
+                <Post_options setFilterOptions={setFilterOptions} />
                 <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh - 192px)]">
                     <div className="py-[15px] pl-[23px]">
                         <span className="text-lg sm:text-xl font-semibold">
@@ -84,7 +83,7 @@ export const Sessions_page_index = () => {
                     </div>
                     <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
                         {data?.map((post) => {
-                            return <Post_Card key={post._id} post={post} />;
+                            return <PostCard key={post._id} post={post} />;
                         })}
                     </div>
 

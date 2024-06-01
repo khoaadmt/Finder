@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pots } from "../../../interface";
 import { Carousel } from "antd";
 import { FieldTimeOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+
 interface Props {
     post: Pots;
 }
-export const Post_Card: React.FC<Props> = (props) => {
+export const PostCard: React.FC<Props> = (props) => {
     const { post } = props;
+
     const imageStyle: React.CSSProperties = {
         position: "absolute",
         height: "100%",
@@ -14,6 +17,10 @@ export const Post_Card: React.FC<Props> = (props) => {
         inset: "0px",
         color: "transparent",
     };
+
+    const dateTimeConvert = new Date(post.startTime);
+    const date = dayjs(dateTimeConvert).format("DD-MM-YYYY");
+    const time = dayjs(dateTimeConvert).format("HH:mm");
 
     return (
         <a className="flex p-2 rounded-xl shadow-[rgba(0,0,0,0.1)_0px_2px_20px_0px]" href="">
@@ -73,7 +80,7 @@ export const Post_Card: React.FC<Props> = (props) => {
                     <FieldTimeOutlined className="stroke-primary" style={{ fontSize: "18px", marginLeft: "2px" }} />
                     <span>
                         {" "}
-                        Khung giờ: {post.startTime} - {post.startTime}
+                        Khung giờ: {time} - {time}
                     </span>
                 </div>
                 <div className="flex pl-1 gap-2 items-center sm:mb-1">
@@ -112,7 +119,7 @@ export const Post_Card: React.FC<Props> = (props) => {
                             d="M128 48v32m256-32v32"></path>
                         <path fill="none" strokeLinejoin="round" strokeWidth="32" d="M464 160H48"></path>
                     </svg>
-                    <span className="">Ngày: {post.date}</span>
+                    <span className="">Ngày: {date}</span>
                 </div>
                 <div className="flex gap-2 items-start pl-1 sm:mb-1">
                     <svg

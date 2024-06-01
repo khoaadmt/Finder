@@ -14,7 +14,9 @@ export class User {
   @Prop({ default: '' })
   password: string;
 
-  @Prop({ default: 'img.png' })
+  @Prop({
+    default: 'http://localhost:5000/api/uploads/avatar/avatar-default.svg',
+  })
   avaUrl: string;
 
   @Prop({ default: 'refresh_token' })

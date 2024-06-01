@@ -26,7 +26,7 @@ export const CreatePostContent: React.FC = () => {
             description: "",
             memberCount: "",
             date: "",
-            startTime: "",
+            time: "",
             gender: null,
             phones: [""],
             images: "",
@@ -43,7 +43,7 @@ export const CreatePostContent: React.FC = () => {
             description: notJustNumber,
             memberCount: Yup.number().required("Required"),
             date: Yup.string().required("Required"),
-            startTime: Yup.string().required("Required"),
+            time: Yup.string().required("Required"),
             gender: Yup.number().required("Required"),
             phones: Yup.array().required("Required"),
             levelMemberMin: Yup.number().required("Required"),
@@ -83,10 +83,12 @@ export const CreatePostContent: React.FC = () => {
     };
 
     const handleDateChange = (date: Dayjs, dateString: string | string[]) => {
-        createPostForm.setFieldValue("date", dateString);
+        console.log(date.format("YYYY-MM-DD"));
+        createPostForm.setFieldValue("date", date.format("YYYY-MM-DD"));
     };
     const handleStartTimeChange = (time: Dayjs, timeString: string | string[]) => {
-        createPostForm.setFieldValue("startTime", timeString);
+        console.log(time.valueOf());
+        createPostForm.setFieldValue("time", timeString);
     };
     const handleLevelMemberMinChange = (value: any) => {
         console.log("levelMemberMin", value, typeof value);
@@ -249,8 +251,8 @@ export const CreatePostContent: React.FC = () => {
                                 inputReadOnly
                                 onChange={handleStartTimeChange}
                             />
-                            {createPostForm.touched.startTime && createPostForm.errors.startTime && (
-                                <small className="text-danger">{`*${createPostForm.errors.startTime}`}</small>
+                            {createPostForm.touched.time && createPostForm.errors.time && (
+                                <small className="text-danger">{`*${createPostForm.errors.time}`}</small>
                             )}
                         </div>
                         <div className="w-full relative">

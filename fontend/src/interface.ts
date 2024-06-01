@@ -43,11 +43,9 @@ export interface Pots {
 
     memberCount: number;
 
-    date: string;
+    startTime: number;
 
-    startTime: string;
-
-    gender: string[];
+    gender: number;
 
     phones: string[];
 
@@ -103,4 +101,15 @@ export interface Token {
 export interface optional {
     label: string;
     value: string;
+}
+export interface FilterOptions {
+    sortBy: any;
+    distance: number;
+    level: string;
+    date: string;
+    time: string;
+    price: number;
+    memberCount: string;
+    gender: number;
+    agreement: boolean;
 }

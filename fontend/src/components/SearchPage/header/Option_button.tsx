@@ -1,29 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import type { MenuProps } from "antd";
-import { Button, Dropdown, Menu, Space } from "antd";
+import { Dropdown } from "antd";
 import "./search_page_header.css";
+import { FilterOptions } from "../../../interface";
+
 interface Props {
-    value: string;
+    defaultValue: string;
     items_value: {
         label: string;
         key: string;
     }[];
+
+    setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions | null>>;
 }
 export const Option_button: React.FC<Props> = (props) => {
-    const { value, items_value } = props;
+    const { defaultValue, items_value, setFilterOptions } = props;
     const items: MenuProps["items"] = items_value;
     const [optionValue, setOptionValue] = useState("");
 
     const handleDropdownItemClick = (e: any) => {
         const items = e.key.split(":");
         setOptionValue(items[2]);
+
+        setFilterOptions((prev) => {
+            return {
+                ...prev,
+                [items[1]]: items[0],
+            } as FilterOptions;
+        });
     };
+
     useEffect(() => {
-        setOptionValue(value);
+        setOptionValue(defaultValue);
     }, []);
 
-    useEffect(() => {}, [value]);
+    useEffect(() => {}, [defaultValue]);
 
     return (
         <Dropdown menu={{ items, onClick: handleDropdownItemClick }} placement="bottom" trigger={["click"]}>

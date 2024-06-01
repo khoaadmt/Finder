@@ -6,7 +6,7 @@ require('dotenv').config();
 
 @Injectable()
 export class LocationRepository {
-  private readonly pageLimit = 3;
+  private readonly pageLimit = 6;
   constructor(
     @InjectModel(Location.name)
     private LocationModel: Model<Location>,

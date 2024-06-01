@@ -12,7 +12,7 @@ export const Facilities_page_index: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = searchParams.get("location");
     const [pageNumber, setPageNumber] = useState(1);
-    const [totalFacility, setTotalFacility] = useState(1);
+    const [totalFacility, setTotalFacility] = useState(0);
 
     useEffect(() => {
         axios
@@ -27,13 +27,11 @@ export const Facilities_page_index: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const newSearchParams = new URLSearchParams();
-
-        searchParams.forEach((value, key) => {
-            newSearchParams.set(key, value);
+        setSearchParams((prevParams) => {
+            const newParams = new URLSearchParams(prevParams);
+            newParams.set("page", pageNumber.toString());
+            return newParams;
         });
-        newSearchParams.set("page", pageNumber.toString());
-        setSearchParams(newSearchParams.toString());
     }, [pageNumber]);
 
     useEffect(() => {
@@ -56,7 +54,8 @@ export const Facilities_page_index: React.FC = () => {
             return res;
         }
     }, [searchParams]);
-    console.log(data);
+
+    console.log(totalFacility);
     return (
         <div className="min-h-screen flex gap-4">
             <div className="relative w-full">
@@ -81,11 +80,10 @@ export const Facilities_page_index: React.FC = () => {
                     </div>
                     <div className="py-[15px] pl-[23px]">
                         <span className="text-lg sm:text-xl font-semibold">
-                            {data ? `Tìm thấy ${data.length} sân đấu` : "Không tìm thấy sân đấu nào"}
+                            {data ? `Tìm thấy ${totalFacility} sân đấu` : "Không tìm thấy sân đấu nào"}
                         </span>
                     </div>
                     <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
-                        <div className="w-full flex justify-center items-center rounded-xl overflow-hidden"></div>
                         {data?.map((facility) => {
                             return <Facilities_card key={facility.Name} facility={facility} />;
                         })}

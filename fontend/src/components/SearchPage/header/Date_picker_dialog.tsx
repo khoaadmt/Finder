@@ -1,5 +1,4 @@
 import { DatePicker } from "antd";
-import dayjs, { Dayjs } from "dayjs";
 import { Moment } from "moment";
 import React from "react";
 interface Props {
@@ -28,16 +27,7 @@ export const Date_picker_dialog: React.FC<Props> = (props) => {
                         </div>
                         <div className="mb-2">
                             <div className="react-datepicker-wrapper">
-                                <div className="react-datepicker__input-container">
-                                    <DatePicker
-                                        style={{ width: "100%" }}
-                                        format={{
-                                            format: "DD-MM-YYYY",
-                                        }}
-                                        disabledDate={disabledDate}
-                                        onChange={onChange}
-                                    />
-                                </div>
+                                <div className="react-datepicker__input-container"></div>
                             </div>
                         </div>
                         <div className="w-full flex justify-end">

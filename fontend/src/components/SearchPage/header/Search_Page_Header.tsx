@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Input_Search } from "../input-search/Input_Search";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Dropdown, Menu, message } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../interface";
 import "./search_page_header.css";
-import { LogoutOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { FormOutlined, LogoutOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { logOutSuccess } from "../../redux/authSlice";
 
 interface Props {
     defaultSelectedKeys: string;
@@ -13,10 +14,11 @@ interface Props {
 export const Search_Page_header: React.FC<Props> = (props) => {
     const { defaultSelectedKeys } = props;
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const location = searchParams.get("location");
     const type = searchParams.get("type");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const menuItems = [
         { key: "1", label: "Home" },
@@ -28,6 +30,7 @@ export const Search_Page_header: React.FC<Props> = (props) => {
     const items = [
         { key: "1", label: "Trang cá nhân", icon: <UserOutlined /> },
         { key: "2", label: "Logout", icon: <LogoutOutlined /> },
+        { key: "3", label: "Bài viết của tôi", icon: <FormOutlined /> },
     ];
 
     const handleClickHeaderMenu = (e: any) => {
@@ -60,7 +63,15 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                 break;
         }
     };
-    const handleDropdownItemClick = (e: any) => {};
+    const handleLogOut = () => {
+        dispatch(logOutSuccess());
+        navigate("/");
+    };
+    const handleDropdownItemClick = (e: any) => {
+        if (e.key == 2) {
+            handleLogOut();
+        }
+    };
     return (
         <header className="sticky top-0 z-10 bg-white shadow-[rgba(0,0,0,0.1)_0px_10px_20px_-8px] pt-2">
             <nav className="sticky top-0 z-10 w-full bg-white py-3 sm:py-4">
@@ -101,7 +112,7 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                                                             decoding="async"
                                                             data-nimg="1"
                                                             className="rounded-full aspect-square object-cover"
-                                                            src="https://lh3.googleusercontent.com/a/ACg8ocKYdXQ3ysg8N_MRwyot0rxlUoFg_X2r-0MNOwW-_hoq3dBcjA=s96-c"
+                                                            src={user.avaUrl}
                                                             style={{ color: "transparent" }}
                                                         />
                                                     )}

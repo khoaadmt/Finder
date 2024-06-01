@@ -13,7 +13,7 @@ export class PostRepository {
 
   async finAllPost(city) {
     const currentDate = new Date();
-    const currentIsoDate = currentDate.toISOString();
+    const currentTimestamp = currentDate.getTime();
 
     return await this.Post.aggregate([
       {
@@ -21,6 +21,7 @@ export class PostRepository {
           location_id_ObjectId: { $toObjectId: '$location_id' },
         },
       },
+
       {
         $lookup: {
           from: 'locations',
@@ -36,6 +37,9 @@ export class PostRepository {
         $match: { 'location.city': city },
       },
       {
+        $match: { startTime: { $gt: currentTimestamp } },
+      },
+      {
         $lookup: {
           from: 'users',
           localField: 'username',
@@ -47,24 +51,6 @@ export class PostRepository {
         $unwind: '$user',
       },
       {
-        $addFields: {
-          fullDate: {
-            $dateFromString: {
-              dateString: {
-                $concat: ['$date', ' ', '$startTime'],
-              },
-              format: '%d-%m-%Y %H:%M',
-              onError: currentIsoDate,
-            },
-          },
-        },
-      },
-      {
-        $match: {
-          fullDate: { $gt: currentDate },
-        },
-      },
-      {
         $project: {
           location_id_ObjectId: 0,
           location_id: 0,
@@ -72,11 +58,7 @@ export class PostRepository {
           'user.password': 0,
           'user.accessToken': 0,
           'user.refreshToken': 0,
-          fullDate: 0, // Loại bỏ trường fullDate khỏi kết quả cuối cùng
         },
-      },
-      {
-        $sort: { createdAt: -1 }, // Sắp xếp theo thời gian tạo
       },
     ]);
   }
@@ -85,8 +67,8 @@ export class PostRepository {
     return await this.Post.countDocuments();
   }
 
-  async createPost(createPostDto: CreatePostDto) {
-    return await this.Post.create(createPostDto);
+  async createPost(newPost) {
+    return await this.Post.create(newPost);
   }
 
   async updateImagesOfPost(postId: string, urlImage: string[]) {

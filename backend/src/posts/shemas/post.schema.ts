@@ -13,16 +13,10 @@ export class Post {
   memberCount: number;
 
   @Prop()
-  date: string;
+  startTime: number;
 
   @Prop()
-  startTime: string;
-
-  @Prop({ type: Date })
-  dateValue: Date;
-
-  @Prop()
-  gender: string[];
+  gender: number;
 
   @Prop()
   phones: string[];

@@ -26,7 +26,7 @@ export class CreatePostDto {
 
   @IsString()
   @IsNotEmpty()
-  startTime: string;
+  time: string;
 
   @IsInt({ each: true, message: 'Each gender value must be an integer.' })
   @ArrayMinSize(1, { message: 'Gender array must have at least one value.' })

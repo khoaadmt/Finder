@@ -8,9 +8,6 @@ interface Props {
 export const Pagination_search_page: React.FC<Props> = (props) => {
     const pageSize = 6;
     const { setPageNumber, totalFacility } = props;
-
-    const [searchParams, setSearchParams] = useSearchParams();
-
     const handleOnChange = (pageNumber: number) => {
         setPageNumber(pageNumber);
     };

@@ -59,31 +59,31 @@ export const Level_value = [
 export const Price_value = [
     {
         label: "Thỏa thuận",
-        key: "0:price:Thỏa thuận",
+        key: "true:agreement:Thỏa thuận",
     },
     {
         label: "40K",
-        key: "40:price:40K",
+        key: "40000:price:40K",
     },
     {
         label: "50K",
-        key: "50:price:50K",
+        key: "50000:price:50K",
     },
     {
         label: "60K",
-        key: "60:price:60K",
+        key: "60000:price:60K",
     },
     {
         label: "70K",
-        key: "70:price:70K",
+        key: "70000:price:70K",
     },
     {
         label: "80k",
-        key: "80:price:80K",
+        key: "80000:price:80K",
     },
     {
         label: "trên 100k",
-        key: "100:price:Trên 100K",
+        key: "100001:price:Trên 100K",
     },
 ];
 

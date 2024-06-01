@@ -16,7 +16,7 @@ require('dotenv').config();
       serveRoot: '/api/uploads/post',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads', 'avatar'),
+      rootPath: join(__dirname, '..', '..', 'uploads', 'avatar'),
       serveRoot: '/api/uploads/avatar',
     }),
     LocationModule,
