@@ -12,7 +12,7 @@ export class UserRepository {
 
   async findUserToUpdate(username: string): Promise<User> {
     const user = await this.UserModel.findOne({ username: username })
-      .select('displayName contactPhone facebookId')
+      .select('displayName contactPhone facebookId avaUrl')
       .lean();
 
     if (!user) {
@@ -25,7 +25,7 @@ export class UserRepository {
       { username: username },
       { $set: updateData },
       { new: true, runValidators: true },
-    ).select('displayName contactPhone facebookId');
+    ).select('displayName contactPhone facebookId avaUrl');
     return updatedUser;
   }
 }

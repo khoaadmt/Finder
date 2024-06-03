@@ -11,6 +11,7 @@ import {
 } from "./authSlice";
 import { message } from "antd";
 import { Token } from "../../interface";
+import { createAxios } from "../createInstance";
 
 export const loginUser = async (user: any, dispatch: any, navigate: any) => {
     dispatch(setFetchingState);
@@ -52,18 +53,26 @@ export const loginWithSocial = async (token: Token, dispatch: any, navigate: any
     navigate("/");
 };
 export const updateUserInfo = async (dispatch: any, valuesUpdate: any, user: any) => {
-    axios
-        .put(`http://localhost:5000/api/user/${user.username}`, {
-            displayName: valuesUpdate.displayName,
-            contactPhone: valuesUpdate.contactPhone,
-            facebookId: valuesUpdate.facebookId,
-        })
+    let axiosJWT = createAxios(user, dispatch, setSuccessState);
+    axiosJWT
+        .put(
+            `http://localhost:5000/api/user/${user.username}`,
+            {
+                displayName: valuesUpdate.displayName,
+                contactPhone: valuesUpdate.contactPhone,
+                facebookId: valuesUpdate.facebookId,
+                avaUrl: valuesUpdate.avaUrl,
+            },
+            {
+                headers: { Authorization: `Bearer ${user?.accessToken}` },
+            }
+        )
         .then((res: any) => {
             const newUser = res.data.user;
             newUser.username = user.username;
             newUser.accessToken = user.accessToken;
             newUser.refreshToken = user.refreshToken;
-            newUser.avaUrl = user.avaUrl;
+
             dispatch(UpdateUserSuccess(newUser));
             message.success(res.data.message);
         })

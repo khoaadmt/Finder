@@ -1,10 +1,16 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { PostsController } from './posts.controller';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from './shemas/post.schema';
 import { PostsService } from './services/posts.service';
 import { PostRepository } from './repository/post.repository';
+import { VerifyTokenMiddleware } from 'src/middlewares/logging.middleware';
 
 @Module({
   imports: [
@@ -14,4 +20,10 @@ import { PostRepository } from './repository/post.repository';
   providers: [PostsService, PostRepository],
   exports: [PostsService],
 })
-export class PostsModule {}
+export class PostsModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(VerifyTokenMiddleware)
+      .forRoutes({ path: 'posts/', method: RequestMethod.POST });
+  }
+}

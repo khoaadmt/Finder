@@ -1,13 +1,14 @@
-import { Avatar, Button, Form, Space, Input, Row, Col, message } from "antd";
+import { Avatar, Button, Form, Space, Input, Row, Col, message, UploadFile, Upload, UploadProps } from "antd";
 import { Search_Page_header } from "../SearchPage/header/Search_Page_Header";
-import { EditOutlined, UserOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import { EditOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../interface";
 import "./userprofile.css";
-import { max, min } from "moment";
+
 import axios from "axios";
 import { updateUserInfo } from "../redux/apiRequest";
+import { PicturesWall } from "../Posts/PictureWall/PicturesWall";
 
 export const UserProfile = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
@@ -16,7 +17,9 @@ export const UserProfile = () => {
         contactPhoneInput: true,
         facebookId: true,
     };
+    const [isChangeAvatar, setIsChangeAvatar] = useState(true);
     const [isEditable, setIsEditable] = useState(initInputState);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const dispatch = useDispatch();
 
     const rules = {
@@ -55,18 +58,37 @@ export const UserProfile = () => {
             },
         ],
     };
-    const handleEditClick = (inputName: any) => {
+    const handleEditClick = (inputName: string) => {
         setIsEditable((prev) => ({
             ...prev,
             [inputName]: false,
         }));
     };
 
-    const handleFormFinish = (values: any) => {
+    const handleFormFinish = async (values: any) => {
+        const formData = new FormData();
+        fileList.forEach((file) => {
+            formData.append("files", file.originFileObj as File);
+        });
+
+        const avaUrlResponse = await axios.post("http://localhost:5000/api/upload/avatar", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        values.avaUrl = avaUrlResponse.data[0].url;
+
         updateUserInfo(dispatch, values, user);
         setIsEditable(initInputState);
     };
 
+    useEffect(() => {
+        if (fileList.length > 0) {
+            setIsChangeAvatar(false);
+        } else {
+            setIsChangeAvatar(true);
+        }
+    }, [fileList]);
     return (
         <div className="user-profile">
             <Search_Page_header defaultSelectedKeys="0" />
@@ -111,8 +133,6 @@ export const UserProfile = () => {
                                         </div>
                                     </Space.Compact>
                                 </Form.Item>
-                            </Col>
-                            <Col span={12}>
                                 <Form.Item name="facebookId" label="Facebook ID" rules={rules.facebookId}>
                                     <Space.Compact>
                                         <Input
@@ -128,6 +148,11 @@ export const UserProfile = () => {
                                     </Space.Compact>
                                 </Form.Item>
                             </Col>
+                            <Col span={12}>
+                                <Form.Item name="facebookId" label="Avatar" rules={rules.facebookId}>
+                                    <PicturesWall setFileList={setFileList} fileList={fileList} maxCount={1} />
+                                </Form.Item>
+                            </Col>
                         </Row>
                         <Form.Item>
                             <Button
@@ -135,7 +160,10 @@ export const UserProfile = () => {
                                 htmlType="submit"
                                 style={{ marginTop: "18px" }}
                                 disabled={
-                                    isEditable.contactPhoneInput && isEditable.displaynameInput && isEditable.facebookId
+                                    isEditable.contactPhoneInput &&
+                                    isEditable.displaynameInput &&
+                                    isEditable.facebookId &&
+                                    isChangeAvatar
                                 }>
                                 Change
                             </Button>

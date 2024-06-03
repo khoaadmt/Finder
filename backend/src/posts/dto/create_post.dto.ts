@@ -1,11 +1,4 @@
-import {
-  ArrayMinSize,
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -28,9 +21,7 @@ export class CreatePostDto {
   @IsNotEmpty()
   time: string;
 
-  @IsInt({ each: true, message: 'Each gender value must be an integer.' })
-  @ArrayMinSize(1, { message: 'Gender array must have at least one value.' })
-  gender: number[];
+  gender: number;
 
   @IsNotEmpty()
   phones: string[];

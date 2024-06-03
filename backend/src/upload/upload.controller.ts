@@ -40,6 +40,6 @@ export class UploadController {
       status: 'done',
       uid: file.filename,
     }));
-    return { files: uploadedFiles };
+    return uploadedFiles;
   }
 }

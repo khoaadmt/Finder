@@ -18,6 +18,7 @@ const App: React.FC = () => {
         <div className="App">
             <Routes>
                 <Route path="/" element={<Home_Page />} />
+                <Route path="test" element={<Home_Page />} />
                 <Route path="search" element={<Search_page_index />}>
                     <Route path="facilities" element={<Facilities_page_index />} />
                     <Route path="sessions" element={<SessionsPage />} />

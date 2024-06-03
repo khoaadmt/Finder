@@ -14,4 +14,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   facebookId?: string;
+
+  @IsOptional()
+  @IsString()
+  avaUrl?: string;
 }

@@ -11,14 +11,18 @@ import "./createpost.css";
 import { disabledDate, filterOption } from "../FunctionHandler";
 import axios from "axios";
 import { RootState, optional } from "../../../interface";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { notJustNumber } from "../../Auth/validationSchema";
+import { setSuccessState } from "../../redux/authSlice";
+import { createAxios } from "../../createInstance";
 
 export const CreatePostContent: React.FC = () => {
     const [phones, setPhones] = useState([""]);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [locationOptions, setLocationOptions] = useState();
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(user, dispatch, setSuccessState);
 
     const createPostForm = useFormik({
         initialValues: {
@@ -27,7 +31,7 @@ export const CreatePostContent: React.FC = () => {
             memberCount: "",
             date: "",
             time: "",
-            gender: null,
+            gender: "",
             phones: [""],
             images: "",
             levelMemberMin: null,
@@ -56,9 +60,15 @@ export const CreatePostContent: React.FC = () => {
                 formData.append("files", file.originFileObj as File);
             });
 
-            const resPostId = await axios.post("http://localhost:5000/api/posts", {
-                values,
-            });
+            const resPostId = await axiosJWT.post(
+                "http://localhost:5000/api/posts",
+                {
+                    values,
+                },
+                {
+                    headers: { Authorization: `Bearer ${user?.accessToken}` },
+                }
+            );
 
             const postId = resPostId.data;
 
@@ -78,8 +88,12 @@ export const CreatePostContent: React.FC = () => {
         createPostForm.setFieldValue("location_id", value);
     };
 
-    const handleGenderChange = (value: any) => {
-        createPostForm.setFieldValue("gender", value);
+    const handleGenderChange = (values: number[]) => {
+        let total = 0;
+        values.forEach((value: number) => {
+            total += value;
+        });
+        createPostForm.setFieldValue("gender", total);
     };
 
     const handleDateChange = (date: Dayjs, dateString: string | string[]) => {
@@ -315,7 +329,7 @@ export const CreatePostContent: React.FC = () => {
                     </div>
                     <div className="font-semibold text-lg text-black-ish-200 mt-2">Hình ảnh mô tả</div>
                     <div className="flex flex-wrap gap-3">
-                        <PicturesWall fileList={fileList} setFileList={setFileList} />
+                        <PicturesWall fileList={fileList} setFileList={setFileList} maxCount={10} />
                     </div>
                     <div className=" md:flex justify-center mt-2">
                         <div className="w-full sm:w-1/2 lg:w-2/3 flex gap-4 justify-end">

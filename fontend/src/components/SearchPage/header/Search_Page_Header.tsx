@@ -5,7 +5,7 @@ import { Dropdown, Menu, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../interface";
 import "./search_page_header.css";
-import { FormOutlined, LogoutOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { FormOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { logOutSuccess } from "../../redux/authSlice";
 
 interface Props {

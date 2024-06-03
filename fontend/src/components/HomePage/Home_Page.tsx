@@ -8,14 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../interface";
 import { Dropdown, Menu, message } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const logo = require("../../assets/images/badminton.png");
 
 export const Home_Page: React.FC = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    let axiosJWT = createAxios(user, dispatch, setSuccessState);
     // useEffect(() => {
     //     const getData = async () => {
     //         const res = await axiosJWT.post(
