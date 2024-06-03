@@ -25,6 +25,8 @@ export class AuthService {
       username: username,
       displayName: displayName,
       avaUrl: avaUrl,
+      facebookId: '',
+      contactPhone: '',
     };
 
     const user = await this.authRepository.findUserByGoogleType(username);
@@ -34,6 +36,9 @@ export class AuthService {
         displayName,
         avaUrl,
       );
+    } else {
+      payload.facebookId = user.facebookId;
+      payload.contactPhone = user.contactPhone;
     }
     const token = await this.genarateToken(payload);
     return token;
@@ -50,8 +55,11 @@ export class AuthService {
       username: username,
       displayName: displayName,
       avaUrl: '',
+      facebookId: username,
+      contactPhone: '',
     };
     const user = await this.authRepository.findUserByFacebookType(username);
+
     if (!user) {
       const newUser = await this.authRepository.createUserByFacebookType(
         username,
@@ -60,6 +68,7 @@ export class AuthService {
       payload.avaUrl = newUser.avaUrl;
     } else {
       payload.avaUrl = user.avaUrl;
+      payload.contactPhone = user.contactPhone;
     }
     const token = await this.genarateToken(payload);
     return token;
@@ -109,6 +118,8 @@ export class AuthService {
       username: user.username,
       displayName: user.displayName,
       avaUrl: user.avaUrl,
+      contactPhone: user.contactPhone,
+      facebookId: user.facebookId,
     };
     const token = await this.genarateToken(payload);
 
@@ -130,6 +141,8 @@ export class AuthService {
         username: verify.username,
         displayName: verify.displayName,
         avaUrl: verify.avaUrl,
+        contactPhone: verify.contactPhone,
+        facebookId: verify.facebookId,
       });
     } catch (err) {
       throw new HttpException(
@@ -143,10 +156,12 @@ export class AuthService {
     username: string;
     displayName: string;
     avaUrl: string;
+    contactPhone: string;
+    facebookId: string;
   }) {
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: '10s',
+      expiresIn: '1h',
     });
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.REFRESH_TOKEN_SECRET,

@@ -44,6 +44,7 @@ export class AuthRepository {
       type: 'FACEBOOK',
       username: username,
       displayName: displayName,
+      facebookId: username,
     });
   }
   async createUserByGoogleType(

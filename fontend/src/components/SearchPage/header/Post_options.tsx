@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Option_button } from "./Option_button";
 import { Distance_value, Gender_value, Level_value, MemberNumber_value, Price_value } from "./Values_option";
-import { Date_picker_dialog } from "./Date_picker_dialog";
-import { Time_picker_dialog } from "./Time_picker_dialog";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { FilterOptions } from "../../../interface";
 import { DatePicker, TimePicker } from "antd";
+import "./search_page_header.css";
 
 interface Props {
     setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions | null>>;
@@ -73,7 +71,7 @@ export const Post_options: React.FC<Props> = (props) => {
                 <Option_button defaultValue="Trình độ" items_value={Level_value} setFilterOptions={setFilterOptions} />
                 <div className="">
                     <DatePicker
-                        className="sm:py-[12px] sm:px-[17px] xl:px-[8px]"
+                        className="sm:py-[11px] sm:px-[17px] xl:px-[8px] custom-datepicker"
                         style={{ width: "120px", borderRadius: "25px" }}
                         format={{
                             format: "DD-MM-YYYY",
@@ -86,15 +84,11 @@ export const Post_options: React.FC<Props> = (props) => {
 
                 <div className="">
                     <TimePicker
+                        className="lg:py-[11px] custom-timepicker"
                         onChange={handleChangeTime}
                         minuteStep={15}
-                        style={{ width: "100px" }}
+                        style={{ width: "100px", borderRadius: "25px" }}
                         placeholder="Giờ"
-                        // popupStyle={{
-                        //     height: "53px",
-                        //     width: "155px",
-                        // }}
-
                         format={"HH:mm"}
                     />
                 </div>

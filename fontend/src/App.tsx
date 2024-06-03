@@ -11,6 +11,7 @@ import { SocialRedirect } from "./components/Auth/GoogleRedirect/SocialRedirect"
 
 import { Home_Page } from "./components/HomePage/Home_Page";
 import { CreatePostPage } from "./components/Posts/CreatePostPage/CreatePostPage";
+import { UserProfile } from "./components/user/UserProfile";
 
 const App: React.FC = () => {
     return (
@@ -28,6 +29,9 @@ const App: React.FC = () => {
                 <Route path="login" element={<Login_page />} />
                 <Route path="auth">
                     <Route path="social/redirect" element={<SocialRedirect />} />
+                </Route>
+                <Route path="user">
+                    <Route path="update-profile" element={<UserProfile />} />
                 </Route>
                 <Route path="*" element={<Not_found_page />} />
             </Routes>

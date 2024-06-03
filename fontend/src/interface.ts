@@ -79,6 +79,8 @@ export interface AuthState {
             username: string;
             displayName: string;
             avaUrl: string;
+            contactPhone: string;
+            facebookId: string;
             accessToken: string;
             refreshToken: string;
         } | null;

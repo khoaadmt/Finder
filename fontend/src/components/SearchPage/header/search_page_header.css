@@ -18,12 +18,13 @@
     background-color: #f5002f;
     border-color: #f5002f;
 }
-.date-picker {
-    padding-top: 4px;
-    position: absolute;
+.custom-datepicker .ant-picker-input input::placeholder {
+    color: #000000;
+    font-weight: 600;
+    font-family: "Sora", sans-serif;
 }
-.time-picker {
-    width: 30px !important;
-    padding-top: 4px;
-    position: absolute;
+.custom-timepicker .ant-picker-input input::placeholder {
+    color: #000000;
+    font-weight: 600;
+    font-family: "Sora", sans-serif;
 }

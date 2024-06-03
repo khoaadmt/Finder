@@ -15,9 +15,15 @@ export class User {
   password: string;
 
   @Prop({
-    default: 'http://localhost:5000/api/uploads/avatar/avatar-default.svg',
+    default: 'http://localhost:5000/api/uploads/avatar/user_avatar_default.png',
   })
   avaUrl: string;
+
+  @Prop({ default: '' })
+  contactPhone: string;
+
+  @Prop({ default: '' })
+  facebookId: string;
 
   @Prop({ default: 'refresh_token' })
   refreshToken: string;

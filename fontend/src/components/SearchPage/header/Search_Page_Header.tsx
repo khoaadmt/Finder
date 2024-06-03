@@ -71,6 +71,9 @@ export const Search_Page_header: React.FC<Props> = (props) => {
         if (e.key == 2) {
             handleLogOut();
         }
+        if (e.key == 1) {
+            navigate("/user/update-profile");
+        }
     };
     return (
         <header className="sticky top-0 z-10 bg-white shadow-[rgba(0,0,0,0.1)_0px_10px_20px_-8px] pt-2">
