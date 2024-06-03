@@ -59,6 +59,10 @@ export const authSlice = createSlice({
             state.register.error = true;
             state.mgs = actions.payload.message;
         },
+
+        UpdateUserSuccess: (state, actions) => {
+            state.login.currentUser = actions.payload;
+        },
     },
 });
 
@@ -70,5 +74,6 @@ export const {
     RegisterSuccess,
     RegisterFailure,
     logOutSuccess,
+    UpdateUserSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;

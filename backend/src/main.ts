@@ -12,7 +12,7 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization, token',
   });
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
   await app.listen(5000);
 }

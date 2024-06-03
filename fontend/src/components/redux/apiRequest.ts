@@ -4,6 +4,7 @@ import {
     RegisterFailure,
     RegisterSuccess,
     Registerstart,
+    UpdateUserSuccess,
     setFailureState,
     setFetchingState,
     setSuccessState,
@@ -50,7 +51,27 @@ export const loginWithSocial = async (token: Token, dispatch: any, navigate: any
 
     navigate("/");
 };
-
+export const updateUserInfo = async (dispatch: any, valuesUpdate: any, user: any) => {
+    axios
+        .put(`http://localhost:5000/api/user/${user.username}`, {
+            displayName: valuesUpdate.displayName,
+            contactPhone: valuesUpdate.contactPhone,
+            facebookId: valuesUpdate.facebookId,
+        })
+        .then((res: any) => {
+            const newUser = res.data.user;
+            newUser.username = user.username;
+            newUser.accessToken = user.accessToken;
+            newUser.refreshToken = user.refreshToken;
+            newUser.avaUrl = user.avaUrl;
+            dispatch(UpdateUserSuccess(newUser));
+            message.success(res.data.message);
+        })
+        .catch((err: any) => {
+            console.log("err :", err);
+            message.error(err.message);
+        });
+};
 export const registerUser = async (user: any, dispatch: any, navigate: any) => {
     dispatch(Registerstart);
     try {

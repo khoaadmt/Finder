@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { UserModule } from './user/user.module';
 
 require('dotenv').config();
 @Module({
@@ -23,8 +24,9 @@ require('dotenv').config();
     PostsModule,
     AuthModule,
     UploadModule,
+    UserModule,
   ],
-  controllers: [],
+
   providers: [],
 })
 export class AppModule {}

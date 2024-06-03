@@ -1,36 +1,25 @@
-import { Avatar, Button, Form, Space, Input, Row, Col } from "antd";
+import { Avatar, Button, Form, Space, Input, Row, Col, message } from "antd";
 import { Search_Page_header } from "../SearchPage/header/Search_Page_Header";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../interface";
 import "./userprofile.css";
 import { max, min } from "moment";
+import axios from "axios";
+import { updateUserInfo } from "../redux/apiRequest";
 
 export const UserProfile = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
-    const [isEditable, setIsEditable] = useState({
-        usernameInput: true,
+    const initInputState = {
         displaynameInput: true,
         contactPhoneInput: true,
         facebookId: true,
-    });
+    };
+    const [isEditable, setIsEditable] = useState(initInputState);
+    const dispatch = useDispatch();
 
     const rules = {
-        username: [
-            {
-                required: !isEditable.usernameInput,
-                message: "Username is require!",
-            },
-            {
-                min: 4,
-                message: "Username require min 4 characters!",
-            },
-            {
-                max: 12,
-                message: "Username require max 12 characters!",
-            },
-        ],
         displayName: [
             {
                 required: !isEditable.displaynameInput,
@@ -41,7 +30,7 @@ export const UserProfile = () => {
                 message: "Display name require min 4 characters!",
             },
             {
-                max: 12,
+                max: 16,
                 message: "Display name max 12 characters!",
             },
         ],
@@ -74,7 +63,8 @@ export const UserProfile = () => {
     };
 
     const handleFormFinish = (values: any) => {
-        console.log(values);
+        updateUserInfo(dispatch, values, user);
+        setIsEditable(initInputState);
     };
 
     return (
@@ -93,20 +83,6 @@ export const UserProfile = () => {
                     <Form onFinish={handleFormFinish} layout="vertical" style={{ padding: "20px" }}>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <Form.Item name="username" label="User Name" rules={rules.username}>
-                                    <Space.Compact>
-                                        <Input
-                                            className="input-form-item"
-                                            defaultValue={user?.username}
-                                            disabled={isEditable.usernameInput}
-                                        />
-                                        <div
-                                            className="icon-input-form-item"
-                                            onClick={() => handleEditClick("usernameInput")}>
-                                            <EditOutlined style={{ fontSize: "18px" }} />
-                                        </div>
-                                    </Space.Compact>
-                                </Form.Item>
                                 <Form.Item name="displayName" label="Display Name" rules={rules.displayName}>
                                     <Space.Compact>
                                         <Input
@@ -121,8 +97,6 @@ export const UserProfile = () => {
                                         </div>
                                     </Space.Compact>
                                 </Form.Item>
-                            </Col>
-                            <Col span={12}>
                                 <Form.Item name="contactPhone" label="Contact Phone" rules={rules.contactPhone}>
                                     <Space.Compact>
                                         <Input
@@ -137,6 +111,8 @@ export const UserProfile = () => {
                                         </div>
                                     </Space.Compact>
                                 </Form.Item>
+                            </Col>
+                            <Col span={12}>
                                 <Form.Item name="facebookId" label="Facebook ID" rules={rules.facebookId}>
                                     <Space.Compact>
                                         <Input
@@ -159,9 +135,7 @@ export const UserProfile = () => {
                                 htmlType="submit"
                                 style={{ marginTop: "18px" }}
                                 disabled={
-                                    isEditable.contactPhoneInput &&
-                                    isEditable.displaynameInput &&
-                                    isEditable.usernameInput
+                                    isEditable.contactPhoneInput && isEditable.displaynameInput && isEditable.facebookId
                                 }>
                                 Change
                             </Button>
