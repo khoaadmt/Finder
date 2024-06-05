@@ -28,31 +28,31 @@ export const Distance_value = [
 export const Level_value = [
     {
         label: "Yếu",
-        key: "0:level:Yếu",
+        key: "1:level:Yếu",
     },
     {
         label: "TBY",
-        key: "1:level:TBY",
+        key: "2:level:TBY",
     },
     {
         label: "TB-",
-        key: "2:level:TB-",
+        key: "3:level:TB-",
     },
     {
         label: "TB",
-        key: "3:level:TB",
+        key: "4:level:TB",
     },
     {
         label: "TB+",
-        key: "4:level:TB+",
+        key: "5:level:TB+",
     },
     {
         label: "TBK",
-        key: "5:level:TBK",
+        key: "6:level:TBK",
     },
     {
         label: "Khá",
-        key: "6:level:Khá",
+        key: "7:level:Khá",
     },
 ];
 
@@ -81,42 +81,38 @@ export const Price_value = [
         label: "80k",
         key: "80000:price:80K",
     },
-    {
-        label: "trên 100k",
-        key: "100001:price:Trên 100K",
-    },
 ];
 
-export const MemberNumber_value = [
+export const MemberCount_value = [
     {
         label: "1 người",
-        key: "0:memberNumber:1 người",
+        key: "1:memberCount:1 người",
     },
     {
         label: "2 người",
-        key: "1:memberNumber:2 người",
+        key: "2:memberCount:2 người",
     },
     {
         label: "3 người",
-        key: "2:memberNumber:3 người",
+        key: "3:memberCount:3 người",
     },
     {
         label: "4 người",
-        key: "3:memberNumber:4 người",
+        key: "4:memberCount:4 người",
     },
 ];
 
 export const Gender_value = [
     {
         label: "Chỉ nam",
-        key: "0:gender:Chỉ nam",
+        key: "1:gender:Chỉ nam",
     },
     {
         label: "Chỉ nữ",
-        key: "1:gender:Chỉ nữ",
+        key: "2:gender:Chỉ nữ",
     },
     {
         label: "Cả nam và nữ",
-        key: "2:gender:Cả nam và nữ",
+        key: "3:gender:Cả nam và nữ",
     },
 ];

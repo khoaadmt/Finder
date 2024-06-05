@@ -107,7 +107,7 @@ export interface optional {
 export interface FilterOptions {
     sortBy: any;
     distance: number;
-    level: string;
+    level: number;
     date: string;
     time: string;
     price: number;

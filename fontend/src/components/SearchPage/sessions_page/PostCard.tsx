@@ -37,7 +37,7 @@ export const PostCard: React.FC<Props> = (props) => {
                 />
                 <div className="absolute top-[6px] right-[6px] bg-primary text-white rounded-full pb-[5px] pt-[2px] px-[8px] sm:py-1 sm:px-[12px] leading-[10px] sm:leading-[14px]">
                     <span className="text-[10px] sm:text-sm font-semibold">
-                        {post.agreement ? "Thỏa thuận" : `${post.priceMin - post.priceMax}`}
+                        {post.agreement ? "Thỏa thuận" : `${post.priceMin} - ${post.priceMax}`}
                     </span>
                 </div>
             </div>

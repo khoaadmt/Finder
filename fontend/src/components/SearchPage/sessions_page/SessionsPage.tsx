@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { Post_options } from "../header/Post_options";
 import { PostCard } from "./PostCard";
 import axios from "axios";
+import { message } from "antd";
 
 export const SessionsPage = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -36,40 +37,38 @@ export const SessionsPage = () => {
         });
     }, [pageNumber]);
 
+    // useEffect(() => {
+    //     axios
+    //         .get("api/posts/count", {
+    //             params: {
+    //                 page: pageNumber,
+    //                 city: location,
+    //             },
+    //         })
+    //         .then((response) => {
+    //             setTotalPosts(response.data);
+    //         });
+    // }, []);
+
     useEffect(() => {
+        console.log("filterOptions :", filterOptions);
         axios
-            .get("api/posts/count", {
+            .get("http://localhost:5000/api/posts/filter", {
                 params: {
+                    filter: filterOptions,
                     page: pageNumber,
                     city: location,
                 },
             })
-            .then((response) => {
-                setTotalPosts(response.data);
-            });
-    }, []);
-
-    useEffect(() => {
-        const getData = async () => {
-            return await axios.get("http://localhost:5000/api/posts", {
-                params: {
-                    page: pageNumber,
-                    city: location,
-                },
-            });
-        };
-        getData()
             .then((res) => {
+                if (res.data.length == 0) {
+                    message.info("không có bài viết nào !");
+                }
                 setData(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [pageNumber, searchParams]);
 
-    useEffect(() => {
-        console.log(filterOptions);
-    }, [filterOptions]);
+                setTotalPosts(res.data.length + 1);
+            });
+    }, [filterOptions, pageNumber, searchParams]);
 
     return (
         <div className="min-h-screen flex gap-4">
@@ -82,9 +81,10 @@ export const SessionsPage = () => {
                         </span>
                     </div>
                     <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
-                        {data?.map((post) => {
-                            return <PostCard key={post._id} post={post} />;
-                        })}
+                        {data &&
+                            data?.map((post) => {
+                                return <PostCard key={post._id} post={post} />;
+                            })}
                     </div>
 
                     {/* PAGINATION */}

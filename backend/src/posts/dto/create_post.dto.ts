@@ -21,6 +21,7 @@ export class CreatePostDto {
   @IsNotEmpty()
   time: string;
 
+  @IsNumber()
   gender: number;
 
   @IsNotEmpty()
@@ -29,11 +30,9 @@ export class CreatePostDto {
   images: string[];
 
   @IsNumber()
-  @IsNotEmpty()
   levelMemberMin: number;
 
   @IsNumber()
-  @IsNotEmpty()
   levelMemberMax: number;
 
   priceMin: number;

@@ -70,7 +70,8 @@ export const CreatePostContent: React.FC = () => {
                 }
             );
 
-            const postId = resPostId.data;
+            const postId = resPostId.data.post;
+            console.log("postId in create post content:", postId);
 
             formData.append("postId", String(postId));
 
@@ -79,6 +80,7 @@ export const CreatePostContent: React.FC = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
+            console.log(responseUpload);
         },
     });
 
