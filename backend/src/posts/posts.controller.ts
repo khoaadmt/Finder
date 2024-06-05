@@ -12,8 +12,6 @@ export class PostsController {
 
   @Get('/filter')
   getPostByFilter(@Query() data: any) {
-    console.log('data :', data);
-
     if (data.filter) {
       return this.postService.getPostsByFilter(
         data.filter,
@@ -23,11 +21,6 @@ export class PostsController {
     } else {
       return this.postService.getAllPosts(data.page, data.city);
     }
-  }
-
-  @Get('/count')
-  countPosts(@Query('page') pageNumber: number, @Query('city') city: string) {
-    return this.postService.countPosts(pageNumber, city);
   }
 
   @Post()

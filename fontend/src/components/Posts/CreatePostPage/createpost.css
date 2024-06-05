@@ -1,10 +1,15 @@
 @media (max-width: 1400px) {
     .create-post-form {
-        transform: scale(0.9);
+        transform: scale(0.85);
+    }
+}
+@media (max-width: 600px) {
+    .create-post-form {
+        transform: scale(0.8);
+        margin-top: -150px;
     }
 }
 .create-post-form {
-    margin-top: -30px;
     color: #303030;
 }
 .custom-dropdown .ant-select-item {

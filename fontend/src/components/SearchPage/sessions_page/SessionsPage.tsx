@@ -6,6 +6,7 @@ import { Post_options } from "../header/Post_options";
 import { PostCard } from "./PostCard";
 import axios from "axios";
 import { message } from "antd";
+import "./sessionpage.css";
 
 export const SessionsPage = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -37,19 +38,6 @@ export const SessionsPage = () => {
         });
     }, [pageNumber]);
 
-    // useEffect(() => {
-    //     axios
-    //         .get("api/posts/count", {
-    //             params: {
-    //                 page: pageNumber,
-    //                 city: location,
-    //             },
-    //         })
-    //         .then((response) => {
-    //             setTotalPosts(response.data);
-    //         });
-    // }, []);
-
     useEffect(() => {
         console.log("filterOptions :", filterOptions);
         axios
@@ -64,14 +52,14 @@ export const SessionsPage = () => {
                 if (res.data.length == 0) {
                     message.info("không có bài viết nào !");
                 }
-                setData(res.data);
+                setData(res.data.rows);
 
-                setTotalPosts(res.data.length + 1);
+                setTotalPosts(res.data.totalPosts);
             });
     }, [filterOptions, pageNumber, searchParams]);
 
     return (
-        <div className="min-h-screen flex gap-4">
+        <div className="sessions-content-page min-h-screen flex gap-4">
             <div className="relative w-full">
                 <Post_options setFilterOptions={setFilterOptions} />
                 <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh - 192px)]">

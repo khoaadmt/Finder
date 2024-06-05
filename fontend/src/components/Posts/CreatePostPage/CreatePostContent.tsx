@@ -142,10 +142,10 @@ export const CreatePostContent: React.FC = () => {
     };
 
     return (
-        <div className="create-post-form max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4">
+        <div className="create-post-form max-w-[2520px] mx-auto">
             <form
                 onSubmit={createPostForm.handleSubmit}
-                className="my-4 sm:my-6 rounded-2xl border-2 flex flex-col md:flex-row gap-6 p-4 sm:p-6">
+                className="rounded-2xl border-2 flex flex-col md:flex-row gap-6 p-4 sm:p-6 xl:mt-[-30px] md:mt-[-20px] sm:mt-[-60px]">
                 <div className="flex-1 flex flex-col gap-4 md:w-3/5 pb-[18px]">
                     <div className="font-semibold text-lg text-black-ish-200">Thông tin chung</div>
 

@@ -25,10 +25,11 @@ export class PostsService {
 
   async getAllPosts(pageNumber: number, city: string) {
     const posts = await this.postRepository.finAllPost(city);
-    let skip = (pageNumber - 1) * this.pageLimit;
 
+    let skip = (pageNumber - 1) * this.pageLimit;
     const result = posts.slice(skip, skip + this.pageLimit);
-    return result;
+
+    return { rows: result, totalPosts: posts.length, page: pageNumber };
   }
 
   converBoolean = (value: string) => {
@@ -77,23 +78,12 @@ export class PostsService {
     city: string,
   ) {
     const posts = await this.postRepository.finAllPost(city);
-
     const filteredPosts = this.filteredPosts(posts, filter);
-    return filteredPosts;
-  }
-  async countPosts(pageNumber: number, city: string) {
-    // const date = new Date(`2024-05-30T23:30`);
 
-    // const timestamp = date.getTime();
-    // console.log('timestamp :', timestamp);
+    let skip = (pageNumber - 1) * this.pageLimit;
+    const result = filteredPosts.slice(skip, skip + this.pageLimit);
 
-    // const dateConvert = dayjs(1717165800000, 'DD-MM-YYYY HH:mm');
-    // console.log('dateConvert :', dateConvert);
-    // console.log('dateConvert :', dateConvert.format('DD/MM/YYYY'));
-    // console.log('dateConvert :', dateConvert.format('HH:mm'));
-
-    const post = await this.postRepository.finAllPost(city);
-    return post.length;
+    return { rows: result, totalPosts: posts.length, page: pageNumber };
   }
 
   async createPost(createPostDto: CreatePostDto) {
