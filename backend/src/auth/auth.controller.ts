@@ -13,9 +13,9 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login.dto';
 import { GoogleAuthGuard } from './utils/GoogleAuthGuards';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './services/auth.service';
+import { Request } from 'express';
 import { Response } from 'express';
 
 @Controller('auth')

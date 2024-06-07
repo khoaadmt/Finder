@@ -97,7 +97,7 @@ export const Home_Page: React.FC = () => {
                 }}>
                 <div className="logo"></div>
                 <Menu
-                    className="menu-header-left-home-page"
+                    className="menu-header-left-home-page sm:text-xs"
                     theme="dark"
                     mode="horizontal"
                     defaultSelectedKeys={["1"]}

@@ -1,3 +1,22 @@
+@media (max-width: 768px) {
+    .menu-header-left-home-page {
+        font-size: 14px !important;
+    }
+    .menu-header-left-home-page .ant-menu-item {
+        padding: 0 12px;
+    }
+    /* .title-container {
+        margin-top: -50px !important;
+    } */
+    .title-home-page {
+        font-size: 42px !important;
+    }
+    .description-home-page {
+        font-size: 18px !important;
+        margin-bottom: -10px;
+    }
+}
+
 .home-page-content {
     width: 100vw;
     height: 100vh;
@@ -15,7 +34,7 @@
     flex: 1;
     background-color: transparent;
     color: white !important;
-    font-size: 20px !important;
+    font-size: 20px;
     font-weight: 400;
 }
 .menu-header-right-home-page {

@@ -53,8 +53,8 @@ export const Post_options: React.FC<Props> = (props) => {
     };
 
     return (
-        <div className=" pt-4 font-normal flex justify-center sm:pt-4 pb-4  sm:px-5 overflow-x-scroll lg:overflow-visible">
-            <div className="flex gap-2 sm:gap-[10px]">
+        <div className="option-button-container pt-4 font-normal flex xl:mx-[48px]  lg:mx-[36px] sm:pt-4 pb-4  sm:px-5 overflow-x-scroll lg:overflow-visible">
+            <div className="flex gap-2 sm:gap-[15px]">
                 <div>
                     <button
                         onClick={() => handleSortBtnClick("sortBy", "upcoming")}
@@ -72,29 +72,26 @@ export const Post_options: React.FC<Props> = (props) => {
                     setFilterOptions={setFilterOptions}
                 />
                 <Option_button defaultValue="Trình độ" items_value={Level_value} setFilterOptions={setFilterOptions} />
-                <div className="">
-                    <DatePicker
-                        className="sm:py-[11px] sm:px-[17px] xl:px-[8px] custom-datepicker"
-                        style={{ width: "120px", borderRadius: "25px" }}
-                        format={{
-                            format: "DD-MM-YYYY",
-                        }}
-                        placeholder="Ngày"
-                        disabledDate={disabledDate}
-                        onChange={HandleDatePickerOnChange}
-                    />
-                </div>
 
-                <div className="">
-                    <TimePicker
-                        className="lg:py-[11px] custom-timepicker"
-                        onChange={handleChangeTime}
-                        minuteStep={15}
-                        style={{ width: "100px", borderRadius: "25px" }}
-                        placeholder="Giờ"
-                        format={"HH:mm"}
-                    />
-                </div>
+                <DatePicker
+                    className="sm:py-[11px] sm:px-[17px] xl:px-[8px] custom-datepicker"
+                    style={{ width: "120px", borderRadius: "25px" }}
+                    format={{
+                        format: "DD-MM-YYYY",
+                    }}
+                    placeholder="Ngày"
+                    disabledDate={disabledDate}
+                    onChange={HandleDatePickerOnChange}
+                />
+
+                <TimePicker
+                    className="lg:py-[11px] custom-timepicker"
+                    onChange={handleChangeTime}
+                    minuteStep={15}
+                    style={{ width: "100px", borderRadius: "25px" }}
+                    placeholder="Giờ"
+                    format={"HH:mm"}
+                />
 
                 <Option_button defaultValue="Giá" items_value={Price_value} setFilterOptions={setFilterOptions} />
                 <Option_button

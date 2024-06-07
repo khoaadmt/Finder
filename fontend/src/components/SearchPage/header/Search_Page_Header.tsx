@@ -5,8 +5,9 @@ import { Dropdown, Menu, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../interface";
 import "./search_page_header.css";
-import { FormOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { FormOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from "@ant-design/icons";
 import { logOutSuccess } from "../../redux/authSlice";
+import { MenuButton } from "./MenuButton";
 
 interface Props {
     defaultSelectedKeys: string;
@@ -20,17 +21,29 @@ export const Search_Page_header: React.FC<Props> = (props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const items = [
+        { key: "1", label: "Trang cá nhân", icon: <UserOutlined /> },
+        { key: "2", label: "Logout", icon: <LogoutOutlined /> },
+        { key: "3", label: "Bài viết của tôi", icon: <FormOutlined /> },
+    ];
+
+    const handleLogOut = () => {
+        dispatch(logOutSuccess());
+        navigate("/");
+    };
+    const handleDropdownItemClick = (e: any) => {
+        if (e.key == 2) {
+            handleLogOut();
+        }
+        if (e.key == 1) {
+            navigate("/user/update-profile");
+        }
+    };
     const menuItems = [
         { key: "1", label: "Home" },
         { key: "2", label: "Tìm kiếm" },
         { key: "3", label: "Đặt sân" },
         { key: "4", label: "Đăng tin" },
-    ];
-
-    const items = [
-        { key: "1", label: "Trang cá nhân", icon: <UserOutlined /> },
-        { key: "2", label: "Logout", icon: <LogoutOutlined /> },
-        { key: "3", label: "Bài viết của tôi", icon: <FormOutlined /> },
     ];
 
     const handleClickHeaderMenu = (e: any) => {
@@ -63,18 +76,8 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                 break;
         }
     };
-    const handleLogOut = () => {
-        dispatch(logOutSuccess());
-        navigate("/");
-    };
-    const handleDropdownItemClick = (e: any) => {
-        if (e.key == 2) {
-            handleLogOut();
-        }
-        if (e.key == 1) {
-            navigate("/user/update-profile");
-        }
-    };
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <header className="sticky top-0 z-10 bg-white shadow-[rgba(0,0,0,0.1)_0px_10px_20px_-8px] pt-2">
             <nav className="sticky top-0 z-10 w-full bg-white py-3 sm:py-4">
@@ -90,11 +93,21 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                                 style={{ color: "black" }}
                             />
                         </div>
+
+                        <div className="sm:hidden flex items-center">
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="p-2 border border-neutral-200 rounded-full cursor-pointer hover:shadow-md transition">
+                                <MenuOutlined className="text-xl" />
+                            </button>
+                        </div>
+
                         <div className="flex-[4]">
                             <Input_Search />
                         </div>
-                        <div className="flex-[2] flex justify-end items-center gap-2 sm:gap-4">
-                            <div className="flex justify-end flex-shrink-0 relative false">
+
+                        <div className="flex flex justify-end items-center gap-2 sm:gap-4">
+                            <div className="flex justify-end flex-shrink-0 relative">
                                 <div className="flex flex-row items-center gap-3">
                                     {user ? (
                                         <Dropdown
@@ -103,7 +116,7 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                                             trigger={["click"]}>
                                             <button className="p-1 sm:p-2 md:py-2 md:pl-4 md:pr-3 border border-neutral-200 flex flex-row items-center gap-2 rounded-full cursor-pointer hover:shadow-md transition">
                                                 <div className="font-semibold hidden lg:block whitespace-nowrap truncate">
-                                                    {user ? user.displayName : <Link to="/login">{"Login"}</Link>}
+                                                    {user ? user.displayName : <Link to="/login">Login</Link>}
                                                 </div>
                                                 <div className="flex-shrink-0">
                                                     {user && (
@@ -125,7 +138,7 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                                     ) : (
                                         <button className="p-1 sm:p-2 md:py-2 md:pl-4 md:pr-3 border border-neutral-200 flex flex-row items-center gap-2 rounded-full cursor-pointer hover:shadow-md transition">
                                             <div className="font-semibold hidden lg:block whitespace-nowrap truncate">
-                                                <Link to="/login">{"Login"}</Link>
+                                                <Link to="/login">Login</Link>
                                             </div>
                                         </button>
                                     )}
@@ -133,6 +146,19 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                             </div>
                         </div>
                     </div>
+                    {/* Menu dropdown cho màn hình nhỏ */}
+                    {isMenuOpen && (
+                        <div className="absolute top-16 left-0 bg-white shadow-lg rounded-lg p-4 sm:hidden z-50">
+                            <Menu
+                                className="menu-search-page-header"
+                                mode="vertical"
+                                defaultSelectedKeys={[defaultSelectedKeys]}
+                                items={menuItems}
+                                onClick={handleClickHeaderMenu}
+                                style={{ color: "black" }}
+                            />
+                        </div>
+                    )}
                 </div>
             </nav>
         </header>
