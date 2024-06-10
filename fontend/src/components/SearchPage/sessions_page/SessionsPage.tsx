@@ -3,8 +3,7 @@ import { Pots, ResponseLocation, RootState, FilterOptions } from "../../../inter
 import { PaginationComponent } from "../pagination/Pagination";
 import { useSearchParams } from "react-router-dom";
 import { Post_options } from "../header/PostOptions";
-import { PostCard } from "./PostCard";
-
+import { PostCard } from "../../Posts/PostCard";
 import { message } from "antd";
 import PostService from "../../../services/post/PostService";
 import { useSelector } from "react-redux";

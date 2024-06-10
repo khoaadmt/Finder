@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./home-page.css";
 import { InputSearch } from "../SearchPage/input_search/InputSearch";
 import { createAxios } from "../createInstance";
 import { setSuccessState } from "../../redux/authSlice";
@@ -8,6 +7,7 @@ import { RootState } from "../../interface";
 import { Dropdown, Menu, message } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
+import "./home-page.css";
 
 export const HomePage: React.FC = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
@@ -95,7 +95,7 @@ export const HomePage: React.FC = () => {
                 }}>
                 <div className="logo"></div>
                 <Menu
-                    className="menu-header-left-home-page sm:text-xs"
+                    className="menu-header-left-home-page "
                     theme="dark"
                     mode="horizontal"
                     defaultSelectedKeys={["1"]}

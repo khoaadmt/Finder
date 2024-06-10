@@ -1,5 +1,5 @@
 import { Avatar, Button, Form, Space, Input, Row, Col, message, UploadFile, Upload, UploadProps } from "antd";
-import { Search_Page_header } from "../SearchPage/header/SearchPageHeader";
+import { SearchPageHeader } from "../SearchPage/header/SearchPageHeader";
 import { EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -87,7 +87,7 @@ export const UserProfile = () => {
     }, [fileList]);
     return (
         <div className="user-profile">
-            <Search_Page_header defaultSelectedKeys="0" />
+            <SearchPageHeader defaultSelectedKeys="0" />
             <div className="user-profile-content">
                 <div className="overlap-group">
                     <div className="image-wrapper"></div>

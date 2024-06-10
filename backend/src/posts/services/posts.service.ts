@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  ParseBoolPipe,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostRepository } from '../repository/post.repository';
 import { CreatePostDto } from '../dto/create_post.dto';
 import * as dayjs from 'dayjs';
@@ -30,6 +25,14 @@ export class PostsService {
     const result = posts.slice(skip, skip + this.pageLimit);
 
     return { rows: result, totalPosts: posts.length, page: pageNumber };
+  }
+
+  async getPostById(id: string) {
+    const post = await this.postRepository.findById(id);
+    if (!post) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+    return post;
   }
 
   converBoolean = (value: string) => {

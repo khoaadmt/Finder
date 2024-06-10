@@ -27,6 +27,10 @@ class PostService extends BaseService {
         );
     }
 
+    getPostById(id: string | undefined) {
+        return this.get(`${id}`, id);
+    }
+
     createPost(values: any, accessToken: string | undefined) {
         console.log("values in service: ", values);
         return this.post("", values, "", accessToken);

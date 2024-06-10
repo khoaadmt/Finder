@@ -2,7 +2,6 @@ import { TimePicker, Select, DatePicker, UploadFile } from "antd";
 import React, { useEffect, useState } from "react";
 import { CustomDynamicForm } from "../Form/CustomDynamicForm";
 import { PicturesWall } from "../PictureWall/PicturesWall";
-import { genderOptions, memberLevel } from "../options";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Dayjs } from "dayjs";
@@ -13,8 +12,9 @@ import { notJustNumber } from "../../Auth/validationSchema";
 import { tagRender } from "../TagRender";
 import PostService from "../../../services/post/PostService";
 import UpLoadService from "../../../services/uploads/UploadService";
-import "./createpost.css";
 import LocationService from "../../../services/location/LocationService";
+import { genderOptions, memberLevel } from "../../../utils/Constant";
+import "./createpost.css";
 
 export const CreatePostContent: React.FC = () => {
     const [phones, setPhones] = useState([""]);
@@ -28,9 +28,9 @@ export const CreatePostContent: React.FC = () => {
 
     const createPostForm = useFormik({
         initialValues: {
-            title: "",
-            description: "",
-            memberCount: "",
+            title: "Tuyển giao lưu & cố định",
+            description: "Hôm nay đội mình cần vài bạn đến giao lưu ",
+            memberCount: 1,
             date: "",
             time: "",
             gender: "",
@@ -38,8 +38,8 @@ export const CreatePostContent: React.FC = () => {
             images: "",
             levelMemberMin: null,
             levelMemberMax: null,
-            priceMin: 0,
-            priceMax: 0,
+            priceMin: 50000,
+            priceMax: 50000,
             agreement: false,
             location_id: null,
             username: user?.username,
@@ -57,23 +57,22 @@ export const CreatePostContent: React.FC = () => {
             location_id: Yup.string().required("Required"),
         }),
         onSubmit: async (values) => {
+            console.log(values);
             const formData = new FormData();
             fileList.forEach((file) => {
                 formData.append("files", file.originFileObj as File);
             });
 
-            const resPostId = await postService.createPost(values, user?.accessToken);
-
-            const postId = resPostId.data.post;
-            console.log("postId in create post content:", postId);
-
-            formData.append("postId", String(postId));
-
-            await uploadService.uploadPostImage(formData);
+            try {
+                const resPostId = await postService.createPost(values, user?.accessToken);
+                const postId = resPostId.data.post;
+                formData.append("postId", String(postId));
+                const res = await uploadService.uploadPostImage(formData);
+            } catch (error) {
+                console.log(error);
+            }
         },
     });
-
-    console.log(createPostForm.values);
 
     const HandleLocationOnChange = (value: string) => {
         createPostForm.setFieldValue("location_id", value);

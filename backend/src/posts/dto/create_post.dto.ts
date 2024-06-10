@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePostDto {
@@ -35,8 +36,12 @@ export class CreatePostDto {
   @IsNumber()
   levelMemberMax: number;
 
+  @Optional()
+  @IsNumber()
   priceMin: number;
 
+  @Optional()
+  @IsNumber()
   priceMax: number;
 
   @IsBoolean()

@@ -12,7 +12,7 @@ import { MenuButton } from "./MenuButton";
 interface Props {
     defaultSelectedKeys: string;
 }
-export const Search_Page_header: React.FC<Props> = (props) => {
+export const SearchPageHeader: React.FC<Props> = (props) => {
     const { defaultSelectedKeys } = props;
     const [searchParams, setSearchParams] = useSearchParams();
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
