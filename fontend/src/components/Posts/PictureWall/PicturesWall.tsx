@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, Button, message } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
-import axios from "axios";
-import "./index.css";
+import "./picture-wall.css";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -35,33 +34,6 @@ export const PicturesWall: React.FC<Props> = (props) => {
     };
 
     const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => setFileList(newFileList);
-
-    const handleUpload = async () => {
-        const formData = new FormData();
-        fileList.forEach((file) => {
-            formData.append("files", file.originFileObj as File);
-        });
-
-        try {
-            const response = await axios.post("http://localhost:5000/api/upload/post", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            message.success("Upload successfully.");
-            setFileList(
-                response.data.files.map((file: any) => ({
-                    uid: file.uid,
-                    name: file.name,
-                    status: "done",
-                    url: file.url,
-                }))
-            );
-        } catch (error) {
-            message.error("Upload failed.");
-        }
-    };
 
     const uploadButton = (
         <button style={{ border: 0, background: "none" }} type="button">

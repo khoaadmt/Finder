@@ -5,7 +5,7 @@ import "../search.css";
 import TypeDialog from "./TypeDialog";
 import LocationDialog from "./LocationDialog";
 
-export const Input_Search: React.FC = () => {
+export const InputSearch: React.FC = () => {
     const [location, setLocation] = useState<string>("");
     const [type, setType] = useState<string>("");
     const [isShowDialog, setIsShowDialog] = useState(false);

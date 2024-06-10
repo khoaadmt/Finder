@@ -5,7 +5,7 @@ interface Props {
     setPageNumber: React.Dispatch<React.SetStateAction<number>>;
     totalFacility: number;
 }
-export const Pagination_search_page: React.FC<Props> = (props) => {
+export const PaginationComponent: React.FC<Props> = (props) => {
     const pageSize = 6;
     const { setPageNumber, totalFacility } = props;
     const handleOnChange = (pageNumber: number) => {

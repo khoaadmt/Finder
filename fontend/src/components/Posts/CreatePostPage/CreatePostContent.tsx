@@ -3,18 +3,18 @@ import React, { useEffect, useState } from "react";
 import { CustomDynamicForm } from "../Form/CustomDynamicForm";
 import { PicturesWall } from "../PictureWall/PicturesWall";
 import { genderOptions, memberLevel } from "../options";
-import { tagRender } from "../tagRender";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Dayjs } from "dayjs";
-import "./createpost.css";
 import { disabledDate, filterOption } from "../FunctionHandler";
-import axios from "axios";
-import { RootState, optional } from "../../../interface";
+import { RootState } from "../../../interface";
 import { useDispatch, useSelector } from "react-redux";
 import { notJustNumber } from "../../Auth/validationSchema";
-import { setSuccessState } from "../../redux/authSlice";
-import { createAxios } from "../../createInstance";
+import { tagRender } from "../TagRender";
+import PostService from "../../../services/post/PostService";
+import UpLoadService from "../../../services/uploads/UploadService";
+import "./createpost.css";
+import LocationService from "../../../services/location/LocationService";
 
 export const CreatePostContent: React.FC = () => {
     const [phones, setPhones] = useState([""]);
@@ -22,7 +22,9 @@ export const CreatePostContent: React.FC = () => {
     const [locationOptions, setLocationOptions] = useState();
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const dispatch = useDispatch();
-    let axiosJWT = createAxios(user, dispatch, setSuccessState);
+    const postService = new PostService();
+    const uploadService = new UpLoadService();
+    const locationService = new LocationService();
 
     const createPostForm = useFormik({
         initialValues: {
@@ -60,27 +62,14 @@ export const CreatePostContent: React.FC = () => {
                 formData.append("files", file.originFileObj as File);
             });
 
-            const resPostId = await axiosJWT.post(
-                "http://localhost:5000/api/posts",
-                {
-                    values,
-                },
-                {
-                    headers: { Authorization: `Bearer ${user?.accessToken}` },
-                }
-            );
+            const resPostId = await postService.createPost(values, user?.accessToken);
 
             const postId = resPostId.data.post;
             console.log("postId in create post content:", postId);
 
             formData.append("postId", String(postId));
 
-            const responseUpload = await axios.post("http://localhost:5000/api/upload/post", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            console.log(responseUpload);
+            await uploadService.uploadPostImage(formData);
         },
     });
 
@@ -126,11 +115,7 @@ export const CreatePostContent: React.FC = () => {
     }, [phones]);
 
     useEffect(() => {
-        const getLocationOptions = async () => {
-            const locations = await axios.get("http://localhost:5000/api/search/locations");
-            return locations;
-        };
-        getLocationOptions().then((res) => {
+        locationService.getLocationKeyLabels().then((res) => {
             setLocationOptions(res.data);
         });
     }, []);

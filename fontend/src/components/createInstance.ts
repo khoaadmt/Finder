@@ -1,15 +1,12 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import AuthService from "../services/auth/AuthService";
+const authService = new AuthService();
 
 const refreshToken = async (): Promise<{ accessToken: string }> => {
     try {
-        const response = await axios.post(
-            "http://localhost:5000/api/auth/refresh",
-            {},
-            {
-                withCredentials: true,
-            }
-        );
+        const response = await authService.refreshToken();
+
         return response.data;
     } catch (err) {
         console.error("err:", err);

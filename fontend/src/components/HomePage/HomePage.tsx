@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "./home_page.css";
-import { Input_Search } from "../SearchPage/input-search/Input_Search";
-import axios from "axios";
+import "./home-page.css";
+import { InputSearch } from "../SearchPage/input_search/InputSearch";
 import { createAxios } from "../createInstance";
-import { setSuccessState } from "../redux/authSlice";
+import { setSuccessState } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../interface";
 import { Dropdown, Menu, message } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
-const logo = require("../../assets/images/badminton.png");
 
-export const Home_Page: React.FC = () => {
+export const HomePage: React.FC = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -119,7 +117,7 @@ export const Home_Page: React.FC = () => {
                     <p className="description-home-page">tìm kiếm cơ hội giao lưu gần bạn</p>
                 </div>
                 <div className="input-search-home-page">
-                    <Input_Search />
+                    <InputSearch />
                 </div>
             </div>
         </>

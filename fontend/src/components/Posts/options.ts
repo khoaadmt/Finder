@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const memberLevel = [
     { value: 1, label: "Y" },
     { value: 2, label: "TBY" },

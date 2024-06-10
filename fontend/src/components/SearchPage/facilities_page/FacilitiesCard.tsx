@@ -3,7 +3,7 @@ import { Facility } from "../../../interface";
 interface Props {
     facility: Facility;
 }
-export const Facilities_card: React.FC<Props> = (props) => {
+export const FacilitiesCard: React.FC<Props> = (props) => {
     const { facility } = props;
     const imageStyle: React.CSSProperties = {
         position: "absolute",

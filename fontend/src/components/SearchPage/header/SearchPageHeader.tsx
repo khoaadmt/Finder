@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Input_Search } from "../input-search/Input_Search";
+import { InputSearch } from "../input_search/InputSearch";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Dropdown, Menu, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../interface";
-import "./search_page_header.css";
+import "./search-page-header.css";
 import { FormOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from "@ant-design/icons";
-import { logOutSuccess } from "../../redux/authSlice";
+import { logOutSuccess } from "../../../redux/authSlice";
 import { MenuButton } from "./MenuButton";
 
 interface Props {
@@ -103,7 +103,7 @@ export const Search_Page_header: React.FC<Props> = (props) => {
                         </div>
 
                         <div className="flex-[4]">
-                            <Input_Search />
+                            <InputSearch />
                         </div>
 
                         <div className="flex flex justify-end items-center gap-2 sm:gap-4">

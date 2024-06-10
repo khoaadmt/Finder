@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Pots, ResponseLocation, RootState, FilterOptions } from "../../../interface";
-import { Pagination_search_page } from "../pagination/Pagination_search_page";
+import { PaginationComponent } from "../pagination/Pagination";
 import { useSearchParams } from "react-router-dom";
-import { Post_options } from "../header/Post_options";
+import { Post_options } from "../header/PostOptions";
 import { PostCard } from "./PostCard";
-import axios from "axios";
+
 import { message } from "antd";
-import "./sessionpage.css";
+import PostService from "../../../services/post/PostService";
+import { useSelector } from "react-redux";
 
 export const SessionsPage = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -16,8 +17,10 @@ export const SessionsPage = () => {
     const [totalPosts, setTotalPosts] = useState(5);
     const [data, setData] = useState<Pots[] | null>();
     const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
-
     const location = searchParams.get("location");
+    const user = useSelector((state: RootState) => state.auth.login.currentUser);
+
+    const postService = new PostService();
 
     useEffect(() => {
         const getLocation = () => {
@@ -40,22 +43,15 @@ export const SessionsPage = () => {
 
     useEffect(() => {
         console.log("filterOptions :", filterOptions);
-        axios
-            .get("http://localhost:5000/api/posts/filter", {
-                params: {
-                    filter: filterOptions,
-                    page: pageNumber,
-                    city: location,
-                },
-            })
-            .then((res) => {
-                if (res.data.length == 0) {
-                    message.info("không có bài viết nào !");
-                }
-                setData(res.data.rows);
 
-                setTotalPosts(res.data.totalPosts);
-            });
+        postService.getPostByFilter(filterOptions, pageNumber, location, "").then((res) => {
+            if (res.data.length == 0) {
+                message.info("không có bài viết nào !");
+            }
+            setData(res.data.rows);
+
+            setTotalPosts(res.data.totalPosts);
+        });
     }, [filterOptions, pageNumber, searchParams]);
 
     return (
@@ -76,7 +72,7 @@ export const SessionsPage = () => {
                     </div>
 
                     {/* PAGINATION */}
-                    <Pagination_search_page setPageNumber={setPageNumber} totalFacility={totalPosts} />
+                    <PaginationComponent setPageNumber={setPageNumber} totalFacility={totalPosts} />
                 </div>
             </div>
         </div>

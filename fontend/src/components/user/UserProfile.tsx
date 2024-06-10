@@ -1,14 +1,13 @@
 import { Avatar, Button, Form, Space, Input, Row, Col, message, UploadFile, Upload, UploadProps } from "antd";
-import { Search_Page_header } from "../SearchPage/header/Search_Page_Header";
+import { Search_Page_header } from "../SearchPage/header/SearchPageHeader";
 import { EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../interface";
-import "./userprofile.css";
-
-import axios from "axios";
-import { updateUserInfo } from "../redux/apiRequest";
+import { updateUserInfo } from "../../redux/apiRequest";
 import { PicturesWall } from "../Posts/PictureWall/PicturesWall";
+import { RootState } from "../../interface";
+import "./user-profile.css";
+import UpLoadService from "../../services/uploads/UploadService";
 
 export const UserProfile = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
@@ -21,6 +20,7 @@ export const UserProfile = () => {
     const [isEditable, setIsEditable] = useState(initInputState);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const dispatch = useDispatch();
+    const uploadService = new UpLoadService();
 
     const rules = {
         displayName: [
@@ -71,11 +71,7 @@ export const UserProfile = () => {
             formData.append("files", file.originFileObj as File);
         });
 
-        const avaUrlResponse = await axios.post("http://localhost:5000/api/upload/avatar", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
+        const avaUrlResponse = await uploadService.uploadAvatar(formData);
         values.avaUrl = avaUrlResponse.data[0].url;
 
         updateUserInfo(dispatch, values, user);

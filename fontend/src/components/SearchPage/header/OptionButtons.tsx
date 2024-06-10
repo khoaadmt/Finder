@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { MenuProps } from "antd";
 import { Dropdown } from "antd";
-import "./search_page_header.css";
+import "./search-page-header.css";
 import { FilterOptions } from "../../../interface";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
     setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions | null>>;
 }
-export const Option_button: React.FC<Props> = (props) => {
+export const OptionButtons: React.FC<Props> = (props) => {
     const { defaultValue, items_value, setFilterOptions } = props;
     const items: MenuProps["items"] = items_value;
     const [optionValue, setOptionValue] = useState("");

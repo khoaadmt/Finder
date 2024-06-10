@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Option_button } from "./Option_button";
-import { Distance_value, Gender_value, Level_value, MemberCount_value, Price_value } from "./Values_option";
+import { Distance_value, Gender_value, Level_value, MemberCount_value, Price_value } from "./ValuesOption";
 import { FilterOptions } from "../../../interface";
 import { DatePicker, TimePicker } from "antd";
-import "./search_page_header.css";
+import "./search-page-header.css";
 import dayjs from "dayjs";
+import { OptionButtons } from "./OptionButtons";
 
 interface Props {
     setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions | null>>;
@@ -66,12 +66,12 @@ export const Post_options: React.FC<Props> = (props) => {
                         </div>
                     </button>
                 </div>
-                <Option_button
+                <OptionButtons
                     defaultValue="Khoảng cách"
                     items_value={Distance_value}
                     setFilterOptions={setFilterOptions}
                 />
-                <Option_button defaultValue="Trình độ" items_value={Level_value} setFilterOptions={setFilterOptions} />
+                <OptionButtons defaultValue="Trình độ" items_value={Level_value} setFilterOptions={setFilterOptions} />
 
                 <DatePicker
                     className="sm:py-[11px] sm:px-[17px] xl:px-[8px] custom-datepicker"
@@ -93,13 +93,13 @@ export const Post_options: React.FC<Props> = (props) => {
                     format={"HH:mm"}
                 />
 
-                <Option_button defaultValue="Giá" items_value={Price_value} setFilterOptions={setFilterOptions} />
-                <Option_button
+                <OptionButtons defaultValue="Giá" items_value={Price_value} setFilterOptions={setFilterOptions} />
+                <OptionButtons
                     defaultValue="Số người"
                     items_value={MemberCount_value}
                     setFilterOptions={setFilterOptions}
                 />
-                <Option_button
+                <OptionButtons
                     defaultValue="Giới tính"
                     items_value={Gender_value}
                     setFilterOptions={setFilterOptions}

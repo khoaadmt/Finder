@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import axios from "axios";
+
 import {
     RegisterFailure,
     RegisterSuccess,
@@ -10,22 +10,19 @@ import {
     setSuccessState,
 } from "./authSlice";
 import { message } from "antd";
-import { Token } from "../../interface";
-import { createAxios } from "../createInstance";
+import { Token } from "../interface";
+import { createAxios } from "../components/createInstance";
+import AuthService from "../services/auth/AuthService";
+const authService = new AuthService();
 
 export const loginUser = async (user: any, dispatch: any, navigate: any) => {
     dispatch(setFetchingState);
     try {
-        const res = await axios.post(
-            "http://localhost:5000/api/auth/login",
-            {
-                username: user.username,
-                password: user.password,
-            },
-            {
-                withCredentials: true,
-            }
-        );
+        const data = {
+            username: user.username,
+            password: user.password,
+        };
+        const res = await authService.login(data);
 
         const payload = jwtDecode(res.data.accessToken) as { [key: string]: any };
         let { iat, exp, ...newPayload } = payload;
@@ -84,11 +81,13 @@ export const updateUserInfo = async (dispatch: any, valuesUpdate: any, user: any
 export const registerUser = async (user: any, dispatch: any, navigate: any) => {
     dispatch(Registerstart);
     try {
-        const res = await axios.post("http://localhost:5000/api/auth/register", {
+        const data = {
             username: user.username,
             password: user.password,
             displayName: user.displayName,
-        });
+        };
+        const res = await authService.register(data);
+
         dispatch(RegisterSuccess(res.data));
         loginUser(user, dispatch, navigate);
     } catch (err: any) {

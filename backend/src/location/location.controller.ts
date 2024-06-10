@@ -1,21 +1,27 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { LocationService } from './services/location.service';
 
-@Controller('search')
+@Controller('locations')
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
-  @Get('/facilities/countByCity')
+  @Get('/booking')
+  createOrder() {
+    const time = new Date().getTime();
+    console.log('time :', time);
+  }
+
+  @Get('/count-by-city')
   countLocationsByCity(@Query('city') city) {
     return this.locationService.countLocationsByCity(city);
   }
 
-  @Get('/locations')
+  @Get('/key-label')
   getLocationOptions() {
     return this.locationService.getLocationOptions();
   }
 
-  @Get('/facilities')
+  @Get('/city')
   getLocationByCity(
     @Query('city') city: string,
     @Query('page') pageNumber: number,

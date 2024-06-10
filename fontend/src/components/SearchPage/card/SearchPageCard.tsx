@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Search_page_card = () => {
+export const SearchPageCard = () => {
     return (
         <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
             <div className="w-full flex justify-center items-center rounded-xl overflow-hidden"></div>

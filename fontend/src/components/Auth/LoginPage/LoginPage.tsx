@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import "./login_page.css";
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { passwordSchema, usernameSchema } from "../validationSchema";
-import { loginUser, registerUser } from "../../redux/apiRequest";
+import { loginUser, registerUser } from "../../../redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../interface";
-import { ArrowLeftOutlined, DoubleLeftOutlined } from "@ant-design/icons";
+import { DoubleLeftOutlined } from "@ant-design/icons";
+import "./login-page.css";
 var facebook_logo = require("../../../assets/images/facebook-logo.png");
 var google_logo = require("../../../assets/images/google-logo.png");
 
-export const Login_page = () => {
+export const LoginPage = () => {
     const [isSwitch, setIsSwitch] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();

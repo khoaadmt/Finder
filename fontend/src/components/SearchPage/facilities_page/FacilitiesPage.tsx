@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Search_page_card } from "../card/Search_page_card";
 import { Facility } from "../../../interface";
-import axios from "axios";
-import { useSearchParams } from "react-router-dom";
-import { Facilities_card } from "./Facilities_card";
-import { Pagination_search_page } from "../pagination/Pagination_search_page";
-import { getLocation } from "../../utils/location";
 
-export const Facilities_page_index: React.FC = () => {
+import { useSearchParams } from "react-router-dom";
+import { FacilitiesCard } from "./FacilitiesCard";
+import { PaginationComponent } from "../pagination/Pagination";
+import { getLocation } from "../../../utils/location";
+import LocationService from "../../../services/location/LocationService";
+
+export const FacilitiesPage: React.FC = () => {
     const [data, setData] = useState<Facility[] | null>();
     const [searchParams, setSearchParams] = useSearchParams();
     const location = searchParams.get("location");
     const [pageNumber, setPageNumber] = useState(1);
     const [totalFacility, setTotalFacility] = useState(0);
+    const locationService = new LocationService();
 
     useEffect(() => {
-        axios
-            .get("api/search/facilities/countByCity", {
-                params: {
-                    city: location,
-                },
-            })
-            .then((response) => {
-                setTotalFacility(response.data);
-            });
+        const params = {
+            params: {
+                city: location,
+            },
+        };
+        locationService.countLocationsByCity(params).then((response) => {
+            setTotalFacility(response.data);
+        });
     }, []);
 
     useEffect(() => {
@@ -43,14 +43,15 @@ export const Facilities_page_index: React.FC = () => {
             });
         });
         async function getData(latitude: number, longitude: number) {
-            const res = await axios.get("api/search/facilities", {
+            const params = {
                 params: {
                     city: location,
                     page: pageNumber,
                     latitude: latitude,
                     longitude: longitude,
                 },
-            });
+            };
+            const res = await locationService.getLocationByCity(params);
             return res;
         }
     }, [searchParams]);
@@ -85,12 +86,12 @@ export const Facilities_page_index: React.FC = () => {
                     </div>
                     <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
                         {data?.map((facility) => {
-                            return <Facilities_card key={facility.Name} facility={facility} />;
+                            return <FacilitiesCard key={facility.Name} facility={facility} />;
                         })}
                     </div>
 
                     {/* PAGINATION */}
-                    <Pagination_search_page setPageNumber={setPageNumber} totalFacility={totalFacility} />
+                    <PaginationComponent setPageNumber={setPageNumber} totalFacility={totalFacility} />
                 </div>
             </div>
         </div>
