@@ -6,6 +6,9 @@ class LocationService extends BaseService {
     constructor() {
         super(URL, configHeaders);
     }
+    getLocationById(id: string) {
+        return this.get(`${id}`, id);
+    }
     getLocationKeyLabels() {
         return this.get("key-label");
     }

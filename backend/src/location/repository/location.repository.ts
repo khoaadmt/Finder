@@ -16,6 +16,10 @@ export class LocationRepository {
     return await this.LocationModel.countDocuments({ city: city });
   }
 
+  async findById(id: string) {
+    return this.LocationModel.findById(id);
+  }
+
   async finAllLocations() {
     return this.LocationModel.find().lean();
   }

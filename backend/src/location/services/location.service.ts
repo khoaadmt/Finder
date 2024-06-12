@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { LocationRepository } from '../repository/location.repository';
 import * as Bluebird from 'bluebird';
 
@@ -8,6 +8,16 @@ require('dotenv').config();
 @Injectable()
 export class LocationService {
   constructor(private readonly locationRepository: LocationRepository) {}
+
+  async getLocationById(id: string) {
+    try {
+      const location = await this.locationRepository.findById(id);
+
+      return location;
+    } catch (err) {
+      throw new HttpException('location is not exists', HttpStatus.NOT_FOUND);
+    }
+  }
 
   async findNearbyLocations(
     latitude: number,

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import "../search.css";
 import TypeDialog from "./TypeDialog";
 import LocationDialog from "./LocationDialog";
+import "../search.css";
 
 export const InputSearch: React.FC = () => {
     const [location, setLocation] = useState<string>("");

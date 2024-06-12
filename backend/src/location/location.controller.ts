@@ -1,5 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LocationService } from './services/location.service';
+import { query } from 'express';
 
 @Controller('locations')
 export class LocationController {
@@ -36,7 +37,12 @@ export class LocationController {
     );
   }
 
-  @Get('nearby')
+  @Get(':id')
+  getLocationById(@Param('id') id: string) {
+    return this.locationService.getLocationById(id);
+  }
+
+  @Get('/nearby')
   async getNearbyLocations(
     @Query('radius') radius: number,
     @Query('latitude') latitude: number,

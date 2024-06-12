@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { InputSearch } from "../SearchPage/input_search/InputSearch";
 import { createAxios } from "../createInstance";
 import { setSuccessState } from "../../redux/authSlice";

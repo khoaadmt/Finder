@@ -27,7 +27,7 @@ class PostService extends BaseService {
         );
     }
 
-    getPostById(id: string | undefined) {
+    getPostById(id: string) {
         return this.get(`${id}`, id);
     }
 

@@ -10,7 +10,7 @@
     border-color: #f5002f;
 }
 .search-location-input {
-    border-right: 1px solid #222222;
+    border-right: 1px solid #222222 !important;
 }
 
 .search-location-input:focus {
@@ -29,9 +29,14 @@
     z-index: 0;
 }
 .dialog {
-    position: absolute;
+    position: absolute !important;
     z-index: 10;
 }
 .stroke-primary {
     color: #f5002f;
+}
+.btn_find_address {
+    margin-left: 12px;
+    font-size: 12px;
+    color: rgb(253, 140, 140);
 }

@@ -11,6 +11,10 @@ export class PostRepository {
     private Post: Model<Post>,
   ) {}
 
+  async testCreatePost(): Promise<Post> {
+    const newPost = new this.Post();
+    return newPost.save();
+  }
   async finAllPost(city) {
     const currentDate = new Date();
     const currentTimestamp = currentDate.getTime();

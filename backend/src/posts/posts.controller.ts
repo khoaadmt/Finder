@@ -5,6 +5,11 @@ import { PostsService } from './services/posts.service';
 @Controller('/posts')
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
+  @Post('/test')
+  testCreatePost() {
+    return this.postService.testCreatePost();
+  }
+
   @Get('/filter')
   getPostByFilter(@Query() data: any) {
     if (data.filter) {

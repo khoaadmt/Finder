@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { PaymentModule } from './payment/payment.module';
+import { CourtModule } from './court/court.module';
 
 require('dotenv').config();
 @Module({
@@ -27,6 +28,7 @@ require('dotenv').config();
     UploadModule,
     UserModule,
     PaymentModule,
+    CourtModule,
   ],
 
   providers: [],

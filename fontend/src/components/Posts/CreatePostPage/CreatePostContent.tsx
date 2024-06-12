@@ -1,4 +1,4 @@
-import { TimePicker, Select, DatePicker, UploadFile } from "antd";
+import { TimePicker, Select, DatePicker, UploadFile, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { CustomDynamicForm } from "../Form/CustomDynamicForm";
 import { PicturesWall } from "../PictureWall/PicturesWall";
@@ -35,7 +35,6 @@ export const CreatePostContent: React.FC = () => {
             time: "",
             gender: "",
             phones: [""],
-            images: "",
             levelMemberMin: null,
             levelMemberMax: null,
             priceMin: 50000,
@@ -66,8 +65,12 @@ export const CreatePostContent: React.FC = () => {
             try {
                 const resPostId = await postService.createPost(values, user?.accessToken);
                 const postId = resPostId.data.post;
-                formData.append("postId", String(postId));
-                const res = await uploadService.uploadPostImage(formData);
+
+                if (Array.from(formData.entries()).length > 0) {
+                    formData.append("postId", String(postId));
+                    const res = await uploadService.uploadPostImage(formData);
+                }
+                message.success("Tin của bạn đã được tải lên !");
             } catch (error) {
                 console.log(error);
             }

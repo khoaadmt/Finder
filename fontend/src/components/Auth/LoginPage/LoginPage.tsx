@@ -15,7 +15,6 @@ export const LoginPage = () => {
     const [isSwitch, setIsSwitch] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const isFetching = useSelector((state: RootState) => state.auth.login.isFetching);
 
     const singInForm = useFormik({
@@ -69,7 +68,7 @@ export const LoginPage = () => {
 
     return (
         <div className="login-page">
-            <button onClick={handleBtnHomeClick} className="btn_Home  sm:w-[50px]" type="button">
+            <button onClick={handleBtnHomeClick} className="btn_home  xl:w-[100px] " type="button">
                 <span>
                     <DoubleLeftOutlined />
                     Home

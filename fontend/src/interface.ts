@@ -9,10 +9,11 @@ export interface Location {
 }
 
 export interface Facility {
+    _id: string;
     city: string;
     Name: string;
     contact_phone: string;
-    img: string;
+    img: string[];
     address: string;
     price_min: number;
     price_max: number;
@@ -34,6 +35,8 @@ interface userInfor {
     displayName: string;
     username: string;
     avaUrl: string;
+    contactPhone: string;
+    facebookId: string;
 }
 export interface Pots {
     _id: string;
@@ -100,9 +103,9 @@ export interface Token {
     accessToken: string;
     refreshToken: string;
 }
-export interface optional {
+export interface Optional {
     label: string;
-    value: string;
+    value: number;
 }
 export interface FilterOptions {
     sortBy: any;

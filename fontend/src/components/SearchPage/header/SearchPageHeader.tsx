@@ -32,11 +32,14 @@ export const SearchPageHeader: React.FC<Props> = (props) => {
         navigate("/");
     };
     const handleDropdownItemClick = (e: any) => {
+        if (e.key == 1) {
+            navigate("/user/update-profile");
+        }
         if (e.key == 2) {
             handleLogOut();
         }
-        if (e.key == 1) {
-            navigate("/user/update-profile");
+        if (e.key == 3) {
+            navigate("/user/my-post");
         }
     };
     const menuItems = [
@@ -61,6 +64,7 @@ export const SearchPageHeader: React.FC<Props> = (props) => {
                         navigate("/login");
                     }, 1500);
                 }
+                navigate("/search/facilities?location=Hà+Nội&type=Sân+đấu&page=1");
                 break;
             case "4":
                 if (!user) {
@@ -68,9 +72,9 @@ export const SearchPageHeader: React.FC<Props> = (props) => {
                     setTimeout(() => {
                         navigate("/login");
                     }, 1500);
-                } else {
-                    navigate("/post/create");
                 }
+                navigate("/post/create");
+
                 break;
             default:
                 break;

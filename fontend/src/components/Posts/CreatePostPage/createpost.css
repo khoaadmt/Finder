@@ -9,6 +9,9 @@
         margin-top: -150px;
     }
 }
+.bg-primary {
+    background-color: #f5002f !important;
+}
 .create-post-form {
     color: #303030;
 }

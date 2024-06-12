@@ -18,6 +18,12 @@ export class PostsService {
   private readonly pageLimit = 6;
   constructor(private readonly postRepository: PostRepository) {}
 
+  async testCreatePost() {
+    const post = await this.postRepository.testCreatePost();
+    console.log(post);
+    return post;
+  }
+
   async getAllPosts(pageNumber: number, city: string) {
     const posts = await this.postRepository.finAllPost(city);
 

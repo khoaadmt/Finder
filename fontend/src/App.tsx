@@ -12,6 +12,9 @@ import { UserProfile } from "./components/User/UserProfile";
 import { PostDetailPage } from "./components/Posts/PostDetail/PostDetailPage";
 import "./App.css";
 import { Test } from "./components/test";
+import PrivateRoute from "./components/PrivateRoute";
+import { MyPost } from "./components/User/MyPost";
+import { LocationDetail } from "./components/Location/LocationDetail";
 
 const App: React.FC = () => {
     return (
@@ -25,15 +28,25 @@ const App: React.FC = () => {
                 </Route>
 
                 <Route path="post">
-                    <Route path="create" element={<CreatePostPage />} />
+                    <Route path="create" element={<PrivateRoute />}>
+                        <Route path="" element={<CreatePostPage />} />
+                    </Route>
+
                     <Route path=":postId" element={<PostDetailPage />} />
                 </Route>
+
+                <Route path="location">
+                    <Route path=":locationId" element={<LocationDetail />} />
+                </Route>
+
                 <Route path="login" element={<LoginPage />} />
                 <Route path="auth">
                     <Route path="social/redirect" element={<SocialRedirect />} />
                 </Route>
-                <Route path="user">
+
+                <Route path="user" element={<PrivateRoute />}>
                     <Route path="update-profile" element={<UserProfile />} />
+                    <Route path="my-post" element={<MyPost />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

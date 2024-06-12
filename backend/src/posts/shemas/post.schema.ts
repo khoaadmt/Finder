@@ -21,7 +21,9 @@ export class Post {
   @Prop()
   phones: string[];
 
-  @Prop({ default: '' })
+  @Prop({
+    default: ['http://localhost:5000/api/uploads/post/default-post-images.jpg'],
+  })
   images: string[];
 
   @Prop()

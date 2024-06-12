@@ -44,9 +44,15 @@
         transform: scale(0.5);
     }
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .main-login-page {
-        transform: scale(0.4);
+        transform: scale(0.35);
+    }
+    .btn_home {
+        font-size: 10px !important;
+        top: 5px;
+        padding: 0 10px !important;
+        height: 30px !important;
     }
 }
 
@@ -155,7 +161,7 @@
     outline: none;
     cursor: pointer;
 }
-.btn_Home {
+.btn_home {
     width: auto;
     padding: 0 16px;
     height: 50px;
