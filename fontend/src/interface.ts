@@ -28,8 +28,8 @@ export interface Facility {
     shifts: Shift[];
     img: string[];
     address: string;
-    price_min: number;
-    price_max: number;
+    priceMin: number;
+    priceMax: number;
     numberOfCourts: number;
     openHours: {
         start: Date;

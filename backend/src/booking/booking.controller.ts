@@ -1,4 +1,13 @@
-import { Body, Controller, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { BookingService } from './services/booking.service';
 import { CreateBookingDto } from './dto/createBooking.dto';
 import { ShiftService } from 'src/shift/services/shift.service';
@@ -10,5 +19,10 @@ export class BookingController {
   @Post('')
   createBooking(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingService.createBooking(createBookingDto);
+  }
+
+  @Get('booked-courts')
+  getBookingById(@Query() data: any) {
+    return this.bookingService.getBookedCourts(data);
   }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchPageHeader } from "../SearchPage/header/SearchPageHeader";
-import { Button, Calendar, CalendarProps, Carousel, Flex, Select, theme } from "antd";
+import { Button, Calendar, CalendarProps, Carousel, Flex, Modal, Select, message, theme } from "antd";
 import { Facility, Optional, RootState } from "../../interface";
 import LocationService from "../../services/location/LocationService";
 import { useParams } from "react-router-dom";
@@ -8,9 +8,16 @@ import dayjs, { Dayjs } from "dayjs";
 import "./location-detail.css";
 import { useSelector } from "react-redux";
 import BookingService from "../../services/booking/BookingService";
+import { Footer } from "antd/es/layout/layout";
 const map_icon = require("../../assets/images/map.png");
 const support_icon = require("../../assets/images/support.png");
 const Badminton_yard = require("../../assets/images/san-cau-long.png");
+
+const createInitDate = () => {
+    const timeStamp = dayjs(Date.now());
+    const date = timeStamp.format("YYYY-MM-D");
+    return date;
+};
 
 export const LocationDetail: React.FC = () => {
     const [locationDetail, setLocationDetail] = useState<Facility | null>();
@@ -18,8 +25,13 @@ export const LocationDetail: React.FC = () => {
     const { locationId } = useParams();
     const [activeButtonName, setActiveButtonName] = useState("Ca sáng");
     const [imgBlur, setImageBlur] = useState<number>();
-    const [dateSelected, setDateSelected] = useState("");
+    const [dateSelected, setDateSelected] = useState(createInitDate());
     const [shiftSelected, setShiftSelected] = useState<number>(0);
+    const [bookedCourts, setBookedCourts] = useState<string[]>();
+    const [paymentUrl, setPaymentUrl] = useState("");
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [cancelCount, setCancelCount] = useState(0);
+
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const bookingService = new BookingService();
 
@@ -45,6 +57,28 @@ export const LocationDetail: React.FC = () => {
                 .catch((error) => {});
         }
     }, []);
+
+    useEffect(() => {
+        if (locationDetail) {
+            const params = {
+                params: {
+                    locationId: locationDetail._id,
+                    shiftId: locationDetail.shifts[shiftSelected]._id,
+                    date: dateSelected,
+                },
+            };
+            bookingService
+                .getBookedCourts(params)
+                .then((bookedCourts) => {
+                    setBookedCourts(bookedCourts.data);
+                    console.log("bookedCourts.data :", bookedCourts.data);
+                })
+                .catch((error) => {
+                    message.error(error.message);
+                });
+        }
+    }, [shiftSelected, dateSelected, locationDetail, cancelCount]);
+
     const handleBtnFindAddressClick = () => {
         window.open(
             `https://www.google.com/maps/search/?api=1&query=${locationDetail?.latitude},${locationDetail?.longitude}`,
@@ -60,20 +94,11 @@ export const LocationDetail: React.FC = () => {
         return current && current < today.setHours(0, 0, 0, 0);
     };
 
-    // useEffect(() => {
-    //     if (options) {
-    //         console.log("options: ", options);
-
-    //         console.log("options[0].value  :", options[0].value);
-    //         setShiftSelected(options[0].value);
-    //     }
-    // }, [options]);
-
     useEffect(() => {
         setShiftSelected(0);
         if (locationDetail?.shifts) {
             const optionsTmp: Optional[] = locationDetail.shifts
-                .filter((shift) => shift.period === activeButtonName) // Filter shifts based on the period
+                .filter((shift) => shift.period === activeButtonName)
                 .map((shift, index) => {
                     return {
                         value: shift.shiftNumber,
@@ -99,37 +124,40 @@ export const LocationDetail: React.FC = () => {
     const handleBooking = (courtId: string) => {
         const shiftId = locationDetail?.shifts[options[shiftSelected]?.value - 1]._id;
         const userName = user?.username;
-        const date = new Date();
 
         let data = {
             locationId,
             shiftId,
             userName,
             courtId,
-            date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
-                date.getDate()
-            ).padStart(2, "0")}`,
+            date: dateSelected,
         };
-        if (dateSelected) {
-            data.date = dateSelected;
-        }
 
         bookingService.createBooking(data).then((resUrl) => {
-            console.log("resUrl :", resUrl.data);
-            window.open(resUrl.data);
+            setPaymentUrl(resUrl.data);
         });
+
+        setIsModalVisible(true);
     };
 
     const handleOnChangeShift = (value: any) => {
         setShiftSelected(value - 1);
     };
 
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        setCancelCount((prevCount) => prevCount + 1);
+    };
     return (
         <div>
             <SearchPageHeader defaultSelectedKeys="" />
-            <div className="max-w-[90%] sm:px-3 mx-auto mb-5 sm:mt-5">
-                <div className="grid grid-cols-1 md:grid-cols-8 md:gap-6">
-                    <div className="col-span-3 flex flex-col space-y-8">
+            <div className="max-w-[90%] mx-auto mb-5 sm:mt-5">
+                <div className="grid grid-cols-1 md:grid-cols-8 md:gap-4">
+                    <div className="col-span-3  flex flex-col">
                         <div className=" ">
                             <Carousel className="w-[400px] h[400px] slide-image bg-gray-500" arrows infinite={false}>
                                 {locationDetail &&
@@ -193,8 +221,48 @@ export const LocationDetail: React.FC = () => {
                         <hr className="mx-3 sm:mx-0" />
                         <hr className="mx-3 sm:mx-0" />
                     </div>
-                    <div className="col-span-5 flex flex-col ">
-                        <div className="grid grid-cols-8 gap-4">
+                    <div className="col-span-5  flex flex-col">
+                        <div className="sm:grid grid-cols-8 gap-2">
+                            <div className="col-span-5">
+                                <div className="flex">
+                                    Giá thuê:
+                                    <p className="shift-price">
+                                        {locationDetail &&
+                                            locationDetail?.shifts[options[shiftSelected]?.value]?.price.toLocaleString(
+                                                "vi-VN"
+                                            )}
+                                    </p>
+                                </div>
+                                <Flex className="p-1 bg-gray-100" justify={"space-between"} wrap="wrap">
+                                    {locationDetail?.courts &&
+                                        locationDetail.courts.map((court) => {
+                                            let isDisable = "";
+                                            if (bookedCourts) {
+                                                if (bookedCourts.indexOf(court._id) != -1) isDisable = "disabled";
+                                            }
+                                            return (
+                                                <div className={`badminton-yard-container ${isDisable}`}>
+                                                    <img
+                                                        className={`badminton-yard-img mb-4 ${
+                                                            imgBlur == court.courtNumber ? "blur" : ""
+                                                        }`}
+                                                        src={Badminton_yard}
+                                                        alt=""
+                                                    />
+                                                    <p className="badminton-yard-number">Sân {court.courtNumber}</p>
+                                                    <Button
+                                                        onMouseEnter={() => handleMouseEndter(court.courtNumber)}
+                                                        onMouseLeave={handleMouseLeave}
+                                                        onClick={() => handleBooking(court._id)}
+                                                        className="btn-book-court">
+                                                        Đặt sân
+                                                    </Button>
+                                                </div>
+                                            );
+                                        })}
+                                </Flex>
+                            </div>
+
                             <div className="col-span-3 flex flex-col">
                                 <div className="calendar" style={wrapperStyle}>
                                     <Calendar
@@ -230,46 +298,26 @@ export const LocationDetail: React.FC = () => {
                                     </Button>
                                 </Flex>
                             </div>
-
-                            <div className="col-span-5">
-                                <div className="flex">
-                                    Giá thuê:
-                                    <p className="shift-price">
-                                        {locationDetail &&
-                                            locationDetail?.shifts[options[shiftSelected]?.value]?.price.toLocaleString(
-                                                "vi-VN"
-                                            )}
-                                    </p>
-                                </div>
-                                <Flex className="p-1 bg-gray-100" justify={"space-between"} wrap="wrap">
-                                    {locationDetail?.courts &&
-                                        locationDetail.courts.map((court) => {
-                                            return (
-                                                <div className="badminton-yard-container">
-                                                    <img
-                                                        className={`badminton-yard-img mb-4 ${
-                                                            imgBlur == court.courtNumber ? "blur" : ""
-                                                        }`}
-                                                        src={Badminton_yard}
-                                                        alt=""
-                                                    />
-                                                    <p className="badminton-yard-number">Sân {court.courtNumber}</p>
-                                                    <Button
-                                                        onMouseEnter={() => handleMouseEndter(court.courtNumber)}
-                                                        onMouseLeave={handleMouseLeave}
-                                                        onClick={() => handleBooking(court._id)}
-                                                        className="btn-book-court">
-                                                        Đặt sân
-                                                    </Button>
-                                                </div>
-                                            );
-                                        })}
-                                </Flex>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer style={{ textAlign: "center" }}>
+                <h1>Giao luu cau long .com</h1>
+                Tìm kiếm cơ hội giao lưu gần bạn
+            </Footer>
+            <Modal
+                visible={isModalVisible}
+                footer={false}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                width="80%"
+                style={{ top: 20 }}>
+                <iframe
+                    src={paymentUrl}
+                    title="Popup Content"
+                    style={{ width: "100%", height: "450px", border: "none" }}></iframe>
+            </Modal>
         </div>
     );
 };

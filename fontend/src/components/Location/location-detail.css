@@ -4,9 +4,13 @@
 .calendar .ant-picker-calendar .ant-picker-calendar-header .ant-radio-group label:nth-child(2) {
     display: none;
 }
+.ant-picker-calendar-header .ant-radio-group {
+    display: none;
+}
 .active-button {
-    background-color: #f5002f;
-    color: white;
+    background-color: #f5002f !important;
+    color: white !important;
+    border: none !important;
 }
 .badminton-yard-container {
     position: relative;
@@ -60,13 +64,14 @@
     font-weight: 700;
     margin-left: 4px;
 }
+.disabled {
+    cursor: none;
+    filter: brightness(50%);
+    pointer-events: none;
+}
 @media (max-width: 768px) {
-    .group-btn {
-        display: flex;
-        flex-direction: column;
-    }
     .btn-shift {
-        width: 115px;
+        width: 100px;
         margin-bottom: 8px;
     }
 }

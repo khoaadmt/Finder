@@ -15,11 +15,24 @@ export class BookingRepository {
   async createBooking(createBookingDto: CreateBookingDto) {
     return await this.BookingModel.create(createBookingDto);
   }
+
   async updateBookingById(id: string) {
     return await this.BookingModel.findOneAndUpdate(
       { _id: id },
       { status: 'booked' },
       { new: true },
     );
+  }
+
+  async getBookedCourts(data: any) {
+    return await this.BookingModel.find({
+      locationId: data.locationId,
+      shiftId: data.shiftId,
+      date: data.date,
+      status: 'booked',
+    })
+      .select('courtId')
+      .lean()
+      .exec();
   }
 }

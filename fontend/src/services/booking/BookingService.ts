@@ -10,5 +10,9 @@ class BookingService extends BaseService {
     createBooking(data: any) {
         return this.post(``, data);
     }
+
+    getBookedCourts(data: any) {
+        return this.get("booked-courts", data);
+    }
 }
 export default BookingService;

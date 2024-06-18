@@ -26,7 +26,15 @@ export class BookingService {
     );
     return resZaloPayment.order_url;
   }
+
   async updateBookingById(id: string) {
     return await this.bookingrepository.updateBookingById(id);
+  }
+
+  async getBookedCourts(data: any) {
+    const bookedCourts = await this.bookingrepository.getBookedCourts(data);
+    return bookedCourts.map((bookedCourt) => {
+      return bookedCourt.courtId.toString();
+    });
   }
 }
