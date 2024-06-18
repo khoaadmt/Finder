@@ -39,7 +39,7 @@ export const FacilitiesCard: React.FC<Props> = (props) => {
                         <div className="flex items-center gap-2 mr-2"></div>
                     </div>
                     <div className="sm:mb-1">
-                        <h3 className="text-black-ish-200 font-bold text-base sm:text-xl truncate">{facility.Name}</h3>
+                        <h3 className="text-black-ish-200 font-bold text-base sm:text-xl truncate">{facility.name}</h3>
                     </div>
                     <div className="flex gap-2 items-start pl-1 sm:mb-1">
                         <svg

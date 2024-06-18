@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Location } from '../schemas/location.schema';
+import { CreateLocationDto } from '../Dto/createLocation.dto';
+import { ObjectId } from 'mongodb';
 require('dotenv').config();
 
 @Injectable()
@@ -12,12 +14,39 @@ export class LocationRepository {
     private LocationModel: Model<Location>,
   ) {}
 
+  async createLocation(createLocationDto: CreateLocationDto) {
+    return await this.LocationModel.create(createLocationDto);
+  }
   async countLocationsByCity(city: string) {
     return await this.LocationModel.countDocuments({ city: city });
   }
 
   async findById(id: string) {
-    return this.LocationModel.findById(id);
+    const objectId = new ObjectId(id);
+
+    return await this.LocationModel.aggregate([
+      {
+        $lookup: {
+          from: 'courts',
+          localField: '_id',
+          foreignField: 'locationId',
+          as: 'courts',
+        },
+      },
+      {
+        $lookup: {
+          from: 'shifts',
+          localField: '_id',
+          foreignField: 'locationId',
+          as: 'shifts',
+        },
+      },
+      {
+        $match: {
+          _id: objectId,
+        },
+      },
+    ]);
   }
 
   async finAllLocations() {

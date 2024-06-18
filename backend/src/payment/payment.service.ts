@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Response, Request } from 'express';
+import { BookingService } from 'src/booking/services/booking.service';
 const axios = require('axios').default; // npm install axios
 const CryptoJS = require('crypto-js'); // npm install crypto-js
 const moment = require('moment'); // npm install moment
@@ -13,8 +14,12 @@ const config = {
 
 @Injectable()
 export class PaymentService {
-  async createZaloPayment() {
-    const embed_data = {};
+  constructor(
+    @Inject(forwardRef(() => BookingService))
+    private readonly bookingService: BookingService,
+  ) {}
+  async createZaloPayment(price: number, bookingId: string) {
+    const embed_data = { bookingId: bookingId };
 
     const items = [{}];
     const transID = Math.floor(Math.random() * 1000000);
@@ -25,12 +30,12 @@ export class PaymentService {
       app_time: Date.now(), // miliseconds
       item: JSON.stringify(items),
       embed_data: JSON.stringify(embed_data),
-      amount: 50000,
+      amount: price,
       description: `Finder badminton - Payment for the order #${transID}`,
       bank_code: '',
       mac: '',
       callback_url:
-        'https://4280-104-28-254-74.ngrok-free.app/api/payment/zalopayCallback',
+        'https://c2b3-104-28-222-73.ngrok-free.app/api/payment/zalopayCallback',
     };
 
     // appid|app_trans_id|appuser|amount|apptime|embeddata|item
@@ -79,6 +84,9 @@ export class PaymentService {
         const key2 = config.key2;
         let dataJson = JSON.parse(dataStr);
         console.log('dataJson :', dataJson);
+        const embed_data = JSON.parse(dataJson.embed_data);
+
+        this.bookingService.updateBookingById(embed_data.bookingId);
 
         result.return_code = 1;
         result.return_message = 'success';

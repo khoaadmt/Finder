@@ -67,6 +67,8 @@ export const HomePage: React.FC = () => {
                 setTimeout(() => {
                     navigate("/login");
                 }, 1500);
+            } else {
+                navigate("/search/facilities?location=Hà+Nội&type=Sân+đấu");
             }
         }
         if (e.key == 4) {

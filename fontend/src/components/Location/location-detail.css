@@ -55,3 +55,18 @@
 .badminton-yard-container:hover .badminton-yard-number {
     display: none;
 }
+.shift-price {
+    color: #f5002f;
+    font-weight: 700;
+    margin-left: 4px;
+}
+@media (max-width: 768px) {
+    .group-btn {
+        display: flex;
+        flex-direction: column;
+    }
+    .btn-shift {
+        width: 115px;
+        margin-bottom: 8px;
+    }
+}

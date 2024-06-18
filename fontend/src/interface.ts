@@ -7,12 +7,25 @@ export interface Location {
     latitude: number;
     longitude: number;
 }
-
+export interface Shift {
+    _id: string;
+    shiftNumber: number;
+    startTime: string;
+    endTime: string;
+    period: string;
+    price: number;
+}
+export interface Court {
+    _id: string;
+    courtNumber: number;
+}
 export interface Facility {
     _id: string;
     city: string;
-    Name: string;
+    name: string;
     contact_phone: string;
+    courts: Court[];
+    shifts: Shift[];
     img: string[];
     address: string;
     price_min: number;

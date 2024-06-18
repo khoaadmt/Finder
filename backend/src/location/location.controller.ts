@@ -1,16 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { LocationService } from './services/location.service';
 import { query } from 'express';
+import { CreateLocationDto } from './Dto/createLocation.dto';
 
 @Controller('locations')
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
-
-  @Get('/booking')
-  createOrder() {
-    const time = new Date().getTime();
-    console.log('time :', time);
-  }
 
   @Get('/count-by-city')
   countLocationsByCity(@Query('city') city) {
@@ -53,5 +48,10 @@ export class LocationController {
       longitude,
       radius,
     );
+  }
+
+  @Post('')
+  async createLocation(@Body() createLocationDto: CreateLocationDto) {
+    return await this.locationService.createLocation(createLocationDto);
   }
 }

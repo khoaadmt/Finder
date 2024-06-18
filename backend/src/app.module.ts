@@ -9,6 +9,8 @@ import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { PaymentModule } from './payment/payment.module';
 import { CourtModule } from './court/court.module';
+import { ShiftModule } from './shift/shift.module';
+import { BookingModule } from './booking/booking.module';
 
 require('dotenv').config();
 @Module({
@@ -29,6 +31,8 @@ require('dotenv').config();
     UserModule,
     PaymentModule,
     CourtModule,
+    ShiftModule,
+    BookingModule,
   ],
 
   providers: [],

@@ -3,11 +3,113 @@ import { LocationRepository } from '../repository/location.repository';
 import * as Bluebird from 'bluebird';
 
 import axios from 'axios';
+import { CreateLocationDto } from '../Dto/createLocation.dto';
+import { CourtService } from 'src/court/services/court.service';
+import { Types } from 'mongoose';
+import { ShiftService } from 'src/shift/services/shift.service';
+import dayjs from 'dayjs';
 require('dotenv').config();
 
 @Injectable()
 export class LocationService {
-  constructor(private readonly locationRepository: LocationRepository) {}
+  constructor(
+    private readonly locationRepository: LocationRepository,
+    private readonly courtService: CourtService,
+    private readonly shiftService: ShiftService,
+  ) {}
+
+  getHoursFormat(date: Date) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    return formattedTime;
+  }
+
+  getPeriod(startTimeShift: Date, morningEnd: Date, afternoonEnd: Date) {
+    let period;
+    if (startTimeShift.getTime() < morningEnd.getTime()) {
+      period = 'Ca sáng';
+    } else if (startTimeShift.getTime() < afternoonEnd.getTime()) {
+      period = 'Ca chiều';
+    } else {
+      period = 'Ca tối';
+    }
+    return period;
+  }
+  createShifts = async (
+    startTime: string,
+    endTime: string,
+    locationId: Types.ObjectId,
+    priceMin: number,
+    priceMax: number,
+  ) => {
+    const msPerHour = 60 * 60 * 1000;
+    const openStartTime = new Date(`1970-01-02T${startTime}:00`);
+    const openEndTime = new Date(`1970-01-02T${endTime}:00`);
+    const morningEnd = new Date(`1970-01-02T12:00:00`);
+    const afternoonEnd = new Date(`1970-01-02T17:00:00`);
+
+    const totalHours =
+      (openEndTime.getTime() - openStartTime.getTime()) / msPerHour;
+
+    const totalShifts = totalHours / 2;
+
+    for (let i = 0; i < totalShifts; i++) {
+      const shiftDuration = 2 * msPerHour;
+      const startTimeShift = new Date(
+        openStartTime.getTime() + i * shiftDuration,
+      );
+      const endTimeShift = new Date(startTimeShift.getTime() + shiftDuration);
+
+      let period = this.getPeriod(startTimeShift, morningEnd, afternoonEnd);
+
+      let price;
+      if (period === 'Ca tối') {
+        price = priceMax;
+      } else {
+        price = priceMin;
+      }
+
+      const shiftData = {
+        shiftNumber: i + 1,
+        startTime: this.getHoursFormat(startTimeShift),
+        endTime: this.getHoursFormat(endTimeShift),
+        price,
+        period,
+        locationId,
+      };
+
+      try {
+        await this.shiftService.createShift(shiftData);
+      } catch (error) {
+        console.error('Error creating shift:', error);
+      }
+    }
+  };
+
+  async createLocation(createLocationDto: CreateLocationDto) {
+    try {
+      const location =
+        await this.locationRepository.createLocation(createLocationDto);
+
+      await this.createShifts(
+        location.openHours.start,
+        location.openHours.end,
+        location._id,
+        location.priceMin,
+        location.priceMax,
+      );
+
+      await this.courtService.createCourts(
+        location._id,
+        createLocationDto.numberOfCourts,
+      );
+
+      return new HttpException('Create location success', HttpStatus.OK);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   async getLocationById(id: string) {
     try {
