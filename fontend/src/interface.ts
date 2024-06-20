@@ -1,6 +1,6 @@
 export interface Location {
     city: string;
-    Name: string;
+    name: string;
     contact_phone: string;
     img: string;
     address: string;
@@ -130,4 +130,14 @@ export interface FilterOptions {
     memberCount: string;
     gender: number;
     agreement: boolean;
+}
+export interface BookedCourts {
+    _id: string;
+    courts: {
+        courtNumber: number;
+    };
+    location: Location;
+    shift: Shift;
+    userName: string;
+    date: string;
 }

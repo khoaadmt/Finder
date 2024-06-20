@@ -69,6 +69,11 @@
     filter: brightness(50%);
     pointer-events: none;
 }
+.btn-disabled {
+    cursor: none;
+    pointer-events: none;
+    background-color: #d1d1d1;
+}
 @media (max-width: 768px) {
     .btn-shift {
         width: 100px;

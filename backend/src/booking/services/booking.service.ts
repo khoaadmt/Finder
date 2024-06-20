@@ -37,4 +37,8 @@ export class BookingService {
       return bookedCourt.courtId.toString();
     });
   }
+
+  async getBookingByUsername(username: string) {
+    return await this.bookingrepository.findBookingsByUsername(username);
+  }
 }

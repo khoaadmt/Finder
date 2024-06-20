@@ -35,4 +35,76 @@ export class BookingRepository {
       .lean()
       .exec();
   }
+
+  async findBookingsByUsername(userName: string) {
+    const bookings = await this.BookingModel.aggregate([
+      {
+        $match: {
+          userName: userName,
+          status: 'booked',
+        },
+      },
+      {
+        $addFields: {
+          location_id_ObjectId: { $toObjectId: '$locationId' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'locations',
+          localField: 'location_id_ObjectId',
+          foreignField: '_id',
+          as: 'location',
+        },
+      },
+
+      {
+        $addFields: {
+          court_id_ObjectId: { $toObjectId: '$courtId' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'courts',
+          localField: 'court_id_ObjectId',
+          foreignField: '_id',
+          as: 'court',
+        },
+      },
+
+      {
+        $addFields: {
+          shift_id_ObjectId: { $toObjectId: '$shiftId' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'shifts',
+          localField: 'shift_id_ObjectId',
+          foreignField: '_id',
+          as: 'shift',
+        },
+      },
+      {
+        $unwind: '$location',
+      },
+      {
+        $unwind: '$shift',
+      },
+      {
+        $unwind: '$court',
+      },
+      {
+        $project: {
+          location_id_ObjectId: 0,
+          locationId: 0,
+          shiftId: 0,
+          shift_id_ObjectId: 0,
+          court_id_ObjectId: 0,
+          courtId: 0,
+        },
+      },
+    ]);
+    return bookings;
+  }
 }

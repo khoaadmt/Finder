@@ -1,4 +1,4 @@
-import { TimePicker, Select, DatePicker, UploadFile, message } from "antd";
+import { TimePicker, Select, DatePicker, UploadFile, message, Form } from "antd";
 import React, { useEffect, useState } from "react";
 import { CustomDynamicForm } from "../Form/CustomDynamicForm";
 import { PicturesWall } from "../PictureWall/PicturesWall";
@@ -174,19 +174,21 @@ export const CreatePostContent: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="font-semibold text-md text-black-ish-200">Sân đấu:</div>
+                    <div className="font-semibold text-md text-black-ish-200">Sân đấu check:</div>
                     <div className=" w-full relative">
-                        <Select
-                            showSearch
-                            className="input-location"
-                            placeholder="Tìm kiếm sân đấu"
-                            optionFilterProp="children"
-                            onChange={HandleLocationOnChange}
-                            onBlur={createPostForm.handleBlur}
-                            filterOption={filterOption}
-                            dropdownRender={(menu) => <div className="custom-dropdown">{menu}</div>}
-                            options={locationOptions}
-                        />
+                        <Form.Item>
+                            <Select
+                                className="input-location"
+                                placeholder="Tìm kiếm sân đấu"
+                                optionFilterProp="children"
+                                onChange={HandleLocationOnChange}
+                                onBlur={createPostForm.handleBlur}
+                                filterOption={filterOption}
+                                dropdownRender={(menu) => <div className="custom-dropdown">{menu}</div>}
+                                options={locationOptions}
+                                showSearch
+                            />
+                        </Form.Item>
                         {createPostForm.touched.location_id && createPostForm.errors.location_id && (
                             <small className="text-danger">*Required</small>
                         )}

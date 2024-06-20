@@ -12,7 +12,7 @@ export const PaginationComponent: React.FC<Props> = (props) => {
         setPageNumber(pageNumber);
     };
     return (
-        <div className="w-full flex justify-center pt-[20px] pb-[48px]">
+        <div className="pagination w-full flex justify-center">
             <Pagination onChange={handleOnChange} defaultCurrent={1} pageSize={pageSize} total={totalFacility} />
         </div>
     );

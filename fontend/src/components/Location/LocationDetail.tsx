@@ -9,6 +9,8 @@ import "./location-detail.css";
 import { useSelector } from "react-redux";
 import BookingService from "../../services/booking/BookingService";
 import { Footer } from "antd/es/layout/layout";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
+import { MyFooter } from "../Footer/Footer";
 const map_icon = require("../../assets/images/map.png");
 const support_icon = require("../../assets/images/support.png");
 const Badminton_yard = require("../../assets/images/san-cau-long.png");
@@ -23,7 +25,7 @@ export const LocationDetail: React.FC = () => {
     const [locationDetail, setLocationDetail] = useState<Facility | null>();
     const locationService = new LocationService();
     const { locationId } = useParams();
-    const [activeButtonName, setActiveButtonName] = useState("Ca sáng");
+    const [activeButtonName, setActiveButtonName] = useState(0);
     const [imgBlur, setImageBlur] = useState<number>();
     const [dateSelected, setDateSelected] = useState(createInitDate());
     const [shiftSelected, setShiftSelected] = useState<number>(0);
@@ -31,12 +33,10 @@ export const LocationDetail: React.FC = () => {
     const [paymentUrl, setPaymentUrl] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [cancelCount, setCancelCount] = useState(0);
-
+    const [disableBtttons, setDisableBtttons] = useState<number[]>([]);
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
     const bookingService = new BookingService();
-
     const [options, setOptions] = useState<any>("");
-
     const { token } = theme.useToken();
 
     const wrapperStyle: React.CSSProperties = {
@@ -45,6 +45,21 @@ export const LocationDetail: React.FC = () => {
         borderRadius: token.borderRadiusLG,
         overflow: "hidden",
     };
+
+    const btnOptions = [
+        {
+            label: "Ca sáng",
+            value: 0,
+        },
+        {
+            label: "Ca chiều",
+            value: 1,
+        },
+        {
+            label: "Ca tối",
+            value: 2,
+        },
+    ];
 
     useEffect(() => {
         if (locationId) {
@@ -87,6 +102,8 @@ export const LocationDetail: React.FC = () => {
     };
 
     const HandleDateOnChange = (value: Dayjs) => {
+        setActiveButtonName(0);
+        setDisableBtttons([]);
         setDateSelected(value.format("YYYY-MM-DD"));
     };
     const disabledDate = (current: any) => {
@@ -94,23 +111,56 @@ export const LocationDetail: React.FC = () => {
         return current && current < today.setHours(0, 0, 0, 0);
     };
 
+    const convertTimeToNumber = (timeStr: string) => {
+        const [hours, minutes] = timeStr.split(":").map(Number);
+
+        if (minutes >= 30) {
+            return hours + 0.5;
+        } else {
+            return hours;
+        }
+    };
+
     useEffect(() => {
         setShiftSelected(0);
         if (locationDetail?.shifts) {
+            const date = new Date(Date.now());
+            let hoursNow = date.getHours();
+            if (date.getMinutes() > 30) {
+                hoursNow += 0.5;
+            }
+
+            const dateNow = dayjs(date).format("YYYY-MM-D");
             const optionsTmp: Optional[] = locationDetail.shifts
-                .filter((shift) => shift.period === activeButtonName)
+                .filter((shift) => {
+                    return shift.period === btnOptions[activeButtonName].label;
+                })
+                .filter((shift) => {
+                    if (dateNow == dateSelected) {
+                        return convertTimeToNumber(shift.startTime) > hoursNow;
+                    }
+                    return true;
+                })
                 .map((shift, index) => {
                     return {
                         value: shift.shiftNumber,
                         label: `Ca ${shift.shiftNumber} - ${shift.startTime} : ${shift.endTime}`,
                     };
                 });
+            if (optionsTmp.length === 0) {
+                setDisableBtttons((prev) => {
+                    return [...prev, activeButtonName];
+                });
+                setActiveButtonName((prev) => {
+                    return prev + 1;
+                });
+            }
             setOptions(optionsTmp);
         }
-    }, [locationDetail, activeButtonName]);
+    }, [locationDetail, activeButtonName, dateSelected]);
 
-    const handleClick = (buttonName: string) => {
-        setActiveButtonName(buttonName);
+    const handleClick = (buttonValue: number) => {
+        setActiveButtonName(buttonValue);
     };
 
     const handleMouseEndter = (i: number) => {
@@ -280,20 +330,24 @@ export const LocationDetail: React.FC = () => {
                                 />
                                 <Flex justify={"space-between"} align={"center"} className="mt-2 group-btn">
                                     <Button
-                                        className={`btn-shift ${activeButtonName === "Ca sáng" ? "active-button" : ""}`}
-                                        onClick={() => handleClick("Ca sáng")}>
+                                        className={`btn-shift ${activeButtonName === 0 ? "active-button" : ""} ${
+                                            disableBtttons.indexOf(0) !== -1 ? "btn-disabled" : ""
+                                        }`}
+                                        onClick={() => handleClick(0)}>
                                         Sáng
                                     </Button>
                                     <Button
-                                        className={`btn-shift ${
-                                            activeButtonName === "Ca chiều" ? "active-button" : ""
+                                        className={`btn-shift ${activeButtonName === 1 ? "active-button" : ""}${
+                                            disableBtttons.indexOf(1) !== -1 ? "btn-disabled" : ""
                                         }`}
-                                        onClick={() => handleClick("Ca chiều")}>
+                                        onClick={() => handleClick(1)}>
                                         Chiều
                                     </Button>
                                     <Button
-                                        className={`btn-shift ${activeButtonName === "Ca tối" ? "active-button" : ""}`}
-                                        onClick={() => handleClick("Ca tối")}>
+                                        className={`btn-shift ${activeButtonName === 2 ? "active-button" : ""}${
+                                            disableBtttons.indexOf(2) !== -1 ? "btn-disabled" : ""
+                                        }`}
+                                        onClick={() => handleClick(2)}>
                                         Tối
                                     </Button>
                                 </Flex>
@@ -302,10 +356,7 @@ export const LocationDetail: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <Footer style={{ textAlign: "center" }}>
-                <h1>Giao luu cau long .com</h1>
-                Tìm kiếm cơ hội giao lưu gần bạn
-            </Footer>
+            <MyFooter></MyFooter>
             <Modal
                 visible={isModalVisible}
                 footer={false}

@@ -15,13 +15,15 @@ import { Test } from "./components/test";
 import PrivateRoute from "./components/PrivateRoute";
 import { MyPost } from "./components/User/MyPost";
 import { LocationDetail } from "./components/Location/LocationDetail";
+import { MyBookedCourts } from "./components/User/MyBookedCourts";
+import { Test2 } from "./components/NotFoundPage/Test";
 
 const App: React.FC = () => {
     return (
         <div className="App">
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="test" element={<Test />} />
+                <Route path="test2" element={<Test2 />} />
                 <Route path="search" element={<SearchPage />}>
                     <Route path="facilities" element={<FacilitiesPage />} />
                     <Route path="sessions" element={<SessionsPage />} />
@@ -47,6 +49,7 @@ const App: React.FC = () => {
                 <Route path="user" element={<PrivateRoute />}>
                     <Route path="update-profile" element={<UserProfile />} />
                     <Route path="my-post" element={<MyPost />} />
+                    <Route path="my-booked-courts" element={<MyBookedCourts />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

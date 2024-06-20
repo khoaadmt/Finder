@@ -14,5 +14,9 @@ class BookingService extends BaseService {
     getBookedCourts(data: any) {
         return this.get("booked-courts", data);
     }
+
+    getBookingsByUserName(username: string) {
+        return this.get(`by-username/${username}`);
+    }
 }
 export default BookingService;

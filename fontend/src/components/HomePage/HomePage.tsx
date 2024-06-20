@@ -63,7 +63,7 @@ export const HomePage: React.FC = () => {
         }
         if (e.key == 3) {
             if (!user) {
-                message.error("Bạn cần đăng nhập để có thể đăng tin.");
+                message.error("Bạn cần đăng nhập để có thể đặt sân.");
                 setTimeout(() => {
                     navigate("/login");
                 }, 1500);

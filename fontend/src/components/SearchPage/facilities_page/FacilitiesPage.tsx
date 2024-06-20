@@ -35,14 +35,19 @@ export const FacilitiesPage: React.FC = () => {
     }, [pageNumber]);
 
     useEffect(() => {
-        getLocation().then((resolve) => {
-            getData(resolve.latitude, resolve.longitude).then((res) => {
-                if (res.data) {
-                    setData(res.data);
-                    console.log(res.data);
-                }
+        getLocation()
+            .then((resolve) => {
+                getData(resolve.latitude, resolve.longitude).then((res) => {
+                    if (res.data) {
+                        setData(res.data);
+                        console.log(res.data);
+                    }
+                });
+            })
+            .catch((error) => {
+                console.log("error :", error);
             });
-        });
+
         async function getData(latitude: number, longitude: number) {
             const params = {
                 params: {
@@ -79,12 +84,12 @@ export const FacilitiesPage: React.FC = () => {
                     <div className="sm:hidden pb-[15px] w-full text-center relative -top-1">
                         <span className="text-sm">Tìm thêm hoạt động</span>
                     </div>
-                    <div className="py-[15px] pl-[23px]">
+                    <div className="py-[15px] pl-[42px]">
                         <span className="text-lg sm:text-xl font-semibold">
                             {data ? `Tìm thấy ${totalFacility} sân đấu` : "Không tìm thấy sân đấu nào"}
                         </span>
                     </div>
-                    <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
+                    <div className="px-[40px] grid gap-2 grid-cols-1 md:grid-cols-2">
                         {data?.map((facility) => {
                             return <FacilitiesCard key={facility.name} facility={facility} />;
                         })}

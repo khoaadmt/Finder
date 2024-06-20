@@ -5,7 +5,7 @@ import { Dropdown, Menu, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../interface";
 import "./search-page-header.css";
-import { FormOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from "@ant-design/icons";
+import { CarryOutOutlined, FormOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from "@ant-design/icons";
 import { logOutSuccess } from "../../../redux/authSlice";
 import { MenuButton } from "./MenuButton";
 
@@ -25,6 +25,7 @@ export const SearchPageHeader: React.FC<Props> = (props) => {
         { key: "1", label: "Trang cá nhân", icon: <UserOutlined /> },
         { key: "2", label: "Logout", icon: <LogoutOutlined /> },
         { key: "3", label: "Bài viết của tôi", icon: <FormOutlined /> },
+        { key: "4", label: "Sân đã đặt", icon: <CarryOutOutlined /> },
     ];
 
     const handleLogOut = () => {
@@ -40,6 +41,9 @@ export const SearchPageHeader: React.FC<Props> = (props) => {
         }
         if (e.key == 3) {
             navigate("/user/my-post");
+        }
+        if (e.key == 4) {
+            navigate("/user/my-booked-courts");
         }
     };
     const menuItems = [

@@ -25,4 +25,9 @@ export class BookingController {
   getBookingById(@Query() data: any) {
     return this.bookingService.getBookedCourts(data);
   }
+
+  @Get('/by-username/:username')
+  getBookingByUsername(@Param('username') username: string) {
+    return this.bookingService.getBookingByUsername(username);
+  }
 }

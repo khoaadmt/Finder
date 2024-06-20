@@ -11,10 +11,6 @@ export class PostRepository {
     private Post: Model<Post>,
   ) {}
 
-  async testCreatePost(): Promise<Post> {
-    const newPost = new this.Post();
-    return newPost.save();
-  }
   async finAllPost(city) {
     const currentDate = new Date();
     const currentTimestamp = currentDate.getTime();
@@ -112,6 +108,52 @@ export class PostRepository {
       },
     ]);
   }
+
+  async findByUserName(username: string) {
+    return await this.Post.aggregate([
+      {
+        $addFields: {
+          location_id_ObjectId: { $toObjectId: '$location_id' },
+        },
+      },
+      {
+        $match: { username: username },
+      },
+      {
+        $lookup: {
+          from: 'locations',
+          localField: 'location_id_ObjectId',
+          foreignField: '_id',
+          as: 'location',
+        },
+      },
+      {
+        $unwind: '$location',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'username',
+          foreignField: 'username',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {
+          location_id_ObjectId: 0,
+          location_id: 0,
+          'user._id': 0,
+          'user.password': 0,
+          'user.accessToken': 0,
+          'user.refreshToken': 0,
+        },
+      },
+    ]);
+  }
+
   async countPosts() {
     return await this.Post.countDocuments();
   }

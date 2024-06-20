@@ -18,12 +18,6 @@ export class PostsService {
   private readonly pageLimit = 6;
   constructor(private readonly postRepository: PostRepository) {}
 
-  async testCreatePost() {
-    const post = await this.postRepository.testCreatePost();
-    console.log(post);
-    return post;
-  }
-
   async getAllPosts(pageNumber: number, city: string) {
     const posts = await this.postRepository.finAllPost(city);
 
@@ -38,6 +32,11 @@ export class PostsService {
     if (!post) {
       throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
+    return post;
+  }
+
+  async getPostByUserName(userName: string) {
+    const post = await this.postRepository.findByUserName(userName);
     return post;
   }
 

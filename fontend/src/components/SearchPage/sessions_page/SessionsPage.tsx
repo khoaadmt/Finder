@@ -58,12 +58,12 @@ export const SessionsPage = () => {
             <div className="relative w-full">
                 <Post_options setFilterOptions={setFilterOptions} />
                 <div className="relative w-screen min-h-screen sm:w-full sm:min-h-full transition-all z-[9] sm:static bg-white rounded-xl top-[calc(100vh - 192px)]">
-                    <div className="py-[15px] pl-[23px]">
+                    <div className="py-[15px] pl-[42px]">
                         <span className="text-lg sm:text-xl font-semibold">
                             {data ? `Tìm thấy ${totalPosts} bài viết` : "Không tìm thấy sân đấu nào"}
                         </span>
                     </div>
-                    <div className="px-[15px] grid gap-2 grid-cols-1 md:grid-cols-2">
+                    <div className="px-[40px] grid gap-2 grid-cols-1 md:grid-cols-2">
                         {data &&
                             data?.map((post) => {
                                 return <PostCard key={post._id} post={post} />;
