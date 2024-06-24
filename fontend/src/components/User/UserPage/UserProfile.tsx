@@ -3,11 +3,11 @@ import { SearchPageHeader } from "../SearchPage/header/SearchPageHeader";
 import { EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserInfo } from "../../redux/apiRequest";
 import { PicturesWall } from "../Posts/PictureWall/PicturesWall";
-import { RootState } from "../../interface";
+import { RootState } from "../../../interface";
+import { updateUserInfo } from "../../../redux/apiRequest";
+import UpLoadService from "../../../services/uploads/UploadService";
 import "./user-profile.css";
-import UpLoadService from "../../services/uploads/UploadService";
 
 export const UserProfile = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);

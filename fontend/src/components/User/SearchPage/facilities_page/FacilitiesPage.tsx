@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Facility } from "../../../interface";
 
 import { useSearchParams } from "react-router-dom";
 import { FacilitiesCard } from "./FacilitiesCard";
 import { PaginationComponent } from "../pagination/Pagination";
-import { getLocation } from "../../../utils/location";
-import LocationService from "../../../services/location/LocationService";
+import { Facility } from "../../../../interface";
+import LocationService from "../../../../services/location/LocationService";
+import { getLocation } from "../../../../utils/location";
 
 export const FacilitiesPage: React.FC = () => {
     const [data, setData] = useState<Facility[] | null>();

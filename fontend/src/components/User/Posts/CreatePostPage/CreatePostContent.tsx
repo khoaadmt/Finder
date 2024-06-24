@@ -1,19 +1,20 @@
 import { TimePicker, Select, DatePicker, UploadFile, message, Form } from "antd";
 import React, { useEffect, useState } from "react";
-import { CustomDynamicForm } from "../Form/CustomDynamicForm";
 import { PicturesWall } from "../PictureWall/PicturesWall";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Dayjs } from "dayjs";
 import { disabledDate, filterOption } from "../FunctionHandler";
-import { RootState } from "../../../interface";
 import { useDispatch, useSelector } from "react-redux";
-import { notJustNumber } from "../../Auth/validationSchema";
-import { tagRender } from "../TagRender";
-import PostService from "../../../services/post/PostService";
-import UpLoadService from "../../../services/uploads/UploadService";
-import LocationService from "../../../services/location/LocationService";
-import { genderOptions, memberLevel } from "../../../utils/Constant";
+
+import { RootState } from "../../../../interface";
+import LocationService from "../../../../services/location/LocationService";
+import PostService from "../../../../services/post/PostService";
+import UpLoadService from "../../../../services/uploads/UploadService";
+import { genderOptions, memberLevel } from "../../../../utils/Constant";
+import { notJustNumber } from "../../../Auth/validationSchema";
+import { CustomDynamicForm } from "../form/CustomDynamicForm";
+import { tagRender } from "../tagRender";
 import "./createpost.css";
 
 export const CreatePostContent: React.FC = () => {

@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { SearchPageHeader } from "../SearchPage/header/SearchPageHeader";
 import { Button, Calendar, CalendarProps, Carousel, Flex, Modal, Select, message, theme } from "antd";
-import { Facility, Optional, RootState } from "../../interface";
-import LocationService from "../../services/location/LocationService";
 import { useParams } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import "./location-detail.css";
 import { useSelector } from "react-redux";
-import BookingService from "../../services/booking/BookingService";
-import { Footer } from "antd/es/layout/layout";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
 import { MyFooter } from "../Footer/Footer";
-const map_icon = require("../../assets/images/map.png");
-const support_icon = require("../../assets/images/support.png");
-const Badminton_yard = require("../../assets/images/san-cau-long.png");
+import { Facility, RootState, Optional } from "../../../interface";
+import BookingService from "../../../services/booking/BookingService";
+import LocationService from "../../../services/location/LocationService";
+const map_icon = require("../../../assets/images/map.png");
+const support_icon = require("../../../assets/images/support.png");
+const Badminton_yard = require("../../../assets/images/san-cau-long.png");
 
 const createInitDate = () => {
     const timeStamp = dayjs(Date.now());

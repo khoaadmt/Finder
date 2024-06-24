@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Pots, ResponseLocation, RootState, FilterOptions } from "../../../interface";
 import { PaginationComponent } from "../pagination/Pagination";
 import { useSearchParams } from "react-router-dom";
 import { Post_options } from "../header/PostOptions";
 import { PostCard } from "../../Posts/PostCard";
 import { message } from "antd";
-import PostService from "../../../services/post/PostService";
 import { useSelector } from "react-redux";
+import { Post, FilterOptions, RootState } from "../../../../interface";
+import PostService from "../../../../services/post/PostService";
 
 export const SessionsPage = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -14,7 +14,7 @@ export const SessionsPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [pageNumber, setPageNumber] = useState(1);
     const [totalPosts, setTotalPosts] = useState(5);
-    const [data, setData] = useState<Pots[] | null>();
+    const [data, setData] = useState<Post[] | null>();
     const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
     const location = searchParams.get("location");
     const user = useSelector((state: RootState) => state.auth.login.currentUser);

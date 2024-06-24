@@ -51,7 +51,7 @@ interface userInfor {
     contactPhone: string;
     facebookId: string;
 }
-export interface Pots {
+export interface Post {
     _id: string;
     title: string;
 

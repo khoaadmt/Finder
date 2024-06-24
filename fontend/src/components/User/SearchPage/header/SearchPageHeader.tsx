@@ -3,11 +3,13 @@ import { InputSearch } from "../input_search/InputSearch";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Dropdown, Menu, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../interface";
+
 import "./search-page-header.css";
 import { CarryOutOutlined, FormOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from "@ant-design/icons";
-import { logOutSuccess } from "../../../redux/authSlice";
+
 import { MenuButton } from "./MenuButton";
+import { RootState } from "../../../../interface";
+import { logOutSuccess } from "../../../../redux/authSlice";
 
 interface Props {
     defaultSelectedKeys: string;

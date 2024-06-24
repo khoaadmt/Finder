@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import PostService from "../../../services/post/PostService";
 import { useParams, useSearchParams } from "react-router-dom";
-import { Pots } from "../../../interface";
 import { SearchPageHeader } from "../../SearchPage/header/SearchPageHeader";
 import { Button, Carousel, message } from "antd";
-import { memberLevel } from "../../../utils/Constant";
+
+import { Post } from "../../../../interface";
+import PostService from "../../../../services/post/PostService";
+import { memberLevel } from "../../../../utils/Constant";
 import "./postdetail.css";
-const map_icon = require("../../../assets/images/map.png");
-const support_icon = require("../../../assets/images/support.png");
+const map_icon = require("../../../../assets/images/map.png");
+const support_icon = require("../../../../assets/images/support.png");
 export const PostDetailPage = () => {
     const postService = new PostService();
     const { postId } = useParams();
-    const [postDetail, setPostDetail] = useState<Pots | null>();
+    const [postDetail, setPostDetail] = useState<Post | null>();
 
     useEffect(() => {
         if (postId) {

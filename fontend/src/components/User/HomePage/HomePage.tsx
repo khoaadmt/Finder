@@ -1,13 +1,13 @@
 import React from "react";
 import { InputSearch } from "../SearchPage/input_search/InputSearch";
-import { createAxios } from "../createInstance";
-import { setSuccessState } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../interface";
 import { Dropdown, Menu, message } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
 import "./home-page.css";
+import { RootState } from "../../../interface";
+import { setSuccessState } from "../../../redux/authSlice";
+import { createAxios } from "../../createInstance";
 
 export const HomePage: React.FC = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);

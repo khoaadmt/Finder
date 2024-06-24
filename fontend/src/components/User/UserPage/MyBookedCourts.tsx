@@ -2,13 +2,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { SearchPageHeader } from "../SearchPage/header/SearchPageHeader";
 import { useSelector } from "react-redux";
-import { BookedCourts, RootState } from "../../interface";
-import BookingService from "../../services/booking/BookingService";
 import "./my-booked-courts.css";
 import { Input, Space } from "antd";
 import { MyFooter } from "../Footer/Footer";
 import { CarryOutOutlined } from "@ant-design/icons";
-const Badminton_yard = require("../../assets/images/sau-cau.png");
+import { BookedCourts, RootState } from "../../../interface";
+import BookingService from "../../../services/booking/BookingService";
+const Badminton_yard = require("../../../assets/images/sau-cau.png");
 
 export const MyBookedCourts = () => {
     const [bookedCourts, setBookedCourts] = useState<BookedCourts[]>();

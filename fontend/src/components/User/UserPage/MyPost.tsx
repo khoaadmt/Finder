@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { SearchPageHeader } from "../SearchPage/header/SearchPageHeader";
-import PostService from "../../services/post/PostService";
+
 import { useSelector } from "react-redux";
-import { RootState } from "../../interface";
+
 import { MyFooter } from "../Footer/Footer";
 import { CarryOutOutlined } from "@ant-design/icons";
+import PostService from "../../../services/post/PostService";
+import { RootState } from "../../../interface";
 
 export const MyPost = () => {
     const [posts, setPosts] = useState();

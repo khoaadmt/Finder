@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { MenuProps } from "antd";
 import { Dropdown } from "antd";
+import { FilterOptions } from "../../../../interface";
 import "./search-page-header.css";
-import { FilterOptions } from "../../../interface";
 
 interface Props {
     defaultValue: string;

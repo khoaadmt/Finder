@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FilterOptions } from "../../../interface";
 import { DatePicker, TimePicker } from "antd";
-import "./search-page-header.css";
 import dayjs from "dayjs";
 import { OptionButtons } from "./OptionButtons";
-import { Distance_value, Gender_value, Level_value, MemberCount_value, Price_value } from "../../../utils/Constant";
+import { FilterOptions } from "../../../../interface";
+import "./search-page-header.css";
+import { Distance_value, Level_value, Price_value, MemberCount_value, Gender_value } from "../../../../utils/Constant";
 
 interface Props {
     setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions | null>>;
