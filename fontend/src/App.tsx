@@ -1,7 +1,6 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { NotFoundPage } from "./components/NotFoundPage/NotFoundPage";
-import { Test } from "./components/test";
 import PrivateRoute from "./components/PrivateRoute";
 import { SocialRedirect } from "./components/Auth/GoogleRedirect/SocialRedirect";
 import { LoginPage } from "./components/Auth/LoginPage/LoginPage";
@@ -16,6 +15,10 @@ import { MyBookedCourts } from "./components/User/UserPage/MyBookedCourts";
 import { MyPost } from "./components/User/UserPage/MyPost";
 import { UserProfile } from "./components/User/UserPage/UserProfile";
 import "./App.css";
+import { LayoutPage } from "./components/Admin/Layout";
+import { Dashboard } from "./components/Admin/Dashboard";
+import { OverviewLocationPage } from "./components/Admin/Location/Overview";
+import { AddLocationPage } from "./components/Admin/Location/Add";
 
 const App: React.FC = () => {
     return (
@@ -50,6 +53,16 @@ const App: React.FC = () => {
                     <Route path="my-booked-courts" element={<MyBookedCourts />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
+
+                <Route path="admin" element={<LayoutPage />}>
+                    <Route path="" element={<Navigate to="dashboard" />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="location">
+                        <Route path="" element={<Navigate to="overview" />} />
+                        <Route path="overview" element={<OverviewLocationPage />} />
+                        <Route path="add" element={<AddLocationPage />} />
+                    </Route>
+                </Route>
             </Routes>
         </div>
     );
