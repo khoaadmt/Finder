@@ -11,7 +11,7 @@ import { RootState } from "../../../../interface";
 import LocationService from "../../../../services/location/LocationService";
 import PostService from "../../../../services/post/PostService";
 import UpLoadService from "../../../../services/uploads/UploadService";
-import { genderOptions, memberLevel } from "../../../../utils/Constant";
+import { genderOptions, memberLevels } from "../../../../utils/Constant";
 import { notJustNumber } from "../../../Auth/validationSchema";
 import { CustomDynamicForm } from "../form/CustomDynamicForm";
 import { tagRender } from "../tagRender";
@@ -26,6 +26,7 @@ export const CreatePostContent: React.FC = () => {
     const postService = new PostService();
     const uploadService = new UpLoadService();
     const locationService = new LocationService();
+    const [disablePriceInput, setDisablePriceInput] = useState(false);
 
     const createPostForm = useFormik({
         initialValues: {
@@ -95,15 +96,31 @@ export const CreatePostContent: React.FC = () => {
         createPostForm.setFieldValue("date", date.format("YYYY-MM-DD"));
     };
     const handleStartTimeChange = (time: Dayjs, timeString: string | string[]) => {
-        console.log(time.valueOf());
         createPostForm.setFieldValue("time", timeString);
     };
     const handleLevelMemberMinChange = (value: any) => {
-        console.log("levelMemberMin", value, typeof value);
+        console.log("on change");
+        if (createPostForm.values.levelMemberMax) {
+            if (value > createPostForm.values.levelMemberMax) {
+                message.error("Trình độ tối thiểu phải nhỏ hơn hoặc bằng trình độ tối đa");
+                return;
+            }
+        }
         createPostForm.setFieldValue("levelMemberMin", value);
     };
     const handleLevelMemberMaxChange = (value: any) => {
+        if (createPostForm.values.levelMemberMin) {
+            if (value < createPostForm.values.levelMemberMin) {
+                message.error("Trình độ tối thiểu phải nhỏ hơn hoặc bằng trình độ tối đa");
+                return;
+            }
+        }
+
         createPostForm.setFieldValue("levelMemberMax", value);
+    };
+
+    const handleSelect = () => {
+        console.log("select");
     };
     const handleAgreementChange = (e: any) => {
         createPostForm.setFieldValue("agreement", e.target.checked);
@@ -111,6 +128,9 @@ export const CreatePostContent: React.FC = () => {
             createPostForm.setFieldValue("priceMin", "");
             createPostForm.setFieldValue("priceMax", "");
         }
+        setDisablePriceInput((prev) => {
+            return !prev;
+        });
     };
 
     useEffect(() => {
@@ -175,7 +195,7 @@ export const CreatePostContent: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="font-semibold text-md text-black-ish-200">Sân đấu check:</div>
+                    <div className="font-semibold text-md text-black-ish-200">Sân đấu:</div>
                     <div className=" w-full relative">
                         <Form.Item>
                             <Select
@@ -232,7 +252,12 @@ export const CreatePostContent: React.FC = () => {
                                 placeholder="Trình độ tối thiểu"
                                 className="input-post w-full"
                                 onChange={handleLevelMemberMinChange}
-                                options={memberLevel}
+                                options={memberLevels.filter((memberLevel) => {
+                                    if (createPostForm.values.levelMemberMax) {
+                                        return memberLevel.value <= createPostForm.values.levelMemberMax;
+                                    }
+                                    return true;
+                                })}
                                 style={{ border: "2px solid #e5e7eb" }}
                             />
                         </div>
@@ -241,7 +266,12 @@ export const CreatePostContent: React.FC = () => {
                                 placeholder="Trình độ tối đa"
                                 className="input-post  w-full"
                                 onChange={handleLevelMemberMaxChange}
-                                options={memberLevel}
+                                options={memberLevels.filter((memberLevel) => {
+                                    if (createPostForm.values.levelMemberMin) {
+                                        return memberLevel.value >= createPostForm.values.levelMemberMin;
+                                    }
+                                    return true;
+                                })}
                             />
                         </div>
                     </div>
@@ -289,6 +319,7 @@ export const CreatePostContent: React.FC = () => {
                                 min={1}
                                 value={createPostForm.values.priceMin}
                                 onChange={createPostForm.handleChange}
+                                disabled={disablePriceInput}
                             />
                         </div>
                         <div className="w-full relative">
@@ -300,6 +331,7 @@ export const CreatePostContent: React.FC = () => {
                                 min={1}
                                 value={createPostForm.values.priceMax}
                                 onChange={createPostForm.handleChange}
+                                disabled={disablePriceInput}
                             />
                         </div>
                         <div className="w-full relative agreed-checkbox-container">

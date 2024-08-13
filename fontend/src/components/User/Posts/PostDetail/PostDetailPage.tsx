@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { SearchPageHeader } from "../../SearchPage/header/SearchPageHeader";
 import { Button, Carousel, message } from "antd";
 
 import { Post } from "../../../../interface";
 import PostService from "../../../../services/post/PostService";
-import { memberLevel } from "../../../../utils/Constant";
+import { memberLevels } from "../../../../utils/Constant";
 import "./postdetail.css";
 const map_icon = require("../../../../assets/images/map.png");
 const support_icon = require("../../../../assets/images/support.png");
@@ -23,7 +23,7 @@ export const PostDetailPage = () => {
     }, []);
 
     const getLabel = (value: number | undefined) => {
-        const level = memberLevel.find((level) => level.value === value);
+        const level = memberLevels.find((level) => level.value === value);
         return level ? level.label : "Unknown";
     };
 

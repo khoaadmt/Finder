@@ -17,12 +17,16 @@ require('dotenv').config();
   imports: [
     MongooseModule.forRoot(process.env.MONGO_CONNECTION_STRING),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'uploads', 'post'),
+      rootPath: join(process.cwd(), 'uploads', 'post'),
       serveRoot: '/api/uploads/post',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'uploads', 'avatar'),
+      rootPath: join(process.cwd(), 'uploads', 'avatar'),
       serveRoot: '/api/uploads/avatar',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads', 'location'),
+      serveRoot: '/api/uploads/location',
     }),
     LocationModule,
     PostsModule,

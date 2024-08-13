@@ -13,7 +13,7 @@ export const DynamicFieldItem: React.FC<Props> = (props) => {
         <div className="dynamic-form-input-container">
             <input
                 id="test"
-                className="dynamic-form-input"
+                className="p-2 dynamic-form-input"
                 placeholder="Số điện thoại"
                 type="text"
                 name="phone"

@@ -36,9 +36,6 @@ export class Location {
   @Prop({ type: Object, required: true })
   openHours: Timeline;
 
-  @Prop({ type: Object, required: true })
-  openDays: Timeline;
-
   @Prop()
   latitude: number;
 

@@ -11,7 +11,7 @@ export class VerifyTokenMiddleware implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization.split(' ')[1];
     if (!authHeader) {
       throw new UnauthorizedException('Token not provided');
     }
@@ -24,6 +24,7 @@ export class VerifyTokenMiddleware implements NestMiddleware {
       req.user = verify;
       next();
     } catch (error) {
+      console.log(error);
       throw new UnauthorizedException('Invalid token');
     }
   }

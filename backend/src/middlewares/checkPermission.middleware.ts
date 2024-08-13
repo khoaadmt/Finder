@@ -13,16 +13,17 @@ export class CheckPermissionMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     try {
-      const token = req.headers.authorization;
+      const token = req.headers.authorization.split(' ')[1];
       if (!token) {
         return res.status(403).json({
           message: 'Bạn cần phải đăng nhập để thực hiện hành động này!',
         });
       }
-
+      console.log(token);
       const decoded = await this.jwtService.verifyAsync(token, {
         secret: process.env.ACCESS_TOKEN_SECRET,
       });
+      console.log('test');
 
       const user = await this.userModel.findById(decoded.userId);
       if (!user) {

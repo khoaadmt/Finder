@@ -43,12 +43,6 @@ export class CreateLocationDto {
   };
 
   @IsNotEmpty()
-  openDays: {
-    start: string;
-    end: string;
-  };
-
-  @IsNotEmpty()
   @IsNumber()
   latitude: number;
 

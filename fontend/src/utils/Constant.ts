@@ -1,4 +1,4 @@
-export const memberLevel = [
+export const memberLevels = [
     { value: 1, label: "Y" },
     { value: 2, label: "TBY" },
     { value: 3, label: "TB-" },
