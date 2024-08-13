@@ -20,10 +20,7 @@ import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {

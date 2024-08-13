@@ -27,6 +27,7 @@ require('dotenv').config();
   ],
   providers: [AuthService, GoogleStrategy, FacebookStrategy, AuthRepository],
   controllers: [AuthController],
+  exports: [MongooseModule],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

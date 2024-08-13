@@ -16,7 +16,7 @@ export class VerifyTokenMiddleware implements NestMiddleware {
       throw new UnauthorizedException('Token not provided');
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader;
     try {
       const verify = await this.jwtService.verifyAsync(token, {
         secret: process.env.ACCESS_TOKEN_SECRET,

@@ -8,6 +8,7 @@ import { CourtService } from 'src/court/services/court.service';
 import { Types } from 'mongoose';
 import { ShiftService } from 'src/shift/services/shift.service';
 import dayjs from 'dayjs';
+import { Location } from './../../../../fontend/src/interface';
 require('dotenv').config();
 
 @Injectable()
@@ -192,6 +193,42 @@ export class LocationService {
       },
     );
     return locationsWithDistance;
+  }
+
+  async updateLocation(
+    locationId: string,
+    updateLocationDto: CreateLocationDto,
+  ) {
+    try {
+      const location = await this.locationRepository.findById(locationId);
+      if (!location) {
+        throw new HttpException('Location not found', HttpStatus.NOT_FOUND);
+      }
+      await this.locationRepository.update(
+        { _id: locationId },
+        updateLocationDto,
+      );
+      return {
+        message: 'Location deleted successfully',
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async deleteLocation(locationId: string) {
+    try {
+      const location = await this.locationRepository.findById(locationId);
+      if (!location) {
+        throw new HttpException('Location not found', HttpStatus.NOT_FOUND);
+      }
+      await this.locationRepository.delete(locationId);
+      return {
+        message: 'Location deleted successfully',
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   private toRadians(degrees: number): number {

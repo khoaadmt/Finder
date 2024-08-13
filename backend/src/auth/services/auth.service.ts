@@ -23,6 +23,7 @@ export class AuthService {
 
     let payload = {
       username: username,
+      userId: '',
       displayName: displayName,
       avaUrl: avaUrl,
       facebookId: '',
@@ -31,14 +32,16 @@ export class AuthService {
 
     const user = await this.authRepository.findUserByGoogleType(username);
     if (!user) {
-      await this.authRepository.createUserByGoogleType(
+      const newUser = await this.authRepository.createUserByGoogleType(
         username,
         displayName,
         avaUrl,
       );
+      payload.userId = newUser._id.toString();
     } else {
       payload.facebookId = user.facebookId;
       payload.contactPhone = user.contactPhone;
+      payload.userId = user._id.toString();
     }
     const token = await this.genarateToken(payload);
     return token;
@@ -53,6 +56,7 @@ export class AuthService {
 
     let payload = {
       username: username,
+      userId: '',
       displayName: displayName,
       avaUrl: '',
       facebookId: username,
@@ -66,6 +70,7 @@ export class AuthService {
         displayName,
       );
       payload.avaUrl = newUser.avaUrl;
+      payload.userId = newUser._id.toString();
     } else {
       payload.avaUrl = user.avaUrl;
       payload.contactPhone = user.contactPhone;
@@ -116,6 +121,7 @@ export class AuthService {
     // update access token and refresh token
     const payload = {
       username: user.username,
+      userId: user._id.toString(),
       displayName: user.displayName,
       avaUrl: user.avaUrl,
       contactPhone: user.contactPhone,
@@ -139,6 +145,7 @@ export class AuthService {
       });
       return this.genarateToken({
         username: verify.username,
+        userId: verify.userId,
         displayName: verify.displayName,
         avaUrl: verify.avaUrl,
         contactPhone: verify.contactPhone,
@@ -154,11 +161,14 @@ export class AuthService {
 
   private async genarateToken(payload: {
     username: string;
+    userId: string;
     displayName: string;
     avaUrl: string;
     contactPhone: string;
     facebookId: string;
   }) {
+    console.log(payload);
+
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.ACCESS_TOKEN_SECRET,
       expiresIn: '8h',

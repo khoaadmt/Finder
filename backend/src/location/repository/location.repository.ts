@@ -14,6 +14,17 @@ export class LocationRepository {
     private LocationModel: Model<Location>,
   ) {}
 
+  async update(locationId, updateLocationDto: CreateLocationDto) {
+    return await this.LocationModel.findByIdAndUpdate(
+      locationId,
+      updateLocationDto,
+      { new: true },
+    );
+  }
+
+  async delete(locationId) {
+    return await this.LocationModel.findByIdAndDelete(locationId);
+  }
   async createLocation(createLocationDto: CreateLocationDto) {
     return await this.LocationModel.create(createLocationDto);
   }

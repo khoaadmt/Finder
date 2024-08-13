@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { LocationController } from './location.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LocationService } from './services/location.service';
@@ -11,6 +16,8 @@ import { Court, CourtSchema } from 'src/court/schemas/court.schema';
 import { Shift, ShiftSchema } from 'src/shift/schemas/Shift.schema';
 import { ShiftRepository } from 'src/shift/repository/Shift.repository';
 import { ShiftService } from 'src/shift/services/shift.service';
+import { CheckPermissionMiddleware } from 'src/middlewares/checkPermission.middleware';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +26,7 @@ import { ShiftService } from 'src/shift/services/shift.service';
     ]),
     MongooseModule.forFeature([{ name: Court.name, schema: CourtSchema }]),
     MongooseModule.forFeature([{ name: Shift.name, schema: ShiftSchema }]),
+    AuthModule,
   ],
   controllers: [LocationController],
   providers: [
@@ -30,4 +38,14 @@ import { ShiftService } from 'src/shift/services/shift.service';
     ShiftRepository,
   ],
 })
-export class LocationModule {}
+export class LocationModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CheckPermissionMiddleware)
+      .forRoutes(
+        { path: 'locations/:locations', method: RequestMethod.DELETE },
+        { path: 'locations/:locations', method: RequestMethod.PUT },
+        { path: 'locations', method: RequestMethod.POST },
+      );
+  }
+}
