@@ -46,5 +46,8 @@ export class Post {
 
   @Prop()
   location_id: string;
+
+  @Prop({ default: 'pending' })
+  status: string;
 }
 export const PostSchema = SchemaFactory.createForClass(Post);

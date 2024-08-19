@@ -8,6 +8,7 @@ import { RootState } from "../../../interface";
 import { updateUserInfo } from "../../../redux/apiRequest";
 import UpLoadService from "../../../services/uploads/UploadService";
 import "./user-profile.css";
+import { Legend } from "recharts";
 
 export const UserProfile = () => {
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
@@ -72,7 +73,10 @@ export const UserProfile = () => {
         });
 
         const avaUrlResponse = await uploadService.uploadAvatar(formData);
-        values.avaUrl = avaUrlResponse.data[0].url;
+        if (avaUrlResponse.data.length > 0) {
+            console.log("avaUrlResponse :", avaUrlResponse);
+            values.avaUrl = avaUrlResponse.data[0].url;
+        }
 
         updateUserInfo(dispatch, values, user);
         setIsEditable(initInputState);

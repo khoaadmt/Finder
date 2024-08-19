@@ -40,6 +40,27 @@ export class PostsService {
     return post;
   }
 
+  async getPendingPosts() {
+    return await this.postRepository.findPendingPosts();
+  }
+
+  async updateStatus(postId: string, status: string) {
+    const postExists = await this.postRepository.findById(postId);
+
+    if (postExists.length == 0) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+    try {
+      await this.postRepository.updateStatus(postId, status);
+      return { message: 'Update status success' };
+    } catch (err) {
+      throw new HttpException(
+        'Update status failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   converBoolean = (value: string) => {
     if (value == 'true') return true;
     else return false;

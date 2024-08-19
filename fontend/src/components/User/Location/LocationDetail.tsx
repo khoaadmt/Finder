@@ -131,7 +131,8 @@ export const LocationDetail: React.FC = () => {
             const dateNow = dayjs(date).format("YYYY-MM-D");
             const optionsTmp: Optional[] = locationDetail.shifts
                 .filter((shift) => {
-                    return shift.period === btnOptions[activeButtonName].label;
+                    const option = btnOptions[activeButtonName];
+                    return option && option.label === shift.period;
                 })
                 .filter((shift) => {
                     if (dateNow == dateSelected) {

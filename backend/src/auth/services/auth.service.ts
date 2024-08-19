@@ -28,6 +28,7 @@ export class AuthService {
       avaUrl: avaUrl,
       facebookId: '',
       contactPhone: '',
+      role: '',
     };
 
     const user = await this.authRepository.findUserByGoogleType(username);
@@ -61,6 +62,7 @@ export class AuthService {
       avaUrl: '',
       facebookId: username,
       contactPhone: '',
+      role: '',
     };
     const user = await this.authRepository.findUserByFacebookType(username);
 
@@ -126,6 +128,7 @@ export class AuthService {
       avaUrl: user.avaUrl,
       contactPhone: user.contactPhone,
       facebookId: user.facebookId,
+      role: user.role,
     };
     const token = await this.genarateToken(payload);
 
@@ -150,6 +153,7 @@ export class AuthService {
         avaUrl: verify.avaUrl,
         contactPhone: verify.contactPhone,
         facebookId: verify.facebookId,
+        role: verify.role,
       });
     } catch (err) {
       throw new HttpException(
@@ -166,9 +170,8 @@ export class AuthService {
     avaUrl: string;
     contactPhone: string;
     facebookId: string;
+    role: string;
   }) {
-    console.log(payload);
-
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.ACCESS_TOKEN_SECRET,
       expiresIn: '8h',

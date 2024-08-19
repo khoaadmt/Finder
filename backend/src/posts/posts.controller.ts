@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CreatePostDto } from './dto/create_post.dto';
 import { PostsService } from './services/posts.service';
 
@@ -17,6 +17,11 @@ export class PostsController {
     } else {
       return this.postService.getAllPosts(data.page, data.city);
     }
+  }
+
+  @Get('pending')
+  async getPendingPosts() {
+    return await this.postService.getPendingPosts();
   }
 
   @Get(':id')
@@ -38,5 +43,13 @@ export class PostsController {
   createPost(@Body() createPostDto: CreatePostDto) {
     console.log(createPostDto);
     return this.postService.createPost(createPostDto);
+  }
+
+  @Put(':postId/status')
+  updateStatus(
+    @Param('postId') postId: string,
+    @Body('status') status: string,
+  ) {
+    return this.postService.updateStatus(postId, status);
   }
 }

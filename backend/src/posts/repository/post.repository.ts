@@ -21,7 +21,6 @@ export class PostRepository {
           location_id_ObjectId: { $toObjectId: '$location_id' },
         },
       },
-
       {
         $lookup: {
           from: 'locations',
@@ -38,6 +37,9 @@ export class PostRepository {
       },
       {
         $match: { startTime: { $gt: currentTimestamp } },
+      },
+      {
+        $match: { status: 'checked' },
       },
       {
         $lookup: {
@@ -62,6 +64,58 @@ export class PostRepository {
       },
     ]);
   }
+
+  async findPendingPosts() {
+    const currentDate = new Date();
+    const currentTimestamp = currentDate.getTime();
+
+    return await this.Post.aggregate([
+      {
+        $addFields: {
+          location_id_ObjectId: { $toObjectId: '$location_id' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'locations',
+          localField: 'location_id_ObjectId',
+          foreignField: '_id',
+          as: 'location',
+        },
+      },
+      {
+        $unwind: '$location',
+      },
+      {
+        $match: { startTime: { $gt: currentTimestamp } },
+      },
+      {
+        $match: { status: 'pending' },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'username',
+          foreignField: 'username',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {
+          location_id_ObjectId: 0,
+          location_id: 0,
+          'user._id': 0,
+          'user.password': 0,
+          'user.accessToken': 0,
+          'user.refreshToken': 0,
+        },
+      },
+    ]);
+  }
+
   async findById(id: string) {
     const objectId = new ObjectId(id);
 
@@ -154,6 +208,13 @@ export class PostRepository {
     ]);
   }
 
+  async updateStatus(postId: string, status: string) {
+    await this.Post.findOneAndUpdate(
+      { _id: postId },
+      { status: status },
+      { new: true },
+    );
+  }
   async countPosts() {
     return await this.Post.countDocuments();
   }
