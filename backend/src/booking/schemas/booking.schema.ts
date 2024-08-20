@@ -18,7 +18,7 @@ export class Booking {
   date: string;
 
   @Prop()
-  price: Types.ObjectId;
+  price: number;
 
   @Prop({ default: 'Pending' })
   status: string;

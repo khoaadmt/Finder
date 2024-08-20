@@ -59,6 +59,11 @@ export class LocationController {
     );
   }
 
+  @Get('')
+  getAllLocations() {
+    return this.locationService.getAllLocations();
+  }
+
   @Post('')
   async createLocation(@Body() createLocationDto: CreateLocationDto) {
     return await this.locationService.createLocation(createLocationDto);

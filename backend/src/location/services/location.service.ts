@@ -122,6 +122,10 @@ export class LocationService {
     }
   }
 
+  async getAllLocations() {
+    return this.locationRepository.finAllLocations();
+  }
+
   async findNearbyLocations(
     latitude: number,
     longitude: number,

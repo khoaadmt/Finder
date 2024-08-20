@@ -14,12 +14,13 @@ export class BookingService {
   ) {}
 
   async createBooking(createBookingDto: CreateBookingDto) {
-    const booking =
-      await this.bookingrepository.createBooking(createBookingDto);
     const shift = await this.shiftService.getShiftById(
       createBookingDto.shiftId.toString(),
     );
     const price = shift.price;
+    const data = { ...createBookingDto, price };
+    const booking = await this.bookingrepository.createBooking(data);
+
     const resZaloPayment = await this.paymentService.createZaloPayment(
       price,
       booking._id.toString(),

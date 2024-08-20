@@ -12,8 +12,8 @@ export class BookingRepository {
     private BookingModel: Model<Booking>,
   ) {}
 
-  async createBooking(createBookingDto: CreateBookingDto) {
-    return await this.BookingModel.create(createBookingDto);
+  async createBooking(data: any) {
+    return await this.BookingModel.create(data);
   }
 
   async updateBookingById(id: string) {
