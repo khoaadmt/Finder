@@ -3,7 +3,8 @@ import { PicturesWall } from "../../User/Posts/PictureWall/PicturesWall";
 import { useState } from "react";
 import "./index.css";
 import { MyFormItem } from "../../common/InputFIeld/MyFormItem";
-const formItemLayout = {
+import { AutoCompleteLocation } from "./AutoCompleteLocation";
+export const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
         sm: { span: 6 },
@@ -13,12 +14,23 @@ const formItemLayout = {
         sm: { span: 14 },
     },
 };
+
+export type Coordinates = {
+    lat: string;
+    lng: string;
+} | null;
 export const AddLocationPage = () => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const timeFormat = "HH:mm";
+    const [coordinates, setCoordinates] = useState<Coordinates>(null);
+    const [address, setAddress] = useState("");
+
     const onFinish = (values: any) => {
         console.log("Success:", values);
+        console.log("addres: ", address);
+        console.log("coordinates: ", coordinates);
     };
-    const timeFormat = "HH:mm";
+
     return (
         <Form onFinish={onFinish} className="pt-8 pb-10 add-location-form w-full " {...formItemLayout}>
             <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-6">
@@ -39,9 +51,13 @@ export const AddLocationPage = () => {
 
                     <MyFormItem
                         label="Địa chỉ:"
-                        name="address"
-                        rules={[{ required: true, message: "Please input!" }]}
-                        children={<Input />}
+                        children={
+                            <AutoCompleteLocation
+                                setCoordinates={setCoordinates}
+                                setAddress={setAddress}
+                                defaultvalue=""
+                            />
+                        }
                     />
 
                     <MyFormItem
@@ -55,7 +71,7 @@ export const AddLocationPage = () => {
                         label="Mô tả về sân:"
                         name="description"
                         rules={[{ required: true, message: "Please input!" }]}
-                        children={<Input.TextArea />}
+                        children={<Input.TextArea autoSize={{ minRows: 4, maxRows: 12 }} />}
                     />
                 </div>
                 <div className="md:col-span-1">
@@ -66,35 +82,30 @@ export const AddLocationPage = () => {
                         children={<InputNumber style={{ width: "100%" }} />}
                     />
 
-                    <MyFormItem
-                        label="Giá thuê:"
-                        name="prices"
-                        rules={[{ required: true, message: "Please input!" }]}
-                        children={
-                            <>
-                                <Space.Compact>
-                                    <MyFormItem
-                                        name={["prices", "priceMin"]}
-                                        noStyle
-                                        rules={[{ required: true, message: "Province is required" }]}
-                                        children={<InputNumber placeholder="Từ" style={{ width: "50%" }} />}
-                                    />
-                                    <MyFormItem
-                                        name={["prices", "priceMax"]}
-                                        noStyle
-                                        rules={[{ required: true, message: "Province is required" }]}
-                                        children={<InputNumber placeholder="Đến" style={{ width: "50%" }} />}
-                                    />
-                                </Space.Compact>
-                            </>
-                        }
-                    />
+                    <MyFormItem label="Giá thuê:">
+                        <Space>
+                            <MyFormItem
+                                name="priceMin"
+                                noStyle
+                                rules={[{ required: true, message: "Giá thuê tối thiểu là bắt buộc" }]}>
+                                <InputNumber placeholder="Từ" style={{ width: "100%" }} />
+                            </MyFormItem>
+                            <MyFormItem
+                                name="priceMax"
+                                noStyle
+                                rules={[{ required: true, message: "Giá thuê tối đa là bắt buộc" }]}>
+                                <InputNumber placeholder="Đến" style={{ width: "100%" }} />
+                            </MyFormItem>
+                        </Space>
+                    </MyFormItem>
 
                     <MyFormItem
                         label="thời gian mở cửa:"
                         name="openHours"
                         rules={[{ required: true, message: "Please input!" }]}
-                        children={<TimePicker.RangePicker format={timeFormat} className="time-picker" />}
+                        children={
+                            <TimePicker.RangePicker format={timeFormat} className="time-picker" minuteStep={30} />
+                        }
                     />
 
                     <MyFormItem

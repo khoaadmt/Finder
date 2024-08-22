@@ -4,7 +4,7 @@ import { Content, Header } from "antd/es/layout/layout";
 import { useState } from "react";
 import { MyFooter } from "./Footer";
 import { Outlet, useNavigate } from "react-router-dom";
-import { PieChartOutlined, DesktopOutlined, UserOutlined, TeamOutlined, FileOutlined } from "@ant-design/icons";
+import { PieChartOutlined, TeamOutlined, FileOutlined, GroupOutlined, ScheduleOutlined } from "@ant-design/icons";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -19,14 +19,16 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const items: MenuItem[] = [
     getItem("Dashboard", "1", <PieChartOutlined />),
-    getItem("Table", "2", <DesktopOutlined />),
-    getItem("Location", "sub1", <UserOutlined />, [
-        getItem("overview", "3"),
-        getItem("Add", "4"),
-        getItem("Alex", "5"),
+    getItem("Sân cầu", "sub1", <GroupOutlined />, [
+        getItem("Overview", "2"),
+        getItem("Add", "3"),
+        getItem("Alex", "4"),
     ]),
-    getItem("Team", "sub2", <TeamOutlined />, [getItem("Team 1", "6"), getItem("Team 2", "8")]),
-    getItem("Files", "9", <FileOutlined />),
+    getItem("Bài viết", "sub2", <ScheduleOutlined />, [
+        getItem("Bài viết đã duyệt", "5"),
+        getItem("Bài viết đã từ chối", "6"),
+    ]),
+    getItem("Files", "7", <FileOutlined />),
 ];
 
 export const LayoutPage = () => {
@@ -43,11 +45,20 @@ export const LayoutPage = () => {
             case "1":
                 navigate("dashboard");
                 break;
-            case "3":
+            case "2":
                 navigate("location");
                 break;
-            case "4":
+            case "3":
                 navigate("location/add");
+                break;
+            case "5":
+                navigate("post/review");
+                break;
+            case "6":
+                navigate("post/reject");
+                break;
+            case "7":
+                navigate("statistics");
                 break;
         }
     };

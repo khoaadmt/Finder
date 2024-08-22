@@ -99,6 +99,7 @@ export interface AuthState {
             facebookId: string;
             accessToken: string;
             refreshToken: string;
+            role: string;
         } | null;
         isFetching: boolean;
         error: boolean;

@@ -34,3 +34,7 @@
     color: white !important;
     border: none;
 }
+.add-location-modal {
+    width: 50% !important;
+    height: auto;
+}
