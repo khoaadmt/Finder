@@ -19,7 +19,9 @@ import { LayoutPage } from "./components/Admin/Layout";
 import { Dashboard } from "./components/Admin/Dashboard";
 import { OverviewLocationPage } from "./components/Admin/Location/Overview";
 import { AddLocationPage } from "./components/Admin/Location/Add";
-import { StatisticsPage } from "./components/Admin/statistics";
+import { StatisticsPage } from "./components/Admin/Statistics";
+import { ReviewPostPage } from "./components/Admin/Post/ReviewPostPage";
+import { RejectPostPage } from "./components/Admin/Post/RejectPostPage";
 
 const App: React.FC = () => {
     return (
@@ -62,6 +64,10 @@ const App: React.FC = () => {
                         <Route path="" element={<Navigate to="overview" />} />
                         <Route path="overview" element={<OverviewLocationPage />} />
                         <Route path="add" element={<AddLocationPage />} />
+                    </Route>
+                    <Route path="post">
+                        <Route path="review" element={<ReviewPostPage />} />
+                        <Route path="reject" element={<RejectPostPage />} />
                     </Route>
                     <Route path="statistics" element={<StatisticsPage />} />
                 </Route>

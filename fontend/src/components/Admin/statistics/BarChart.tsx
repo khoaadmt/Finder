@@ -3,7 +3,7 @@ import { Badge, Card, Tooltip } from "antd";
 import React, { FC } from "react";
 import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip as RTooltip, XAxis } from "recharts";
 import dayjs from "dayjs";
-
+import numeral from "numeral";
 interface ColCardProps {
     metaName: string;
     metaCount: string;
@@ -12,13 +12,14 @@ interface ColCardProps {
     loading: boolean;
 }
 
-const ColCard: React.FC<ColCardProps> = (props) => {
+export const ColCard: React.FC<ColCardProps> = (props) => {
     const { metaName, metaCount, body, footer, loading } = props;
+    const metaCountFormat = numeral(metaCount).format("0.0a");
     return (
         <Card loading={loading} className="overview" bordered={false}>
             <div className="overview-header">
                 <div className="overview-header-meta">{metaName}</div>
-                <div className="overview-header-count">{metaCount}</div>
+                <div className="overview-header-count">{metaCountFormat}</div>
                 <Tooltip title="Introduce">
                     <InfoCircleOutlined className="overview-header-action" />
                 </Tooltip>
@@ -36,7 +37,7 @@ interface FieldProps {
     number: string;
 }
 
-const Field: FC<FieldProps> = ({ name, number }) => (
+export const Field: FC<FieldProps> = ({ name, number }) => (
     <div className="field">
         <span className="field-label">{name}</span>
         <span className="field-number">{number} </span>
@@ -61,8 +62,8 @@ export const MyBarChart: FC<{ loading: boolean }> = ({ loading }) => {
     return (
         <ColCard
             loading={loading}
-            metaName={"payments"}
-            metaCount="6560"
+            metaName={"Doanh số"}
+            metaCount="656000000"
             body={
                 <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={data}>

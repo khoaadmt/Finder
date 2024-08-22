@@ -1,4 +1,3 @@
-import React from "react";
 import { Space, Table, Tag } from "antd";
 import type { TableProps } from "antd";
 
@@ -100,7 +99,15 @@ const data: DataType[] = [
 export const OverviewLocationPage = () => {
     return (
         <div>
-            <Table columns={columns} dataSource={data} />
+            <Table
+                columns={columns}
+                dataSource={data}
+                pagination={{
+                    pageSize: 5,
+                    showSizeChanger: true,
+                    pageSizeOptions: ["5", "10", "20"],
+                }}
+            />
         </div>
     );
 };

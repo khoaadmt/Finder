@@ -26,7 +26,7 @@ const items: MenuItem[] = [
     ]),
     getItem("Bài viết", "sub2", <ScheduleOutlined />, [
         getItem("Bài viết đã duyệt", "5"),
-        getItem("Bài viết đã từ chối 2", "6"),
+        getItem("Bài viết đã từ chối", "6"),
     ]),
     getItem("Files", "7", <FileOutlined />),
 ];
@@ -50,6 +50,12 @@ export const LayoutPage = () => {
                 break;
             case "3":
                 navigate("location/add");
+                break;
+            case "5":
+                navigate("post/review");
+                break;
+            case "6":
+                navigate("post/reject");
                 break;
             case "7":
                 navigate("statistics");

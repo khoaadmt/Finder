@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Layout, { Content, Header } from "antd/es/layout/layout";
-import { MyBarChart } from "./BarChart";
-import { Button } from "antd";
+import { Button, Select } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import "./index.css";
+import { MyBarChart } from "./BarChart";
+import { TransactionTable } from "./TransactionTable";
 export const StatisticsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
+    const [transactionTime, setTranSactionTime] = useState("ngày");
     const data = [
         { name: "John Doe", age: 28, email: "john@example.com" },
         { name: "Jane Doe", age: 25, email: "jane@example.com" },
@@ -37,15 +39,45 @@ export const StatisticsPage: React.FC = () => {
         };
     }, []);
 
+    useEffect(() => {
+        console.log(transactionTime);
+    }, [transactionTime]);
+    const handleChange = (value: string) => {
+        console.log("value :", value);
+        setTranSactionTime(value);
+    };
     return (
         <Layout>
-            <Header style={{ background: "#F5F5F5" }}>
-                <Button onClick={downloadCSV} className="download-btn sm:w-auto">
-                    Download CSV <DownloadOutlined />
-                </Button>
-            </Header>
             <Content className="dashboard-content">
-                <MyBarChart loading={loading} />
+                <div>
+                    <Button onClick={downloadCSV} className="download-btn">
+                        Download CSV <DownloadOutlined />
+                    </Button>
+                    <MyBarChart loading={loading} />
+                </div>
+
+                <div>
+                    <Button onClick={downloadCSV} className="download-btn2">
+                        Download CSV <DownloadOutlined />
+                    </Button>
+                    <div>
+                        <div className="flex items-center gap-2 pb-2">
+                            <p className="title-table">Các giao dịch trong: </p>
+                            <Select
+                                defaultValue="day"
+                                style={{ width: 120 }}
+                                onChange={handleChange}
+                                options={[
+                                    { value: "day", label: "ngày" },
+                                    { value: "month", label: "tháng" },
+                                    { value: "all", label: "toàn bộ" },
+                                ]}
+                            />
+                        </div>
+
+                        <TransactionTable />
+                    </div>
+                </div>
             </Content>
         </Layout>
     );
