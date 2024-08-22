@@ -4,7 +4,7 @@ import { useState } from "react";
 import "./index.css";
 import { MyFormItem } from "../../common/InputFIeld/MyFormItem";
 import { AutoCompleteLocation } from "./AutoCompleteLocation";
-const formItemLayout = {
+export const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
         sm: { span: 6 },
@@ -15,7 +15,7 @@ const formItemLayout = {
     },
 };
 
-type Coordinates = {
+export type Coordinates = {
     lat: string;
     lng: string;
 } | null;
@@ -51,7 +51,13 @@ export const AddLocationPage = () => {
 
                     <MyFormItem
                         label="Địa chỉ:"
-                        children={<AutoCompleteLocation setCoordinates={setCoordinates} setAddress={setAddress} />}
+                        children={
+                            <AutoCompleteLocation
+                                setCoordinates={setCoordinates}
+                                setAddress={setAddress}
+                                defaultvalue=""
+                            />
+                        }
                     />
 
                     <MyFormItem

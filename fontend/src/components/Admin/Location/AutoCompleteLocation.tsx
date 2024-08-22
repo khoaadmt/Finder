@@ -16,9 +16,10 @@ interface Options {
 interface Props {
     setCoordinates: React.Dispatch<React.SetStateAction<Coordinates>>;
     setAddress: React.Dispatch<React.SetStateAction<string>>;
+    defaultvalue: string;
 }
 export const AutoCompleteLocation: React.FC<Props> = (props) => {
-    const { setCoordinates, setAddress } = props;
+    const { setCoordinates, setAddress, defaultvalue } = props;
     const [options, setOptions] = useState<Options[]>([]);
     const [inputValue, setInputValue] = useState("");
 
@@ -68,6 +69,7 @@ export const AutoCompleteLocation: React.FC<Props> = (props) => {
             filterOption={(inputValue, option) => option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
             onChange={handleOnChange}
             onSelect={handOnSelect}
+            defaultValue={defaultvalue}
         />
     );
 };
