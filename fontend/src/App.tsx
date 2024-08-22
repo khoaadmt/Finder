@@ -19,6 +19,7 @@ import { LayoutPage } from "./components/Admin/Layout";
 import { Dashboard } from "./components/Admin/Dashboard";
 import { OverviewLocationPage } from "./components/Admin/Location/Overview";
 import { AddLocationPage } from "./components/Admin/Location/Add";
+import { StatisticsPage } from "./components/Admin/statistics";
 
 const App: React.FC = () => {
     return (
@@ -62,6 +63,7 @@ const App: React.FC = () => {
                         <Route path="overview" element={<OverviewLocationPage />} />
                         <Route path="add" element={<AddLocationPage />} />
                     </Route>
+                    <Route path="statistics" element={<StatisticsPage />} />
                 </Route>
             </Routes>
         </div>
