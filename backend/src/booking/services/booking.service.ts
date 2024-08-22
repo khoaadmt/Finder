@@ -42,4 +42,27 @@ export class BookingService {
   async getBookingByUsername(username: string) {
     return await this.bookingrepository.findBookingsByUsername(username);
   }
+
+  async getTotalSalesInMonth(month: number, locationId: string) {
+    const bookings = await this.bookingrepository.findBookingsSuccess();
+    let totalSales = 0;
+
+    const filteredBookings = locationId
+      ? bookings.filter(
+          (booking) => booking.locationId.toString() === locationId,
+        )
+      : bookings;
+
+    filteredBookings.forEach((booking) => {
+      const date = new Date(booking.date);
+      const m = date.getMonth() + 1;
+      if (month == m) {
+        if (booking.price) {
+          totalSales += booking.price;
+        }
+      }
+    });
+
+    return totalSales;
+  }
 }

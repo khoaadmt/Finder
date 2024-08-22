@@ -30,4 +30,12 @@ export class BookingController {
   getBookingByUsername(@Param('username') username: string) {
     return this.bookingService.getBookingByUsername(username);
   }
+
+  @Get(':month/total-sales')
+  getTotalSalesInMonth(
+    @Param('month') month: number,
+    @Query('locationId') locationId: string,
+  ) {
+    return this.bookingService.getTotalSalesInMonth(month, locationId);
+  }
 }

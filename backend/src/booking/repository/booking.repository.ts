@@ -107,4 +107,8 @@ export class BookingRepository {
     ]);
     return bookings;
   }
+
+  async findBookingsSuccess() {
+    return await this.BookingModel.find({ status: 'booked' });
+  }
 }
