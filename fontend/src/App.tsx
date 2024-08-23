@@ -22,6 +22,7 @@ import { AddLocationPage } from "./components/Admin/Location/Add";
 import { StatisticsPage } from "./components/Admin/Statistics";
 import { ReviewPostPage } from "./components/Admin/Post/ReviewPostPage";
 import { RejectPostPage } from "./components/Admin/Post/RejectPostPage";
+import { CheckedPostPage } from "./components/Admin/Post/CheckedPostPage";
 
 const App: React.FC = () => {
     return (
@@ -67,6 +68,7 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="post">
                         <Route path="review" element={<ReviewPostPage />} />
+                        <Route path="checked" element={<CheckedPostPage />} />
                         <Route path="reject" element={<RejectPostPage />} />
                     </Route>
                     <Route path="statistics" element={<StatisticsPage />} />

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { PostCard } from "./PostCard";
 
-export const ReviewPostPage = () => {
+export const CheckedPostPage = () => {
     const postDetail = {
         images: [
             "https://sonsanepoxy.vn/wp-content/uploads/2023/07/lap-dat-he-thong-den-chieu-san-cau-long.jpg",
@@ -33,9 +33,9 @@ export const ReviewPostPage = () => {
     return (
         <div className="max-w-[884px] sm:px-3 mx-auto mb-5 sm:mt-5">
             <div>
-                <PostCard postDetail={postDetail} status={"review"} />
+                <PostCard postDetail={postDetail} status={"checked"} />
             </div>
-            <PostCard postDetail={postDetail} status={"review"} />
+            <PostCard postDetail={postDetail} status={"checked"} />
         </div>
     );
 };
