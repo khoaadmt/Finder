@@ -65,4 +65,28 @@ export class BookingService {
 
     return totalSales;
   }
+
+  async getTransactionsInMonth(month: number) {
+    const bookings = await this.bookingrepository.findBookingsSuccess();
+
+    var result = [];
+    bookings.forEach((booking) => {
+      const date = new Date(booking.date);
+      const m = date.getMonth() + 1;
+      if (month == m) {
+        result.push(booking)
+      }
+    });
+
+    return result;
+  }
+
+  async getTransactionsInDay(day: string) {
+    const bookings = await this.bookingrepository.findBookingsSuccess();
+    const result = bookings.filter(
+      (booking) => booking.date == day,
+    )
+
+    return result;
+  }
 }

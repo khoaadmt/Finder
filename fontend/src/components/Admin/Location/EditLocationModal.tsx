@@ -4,11 +4,13 @@ import { MyFormItem } from "../../common/InputFIeld/MyFormItem";
 import { PicturesWall } from "../../User/Posts/PictureWall/PicturesWall";
 import { AutoCompleteLocation } from "./AutoCompleteLocation";
 import { Coordinates, formItemLayout } from "./Add";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+
 interface Prop {
     isModalOpen: boolean;
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 export const EditLocationModal: React.FC<Prop> = (prop) => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const timeFormat = "HH:mm";
@@ -28,6 +30,7 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
     const data = {
         name: "VNBC",
         city: "Hà Nội",
@@ -41,6 +44,7 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
         endTime: "22:00",
         agreement: true,
     };
+
     return (
         <Modal
             className="add-location-modal"
@@ -53,21 +57,36 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                     Cancel
                 </Button>,
             ]}>
-            <Form onFinish={onFinish} className="pt-8 pb-10 add-location-form w-full " {...formItemLayout}>
+            <Form
+                onFinish={onFinish}
+                className="pt-8 pb-10 add-location-form w-full"
+                {...formItemLayout}
+                initialValues={{
+                    name: data.name,
+                    city: data.city,
+                    address: data.address,
+                    phoneNumber: data.phoneNumber,
+                    description: data.description,
+                    courtNumber: data.numberOfCourt,
+                    priceMin: data.priceMin,
+                    priceMax: data.priceMax,
+                    openHours: [dayjs(data.startTime, timeFormat), dayjs(data.endTime, timeFormat)],
+                    img: fileList,
+                }}>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-6">
                     <div className="md:col-span-1">
                         <MyFormItem
                             label="Tên"
                             name="name"
                             rules={[{ required: true, message: "Please input!" }]}
-                            children={<Input defaultValue={"aa"} />}
+                            children={<Input />}
                         />
 
                         <MyFormItem
                             label="Thành phố:"
                             name="city"
                             rules={[{ required: true, message: "Please input!" }]}
-                            children={<Input defaultValue={data.city} />}
+                            children={<Input />}
                         />
 
                         <MyFormItem
@@ -85,19 +104,14 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                             label="SĐT liên hệ:"
                             name="phoneNumber"
                             rules={[{ required: true, message: "Please input!" }]}
-                            children={<Input defaultValue={data.phoneNumber} />}
+                            children={<Input />}
                         />
 
                         <MyFormItem
                             label="Mô tả về sân:"
                             name="description"
                             rules={[{ required: true, message: "Please input!" }]}
-                            children={
-                                <Input.TextArea
-                                    autoSize={{ minRows: 4, maxRows: 12 }}
-                                    defaultValue={data.description}
-                                />
-                            }
+                            children={<Input.TextArea autoSize={{ minRows: 4, maxRows: 12 }} />}
                         />
                     </div>
                     <div className="md:col-span-1">
@@ -105,7 +119,7 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                             label="Số sân:"
                             name="courtNumber"
                             rules={[{ required: true, message: "Please input!" }]}
-                            children={<InputNumber style={{ width: "100%" }} defaultValue={data.numberOfCourt} />}
+                            children={<InputNumber style={{ width: "100%" }} />}
                         />
 
                         <MyFormItem label="Giá thuê:">
@@ -114,21 +128,13 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                                     name="priceMin"
                                     noStyle
                                     rules={[{ required: true, message: "Giá thuê tối thiểu là bắt buộc" }]}>
-                                    <InputNumber
-                                        placeholder="Từ"
-                                        style={{ width: "100%" }}
-                                        defaultValue={data.priceMin}
-                                    />
+                                    <InputNumber placeholder="Từ" style={{ width: "100%" }} />
                                 </MyFormItem>
                                 <MyFormItem
                                     name="priceMax"
                                     noStyle
                                     rules={[{ required: true, message: "Giá thuê tối đa là bắt buộc" }]}>
-                                    <InputNumber
-                                        placeholder="Đến"
-                                        style={{ width: "100%" }}
-                                        defaultValue={data.priceMax}
-                                    />
+                                    <InputNumber placeholder="Đến" style={{ width: "100%" }} />
                                 </MyFormItem>
                             </Space>
                         </MyFormItem>
@@ -138,12 +144,7 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                             name="openHours"
                             rules={[{ required: true, message: "Please input!" }]}
                             children={
-                                <TimePicker.RangePicker
-                                    format={timeFormat}
-                                    className="time-picker"
-                                    minuteStep={30}
-                                    defaultValue={[dayjs(data.startTime, timeFormat), dayjs(data.endTime, timeFormat)]}
-                                />
+                                <TimePicker.RangePicker format={timeFormat} className="time-picker" minuteStep={30} />
                             }
                         />
 

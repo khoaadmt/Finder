@@ -19,16 +19,12 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const items: MenuItem[] = [
     getItem("Dashboard", "1", <PieChartOutlined />),
-    getItem("Sân cầu", "sub1", <GroupOutlined />, [
-        getItem("Overview", "2"),
-        getItem("Add", "3"),
-        getItem("Alex", "4"),
-    ]),
+    getItem("Sân cầu", "sub1", <GroupOutlined />, [getItem("Overview", "2"), getItem("Add", "3")]),
     getItem("Bài viết", "sub2", <ScheduleOutlined />, [
         getItem("Bài viết đã duyệt", "5"),
         getItem("Bài viết đã từ chối", "6"),
     ]),
-    getItem("Files", "7", <FileOutlined />),
+    getItem("Giao dịch", "7", <FileOutlined />),
 ];
 
 export const LayoutPage = () => {
