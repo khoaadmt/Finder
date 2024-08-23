@@ -172,7 +172,6 @@ export const LoginPage = () => {
                         {singInForm.errors.password && (
                             <p className="text-danger">{`*${singInForm.errors.password}`}</p>
                         )}
-                        <p>khoaAa@123</p>
 
                         <button className="form__button button submit" type="submit">
                             {isFetching && <i className="fas fa-spinner fa-pulse"></i>} SIGN IN

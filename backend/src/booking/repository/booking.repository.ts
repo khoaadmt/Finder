@@ -109,6 +109,70 @@ export class BookingRepository {
   }
 
   async findBookingsSuccess() {
-    return await this.BookingModel.find({ status: 'booked' });
+    return await this.BookingModel.aggregate([
+      {
+        $match: { status: 'booked' },
+      },
+      {
+        $lookup: {
+          from: 'users', // Collection name của user
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $lookup: {
+          from: 'courts', // Collection name của court
+          localField: 'courtId',
+          foreignField: '_id',
+          as: 'court',
+        },
+      },
+      {
+        $lookup: {
+          from: 'shifts', // Collection name của shift
+          localField: 'shiftId',
+          foreignField: '_id',
+          as: 'shift',
+        },
+      },
+      {
+        $lookup: {
+          from: 'locations', // Collection name của location
+          localField: 'locationId',
+          foreignField: '_id',
+          as: 'location',
+        },
+      },
+      {
+        $unwind: '$user', // Giải nén mảng nếu lookup trả về nhiều kết quả, nếu chỉ có 1 kết quả, bỏ qua bước này
+      },
+      {
+        $unwind: '$court',
+      },
+      {
+        $unwind: '$shift',
+      },
+      {
+        $unwind: '$location',
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          courtId: 1,
+          shiftId: 1,
+          locationId: 1,
+          date: 1,
+          price: 1,
+          status: 1,
+          user: { username: 1 }, // Chọn các field từ user
+          court: { courtNumber: 1 }, // Chọn các field từ court
+          shift: { startTime: 1, endTime: 1 }, // Chọn các field từ shift
+          location: { name: 1 }, // Chọn các field từ location
+        },
+      },
+    ]);
   }
 }
