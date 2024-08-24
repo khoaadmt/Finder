@@ -19,16 +19,13 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const items: MenuItem[] = [
     getItem("Dashboard", "1", <PieChartOutlined />),
-    getItem("Sân cầu", "sub1", <GroupOutlined />, [
-        getItem("Overview", "2"),
-        getItem("Add", "3"),
-        getItem("Alex", "4"),
-    ]),
+    getItem("Sân cầu", "sub1", <GroupOutlined />, [getItem("Overview", "2"), getItem("Add", "3")]),
     getItem("Bài viết", "sub2", <ScheduleOutlined />, [
+        getItem("Bài viết cần duyệt", "4"),
         getItem("Bài viết đã duyệt", "5"),
         getItem("Bài viết đã từ chối", "6"),
     ]),
-    getItem("Files", "7", <FileOutlined />),
+    getItem("Giao dịch", "7", <FileOutlined />),
 ];
 
 export const LayoutPage = () => {
@@ -51,8 +48,11 @@ export const LayoutPage = () => {
             case "3":
                 navigate("location/add");
                 break;
-            case "5":
+            case "4":
                 navigate("post/review");
+                break;
+            case "5":
+                navigate("post/checked");
                 break;
             case "6":
                 navigate("post/reject");

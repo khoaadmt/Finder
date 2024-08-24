@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 @Schema()
 export class Booking {
   @Prop()
-  userName: Types.ObjectId;
+  userId: Types.ObjectId;
 
   @Prop()
   courtId: Types.ObjectId;
