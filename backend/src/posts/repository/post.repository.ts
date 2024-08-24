@@ -65,7 +65,7 @@ export class PostRepository {
     ]);
   }
 
-  async findPendingPosts() {
+  async findPostByStatus(status: string) {
     const currentDate = new Date();
     const currentTimestamp = currentDate.getTime();
 
@@ -90,7 +90,7 @@ export class PostRepository {
         $match: { startTime: { $gt: currentTimestamp } },
       },
       {
-        $match: { status: 'pending' },
+        $match: { status: status },
       },
       {
         $lookup: {

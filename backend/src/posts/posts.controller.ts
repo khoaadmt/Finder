@@ -19,9 +19,9 @@ export class PostsController {
     }
   }
 
-  @Get('pending')
-  async getPendingPosts() {
-    return await this.postService.getPendingPosts();
+  @Get('/status/:status')
+  async getPostByStatus(@Param('status') status) {
+    return await this.postService.getPostByStatus(status);
   }
 
   @Get(':id')

@@ -34,6 +34,10 @@ class PostService extends BaseService {
     getPostByUserName(username: string) {
         return this.get(`by-username/${username}`);
     }
+
+    getPostByStatus(status: string) {
+        return this.get(`/status/${status}`);
+    }
     createPost(values: any, accessToken: string | undefined) {
         return this.post("", values, "", accessToken);
     }

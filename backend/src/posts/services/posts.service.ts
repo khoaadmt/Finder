@@ -40,8 +40,8 @@ export class PostsService {
     return post;
   }
 
-  async getPendingPosts() {
-    return await this.postRepository.findPendingPosts();
+  async getPostByStatus(status: string) {
+    return await this.postRepository.findPostByStatus(status);
   }
 
   async updateStatus(postId: string, status: string) {
