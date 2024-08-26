@@ -4,6 +4,9 @@ import { useState } from "react";
 import "./index.css";
 import { MyFormItem } from "../../common/InputFIeld/MyFormItem";
 import { AutoCompleteLocation } from "./AutoCompleteLocation";
+import LocationService from "../../../services/location/LocationService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../interface";
 export const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -24,11 +27,18 @@ export const AddLocationPage = () => {
     const timeFormat = "HH:mm";
     const [coordinates, setCoordinates] = useState<Coordinates>(null);
     const [address, setAddress] = useState("");
+    const locationService = new LocationService();
+    const user = useSelector((state: RootState) => state.auth.login.currentUser);
 
     const onFinish = (values: any) => {
-        console.log("Success:", values);
-        console.log("addres: ", address);
-        console.log("coordinates: ", coordinates);
+        // console.log("Success:", values);
+        // console.log("addres: ", address);
+        // console.log("coordinates: ", coordinates);
+        values.address = address;
+        values.latitude = coordinates?.lat;
+        values.longitude = coordinates?.lng;
+        console.log(values);
+        //locationService.createLocation(values, user?.accessToken);
     };
 
     return (

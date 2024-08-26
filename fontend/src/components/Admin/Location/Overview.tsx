@@ -4,7 +4,7 @@ import type { PopconfirmProps, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { EditLocationModal } from "./EditLocationModal";
 import LocationService from "../../../services/location/LocationService";
-import { Facility, Location, RootState } from "../../../interface";
+import { Facility, RootState } from "../../../interface";
 import { useSelector } from "react-redux";
 
 export const OverviewLocationPage = () => {
