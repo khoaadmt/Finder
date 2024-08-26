@@ -54,31 +54,18 @@ interface userInfor {
 export interface Post {
     _id: string;
     title: string;
-
     description: string;
-
     memberCount: number;
-
     startTime: number;
-
     gender: number;
-
     phones: string[];
-
     images: string[];
-
     levelMemberMin: number;
-
     levelMemberMax: number;
-
     priceMin: number;
-
     priceMax: number;
-
     agreement: boolean;
-
     user: userInfor;
-
     location: Facility;
 }
 

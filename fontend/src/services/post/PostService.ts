@@ -38,6 +38,10 @@ class PostService extends BaseService {
     getPostByStatus(status: string) {
         return this.get(`/status/${status}`);
     }
+    updateStatus(postId: string, status: string) {
+        return this.put(`/${postId}/status`, { status });
+    }
+
     createPost(values: any, accessToken: string | undefined) {
         return this.post("", values, "", accessToken);
     }

@@ -3,37 +3,19 @@ import React from "react";
 import { memberLevels } from "../../../utils/Constant";
 import "./index.css";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Post } from "../../../interface";
+import PostService from "../../../services/post/PostService";
 const map_icon = require("../../../assets/images/map.png");
 const support_icon = require("../../../assets/images/support.png");
 
 interface Props {
-    postDetail: {
-        images: string[];
-        title: string;
-        location: {
-            address: string;
-            latitude: string;
-            longitude: string;
-        };
-        memberCount: number;
-        levelMemberMin: number;
-        levelMemberMax: number;
-        priceMin: number;
-        priceMax: number;
-        description: string;
-        user: {
-            displayName: string;
-            avaUrl: string;
-            contactPhone: string;
-            facebookId: string;
-        };
-        agreement: string;
-        phones: never[];
-    };
+    postDetail: Post;
     status: string;
+    setChangeStatusPost: React.Dispatch<React.SetStateAction<number>>;
 }
 export const PostCard: React.FC<Props> = (props) => {
-    const { postDetail, status } = props;
+    const { postDetail, status, setChangeStatusPost } = props;
+    const postService = new PostService();
     const getLabel = (value: number | undefined) => {
         const level = memberLevels.find((level) => level.value === value);
         return level ? level.label : "Unknown";
@@ -64,7 +46,8 @@ export const PostCard: React.FC<Props> = (props) => {
     };
 
     const handleChangeStatusPost = (status: string) => {
-        console.log("status :", status);
+        postService.updateStatus(postDetail._id, status);
+        setChangeStatusPost((prev) => prev + 1);
     };
 
     return (
