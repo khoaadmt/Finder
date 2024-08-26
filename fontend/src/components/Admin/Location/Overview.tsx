@@ -1,19 +1,19 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, message, Modal, Popconfirm, Space, Table, Tag } from "antd";
 import type { PopconfirmProps, TableProps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditLocationModal } from "./EditLocationModal";
-
-interface DataType {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-}
+import LocationService from "../../../services/location/LocationService";
+import { Facility, Location, RootState } from "../../../interface";
+import { useSelector } from "react-redux";
 
 export const OverviewLocationPage = () => {
-    const columns: TableProps<DataType>["columns"] = [
+    const locationService = new LocationService();
+    const [locations, setLocations] = useState<Facility[]>([]);
+    const [curentLocation, setCurentLocation] = useState<Facility>();
+    const [reload, setReload] = useState(0);
+    const user = useSelector((state: RootState) => state.auth.login.currentUser);
+    const columns: TableProps<Facility>["columns"] = [
         {
             title: "Tên",
             dataIndex: "name",
@@ -22,18 +22,18 @@ export const OverviewLocationPage = () => {
         },
         {
             title: "Địa chỉ",
-            dataIndex: "age",
-            key: "age",
-        },
-        {
-            title: "Khu vực",
             dataIndex: "address",
             key: "address",
         },
         {
+            title: "Khu vực",
+            dataIndex: "city",
+            key: "address",
+        },
+        {
             title: "số sân",
-            dataIndex: "tags",
-            key: "tags",
+            dataIndex: "numberOfCourts",
+            key: "numberOfCourts",
         },
         {
             title: "Action",
@@ -47,7 +47,6 @@ export const OverviewLocationPage = () => {
                         title="Xóa sân cầu"
                         description="Bạn có chắc muốn xóa sân cầu này không?"
                         onConfirm={() => confirm(record)}
-                        onCancel={cancel}
                         okText="Yes"
                         cancelText="No">
                         <Button type="primary" danger>
@@ -59,48 +58,9 @@ export const OverviewLocationPage = () => {
         },
     ];
 
-    const data: DataType[] = [
-        {
-            key: "1",
-            name: "John Brown",
-            age: 32,
-            address: "New York No. 1 Lake Park",
-            tags: ["nice", "developer"],
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-            tags: ["loser"],
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sydney No. 1 Lake Park",
-            tags: ["cool", "teacher"],
-        },
-        {
-            key: "4",
-            name: "Joe Black",
-            age: 32,
-            address: "Sydney No. 1 Lake Park",
-            tags: ["cool", "teacher"],
-        },
-        {
-            key: "5",
-            name: "Joe Black",
-            age: 32,
-            address: "Sydney No. 1 Lake Park",
-            tags: ["cool", "teacher"],
-        },
-    ];
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleBtnEdit = (record: any) => {
-        console.log("record :", record);
-        setIsModalOpen(true);
+        setCurentLocation(record);
     };
 
     const confirm = (record: any) => {
@@ -109,26 +69,42 @@ export const OverviewLocationPage = () => {
             return;
         }
         console.log("record :", record);
-        message.success("Xóa sân cầu thành công");
+        locationService.deleteLocation(record._id, user?.accessToken).then(() => {
+            message.success("Xóa sân cầu thành công");
+            setReload((prev) => prev + 1);
+        });
     };
 
-    const cancel: PopconfirmProps["onCancel"] = (e) => {
-        console.log(e);
-        message.error("Click on No");
-    };
+    useEffect(() => {
+        locationService
+            .getAllLocation()
+            .then((res) => {
+                setLocations(res.data);
+            })
+            .catch((err) => {
+                console.log("err :", err);
+                message.error(err.message);
+            });
+    }, [reload]);
+
+    useEffect(() => {
+        if (curentLocation) {
+            setIsModalOpen(true);
+        }
+    }, [curentLocation]);
 
     return (
         <div>
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={locations}
                 pagination={{
                     pageSize: 5,
                     showSizeChanger: true,
                     pageSizeOptions: ["5", "10", "20"],
                 }}
             />
-            <EditLocationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <EditLocationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} data={curentLocation} />
         </div>
     );
 };

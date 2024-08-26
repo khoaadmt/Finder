@@ -24,6 +24,8 @@ export interface Facility {
     city: string;
     name: string;
     contact_phone: string;
+    contactPhone: string;
+    description: string;
     courts: Court[];
     shifts: Shift[];
     img: string[];

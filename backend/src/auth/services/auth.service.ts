@@ -172,10 +172,12 @@ export class AuthService {
     facebookId: string;
     role: string;
   }) {
-    const accessToken = await this.jwtService.signAsync(payload, {
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: '8h',
-    });
+    const accessToken =
+      'Bearer ' +
+      (await this.jwtService.signAsync(payload, {
+        secret: process.env.ACCESS_TOKEN_SECRET,
+        expiresIn: '8h',
+      }));
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.REFRESH_TOKEN_SECRET,
       expiresIn: '7d',

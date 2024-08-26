@@ -16,7 +16,7 @@ interface Options {
 interface Props {
     setCoordinates: React.Dispatch<React.SetStateAction<Coordinates>>;
     setAddress: React.Dispatch<React.SetStateAction<string>>;
-    defaultvalue: string;
+    defaultvalue: string | undefined | null;
 }
 export const AutoCompleteLocation: React.FC<Props> = (props) => {
     const { setCoordinates, setAddress, defaultvalue } = props;

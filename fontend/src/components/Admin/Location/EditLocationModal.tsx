@@ -1,50 +1,67 @@
 import { Button, Form, Input, InputNumber, Modal, Space, TimePicker, UploadFile } from "antd";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { MyFormItem } from "../../common/InputFIeld/MyFormItem";
 import { PicturesWall } from "../../User/Posts/PictureWall/PicturesWall";
 import { AutoCompleteLocation } from "./AutoCompleteLocation";
 import { Coordinates, formItemLayout } from "./Add";
 import dayjs from "dayjs";
+import { Facility, Location } from "../../../interface";
 
 interface Prop {
     isModalOpen: boolean;
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: Facility | undefined;
 }
 
 export const EditLocationModal: React.FC<Prop> = (prop) => {
+    const { isModalOpen, setIsModalOpen, data } = prop;
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const timeFormat = "HH:mm";
     const [coordinates, setCoordinates] = useState<Coordinates>(null);
     const [address, setAddress] = useState("");
+    const [form] = Form.useForm();
 
     const onFinish = (values: any) => {
         console.log("Success:", values);
         console.log("coordinates: ", coordinates);
     };
 
-    const { isModalOpen, setIsModalOpen } = prop;
     const handleOk = () => {
         setIsModalOpen(false);
     };
 
     const handleCancel = () => {
+        form.resetFields();
         setIsModalOpen(false);
     };
+    useEffect(() => {
+        if (data) {
+            setAddress(data.address || "");
+            setFileList(
+                data.img?.map((url, index) => ({
+                    uid: String(index),
+                    name: `image-${index}`,
+                    status: "done",
+                    url,
+                })) || []
+            );
 
-    const data = {
-        name: "VNBC",
-        city: "Hà Nội",
-        address: "Từ liêm, Hà Nội, Việt Nam",
-        phoneNumber: "0366516834",
-        description: "Mô tả vắn tắt",
-        numberOfCourt: 9,
-        priceMin: 1000000,
-        priceMax: 5000000,
-        startTime: "05:30",
-        endTime: "22:00",
-        agreement: true,
-    };
+            form.setFieldsValue({
+                name: data.name,
+                city: data.city,
+                address: data.address,
+                phoneNumber: data.contactPhone,
+                description: data.description,
+                courtNumber: data.numberOfCourts,
+                priceMin: data.priceMin,
+                priceMax: data.priceMax,
+                openHours: [dayjs(data?.openHours?.start, timeFormat), dayjs(data?.openHours?.end, timeFormat)],
+                img: fileList,
+            });
+        }
+    }, [data]);
 
+    console.log(data);
     return (
         <Modal
             className="add-location-modal"
@@ -58,19 +75,20 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                 </Button>,
             ]}>
             <Form
+                form={form}
                 onFinish={onFinish}
                 className="pt-8 pb-10 add-location-form w-full"
                 {...formItemLayout}
                 initialValues={{
-                    name: data.name,
-                    city: data.city,
-                    address: data.address,
-                    phoneNumber: data.phoneNumber,
-                    description: data.description,
-                    courtNumber: data.numberOfCourt,
-                    priceMin: data.priceMin,
-                    priceMax: data.priceMax,
-                    openHours: [dayjs(data.startTime, timeFormat), dayjs(data.endTime, timeFormat)],
+                    name: data?.name,
+                    city: data?.city,
+                    address: data?.address,
+                    phoneNumber: data?.contact_phone,
+                    description: data?.description,
+                    courtNumber: data?.numberOfCourts,
+                    priceMin: data?.priceMin,
+                    priceMax: data?.priceMax,
+                    openHours: [dayjs(data?.openHours.start, timeFormat), dayjs(data?.openHours.end, timeFormat)],
                     img: fileList,
                 }}>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-6">
@@ -95,7 +113,7 @@ export const EditLocationModal: React.FC<Prop> = (prop) => {
                                 <AutoCompleteLocation
                                     setCoordinates={setCoordinates}
                                     setAddress={setAddress}
-                                    defaultvalue={data.address}
+                                    defaultvalue={data?.address}
                                 />
                             }
                         />

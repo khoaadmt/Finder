@@ -1,4 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../interface";
 
 class BaseService {
     private readonly baseUrl: string;
