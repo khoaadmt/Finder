@@ -66,6 +66,8 @@ export class LocationController {
 
   @Post('')
   async createLocation(@Body() createLocationDto: CreateLocationDto) {
+    console.log('createLocationDto :', createLocationDto);
+
     return await this.locationService.createLocation(createLocationDto);
   }
 

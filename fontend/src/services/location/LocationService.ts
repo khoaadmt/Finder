@@ -28,7 +28,8 @@ class LocationService extends BaseService {
         return this.delete(`${locationId}`, {}, token);
     }
     createLocation(location: any, token?: string) {
-        return this.post("/", { location }, token);
+        console.log("token in service: ");
+        return this.post("/", location, {}, token);
     }
 }
 export default LocationService;

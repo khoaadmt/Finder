@@ -1,4 +1,16 @@
-import { Button, Cascader, DatePicker, Form, FormProps, Input, InputNumber, Space, TimePicker, UploadFile } from "antd";
+import {
+    Button,
+    Cascader,
+    DatePicker,
+    Form,
+    FormProps,
+    Input,
+    InputNumber,
+    message,
+    Space,
+    TimePicker,
+    UploadFile,
+} from "antd";
 import { PicturesWall } from "../../User/Posts/PictureWall/PicturesWall";
 import { useState } from "react";
 import "./index.css";
@@ -7,6 +19,8 @@ import { AutoCompleteLocation } from "./AutoCompleteLocation";
 import LocationService from "../../../services/location/LocationService";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../interface";
+import dayjs, { Dayjs } from "dayjs";
+import UpLoadService from "./../../../services/uploads/UploadService";
 export const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -28,17 +42,38 @@ export const AddLocationPage = () => {
     const [coordinates, setCoordinates] = useState<Coordinates>(null);
     const [address, setAddress] = useState("");
     const locationService = new LocationService();
+    const upLoadService = new UpLoadService();
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
 
-    const onFinish = (values: any) => {
+    const formatTime = (value: Dayjs[]) => {
+        if (value && value.length > 0) {
+            return value.map((time) => dayjs(time).format("HH:mm"));
+        }
+        return [];
+    };
+    const onFinish = async (values: any) => {
         // console.log("Success:", values);
         // console.log("addres: ", address);
         // console.log("coordinates: ", coordinates);
         values.address = address;
         values.latitude = coordinates?.lat;
         values.longitude = coordinates?.lng;
-        console.log(values);
-        //locationService.createLocation(values, user?.accessToken);
+
+        values.openHours = {
+            start: dayjs(values.openHours[0]).format("HH:mm"),
+            end: dayjs(values.openHours[0]).format("HH:mm"),
+        };
+
+        const formData = new FormData();
+        fileList.forEach((file) => {
+            formData.append("files", file.originFileObj as File);
+        });
+        const img = await upLoadService.uploadLocationImage(formData);
+        values.img = img?.data;
+
+        locationService.createLocation(values, user?.accessToken).then(() => {
+            message.success("Thêm sân cầu thành công");
+        });
     };
 
     return (
@@ -72,7 +107,7 @@ export const AddLocationPage = () => {
 
                     <MyFormItem
                         label="SĐT liên hệ:"
-                        name="phoneNumber"
+                        name="contactPhone"
                         rules={[{ required: true, message: "Please input!" }]}
                         children={<Input />}
                     />
@@ -87,7 +122,7 @@ export const AddLocationPage = () => {
                 <div className="md:col-span-1">
                     <MyFormItem
                         label="Số sân:"
-                        name="courtNumber"
+                        name="numberOfCourts"
                         rules={[{ required: true, message: "Please input!" }]}
                         children={<InputNumber style={{ width: "100%" }} />}
                     />

@@ -19,7 +19,7 @@ export class CheckPermissionMiddleware implements NestMiddleware {
           message: 'Bạn cần phải đăng nhập để thực hiện hành động này!',
         });
       }
-      console.log(token);
+
       const decoded = await this.jwtService.verifyAsync(token, {
         secret: process.env.ACCESS_TOKEN_SECRET,
       });

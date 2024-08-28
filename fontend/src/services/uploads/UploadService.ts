@@ -14,6 +14,10 @@ class UpLoadService extends BaseService {
         return this.post("avatar", formData, configHeaders);
     }
 
+    uploadLocationImage(formData: FormData) {
+        return this.post("location", formData, configHeaders);
+    }
+
     uploadPostImage(formData: FormData) {
         return this.post("post", formData, configHeaders);
     }

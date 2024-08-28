@@ -45,7 +45,7 @@ class BaseService {
         };
 
         if (token) {
-            headers.Authorization = `Bearer ${token}`;
+            headers.Authorization = `${token}`;
         }
 
         return { headers };

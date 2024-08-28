@@ -29,6 +29,19 @@ export class UploadController {
     return await this.postService.updateImagesOfPost(postId, urlFiles);
   }
 
+  @Post('location')
+  @UseInterceptors(
+    FilesInterceptor('files', 10, { storage: storageOptions('location') }),
+  )
+  async uploadLocationFiles(@UploadedFiles() files: Express.Multer.File[]) {
+    const urlFiles = files.map((file) => {
+      const url = `http://localhost:5000/api/uploads/location/${file.filename}`;
+      return url;
+    });
+
+    return urlFiles;
+  }
+
   @Post('avatar')
   @UseInterceptors(
     FilesInterceptor('files', 1, { storage: storageOptions('avatar') }),
