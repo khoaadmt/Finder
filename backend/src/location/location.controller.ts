@@ -76,6 +76,7 @@ export class LocationController {
     @Param('locationId') locationId: string,
     @Body() locationUpdateDto: CreateLocationDto,
   ) {
+    console.log('locationUpdateDto :', locationUpdateDto);
     return this.locationService.updateLocation(locationId, locationUpdateDto);
   }
 

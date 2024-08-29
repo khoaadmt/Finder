@@ -84,7 +84,6 @@ export const LocationDetail: React.FC = () => {
                 .getBookedCourts(params)
                 .then((bookedCourts) => {
                     setBookedCourts(bookedCourts.data);
-                    console.log("bookedCourts.data :", bookedCourts.data);
                 })
                 .catch((error) => {
                     message.error(error.message);

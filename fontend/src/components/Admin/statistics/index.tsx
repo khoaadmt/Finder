@@ -33,7 +33,6 @@ export const StatisticsPage: React.FC = () => {
 
     const downloadCSV = () => {
         if (data) {
-            console.log("processData :", processData);
             const csv = convertToCSV(processData(data));
             const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" }); // Đảm bảo mã hóa UTF-8
             const url = window.URL.createObjectURL(blob);

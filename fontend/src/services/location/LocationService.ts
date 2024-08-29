@@ -31,5 +31,8 @@ class LocationService extends BaseService {
         console.log("token in service: ");
         return this.post("/", location, {}, token);
     }
+    updateLocation(locationId: string, data: any, token?: string) {
+        return this.put(`${locationId}`, data, {}, token);
+    }
 }
 export default LocationService;
