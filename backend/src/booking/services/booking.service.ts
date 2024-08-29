@@ -3,6 +3,8 @@ import { BookingRepository } from '../repository/booking.repository';
 import { CreateBookingDto } from '../dto/createBooking.dto';
 import { ShiftService } from 'src/shift/services/shift.service';
 import { PaymentService } from 'src/payment/payment.service';
+import { ObjectId } from 'mongodb';
+const dayjs = require('dayjs');
 
 @Injectable()
 export class BookingService {
@@ -14,11 +16,25 @@ export class BookingService {
   ) {}
 
   async createBooking(createBookingDto: CreateBookingDto) {
+    console.log('createBookingDto :', createBookingDto);
     const shift = await this.shiftService.getShiftById(
       createBookingDto.shiftId.toString(),
     );
     const price = shift.price;
-    const data = { ...createBookingDto, price };
+    const courtIdObj = new ObjectId(createBookingDto.courtId);
+    const locationIdObj = new ObjectId(createBookingDto.locationId);
+    const shiftIdObj = new ObjectId(createBookingDto.shiftId);
+    const date = dayjs().format('YYYY-MM-DD');
+
+    const data = {
+      ...createBookingDto,
+      username: createBookingDto.userName,
+      price,
+      locationId: locationIdObj,
+      shiftId: shiftIdObj,
+      courtId: courtIdObj,
+      createdAt: date,
+    };
     const booking = await this.bookingrepository.createBooking(data);
 
     const resZaloPayment = await this.paymentService.createZaloPayment(
@@ -45,6 +61,7 @@ export class BookingService {
 
   async getTotalSalesInMonth(month: number, locationId: string) {
     const bookings = await this.bookingrepository.findBookingsSuccess();
+    console.log('bookings :', bookings);
     let totalSales = 0;
 
     const filteredBookings = locationId
@@ -54,7 +71,7 @@ export class BookingService {
       : bookings;
 
     filteredBookings.forEach((booking) => {
-      const date = new Date(booking.date);
+      const date = new Date(booking.createdAt);
       const m = date.getMonth() + 1;
       if (month == m) {
         if (booking.price) {
@@ -68,13 +85,13 @@ export class BookingService {
 
   async getTransactionsInMonth(month: number) {
     const bookings = await this.bookingrepository.findBookingsSuccess();
-
+    var result = [];
     var result = [];
     bookings.forEach((booking) => {
-      const date = new Date(booking.date);
+      const date = new Date(booking.createdAt);
       const m = date.getMonth() + 1;
       if (month == m) {
-        result.push(booking)
+        result.push(booking);
       }
     });
 
@@ -83,10 +100,13 @@ export class BookingService {
 
   async getTransactionsInDay(day: string) {
     const bookings = await this.bookingrepository.findBookingsSuccess();
-    const result = bookings.filter(
-      (booking) => booking.date == day,
-    )
+    const result = bookings.filter((booking) => booking.createdAt == day);
 
     return result;
+  }
+
+  async getAllTransactions() {
+    const bookings = await this.bookingrepository.findBookingsSuccess();
+    return bookings;
   }
 }

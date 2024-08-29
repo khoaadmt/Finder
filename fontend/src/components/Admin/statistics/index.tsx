@@ -5,14 +5,14 @@ import { DownloadOutlined } from "@ant-design/icons";
 import "./index.css";
 import { MyBarChart } from "./BarChart";
 import { TransactionTable } from "./TransactionTable";
+import BookingService from "../../../services/booking/BookingService";
+import dayjs, { Dayjs } from "dayjs";
+import { BookedCourts } from "../../../interface";
 export const StatisticsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
-    const [transactionTime, setTranSactionTime] = useState("ngày");
-    const data = [
-        { name: "John Doe", age: 28, email: "john@example.com" },
-        { name: "Jane Doe", age: 25, email: "jane@example.com" },
-        { name: "Alice Smith", age: 30, email: "alice@example.com" },
-    ];
+    const [transactionTime, setTranSactionTime] = useState("day");
+    const bookingService = new BookingService();
+    const [data, setData] = useState<BookedCourts[] | undefined>();
 
     const convertToCSV = (array: any) => {
         const header = Object.keys(array[0]).join(",") + "\n";
@@ -40,12 +40,31 @@ export const StatisticsPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        console.log(transactionTime);
+        const date = dayjs();
+        if (transactionTime === "day") {
+            const day = date.format("YYYY-MM-DD");
+            bookingService.getTransactionInDay(day).then((res) => {
+                setData(res.data);
+            });
+        }
+        if (transactionTime === "month") {
+            const month = date.month() + 1;
+            bookingService.getTransactionInMonth(month).then((res) => {
+                setData(res.data);
+            });
+        }
+        if (transactionTime === "all") {
+            bookingService.getAllTransaction().then((res) => {
+                setData(res.data);
+            });
+        }
     }, [transactionTime]);
+
     const handleChange = (value: string) => {
-        console.log("value :", value);
         setTranSactionTime(value);
     };
+
+    console.log(data);
     return (
         <Layout>
             <Content className="dashboard-content">
@@ -74,8 +93,7 @@ export const StatisticsPage: React.FC = () => {
                                 ]}
                             />
                         </div>
-
-                        <TransactionTable />
+                        {data && <TransactionTable data={data} />}
                     </div>
                 </div>
             </Content>

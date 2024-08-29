@@ -1,102 +1,53 @@
 import { Space, Table, Tag } from "antd";
 import type { TableProps } from "antd";
+import { FC } from "react";
+import { BookedCourts } from "../../../interface";
 
-interface DataType {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-}
-
-const columns: TableProps<DataType>["columns"] = [
+const columns: TableProps<any>["columns"] = [
     {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
+        title: "Người thuê",
+        dataIndex: "username",
+        key: "username",
         render: (text) => <a>{text}</a>,
     },
     {
-        title: "Age",
-        dataIndex: "age",
-        key: "age",
+        title: "Địa điểm",
+        dataIndex: ["location", "name"],
+        key: "location.name",
     },
     {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
+        title: "Sân số",
+        dataIndex: ["court", "courtNumber"],
+        key: "court.courtNumber",
     },
     {
-        title: "Tags",
+        title: "Giờ",
         key: "tags",
-        dataIndex: "tags",
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? "geekblue" : "green";
-                    if (tag === "loser") {
-                        color = "volcano";
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
+        render: (_, record) => `${record.shift.startTime} - ${record.shift.endTime}`,
     },
     {
-        title: "Action",
-        key: "action",
-        render: (_, record) => (
-            <Space size="middle">
-                <a>Invite {record.name}</a>
-                <a>Delete</a>
-            </Space>
-        ),
+        title: "Giá",
+        key: "price",
+        dataIndex: "price",
+    },
+    {
+        title: "Ngày thuê",
+        key: "date",
+        dataIndex: "date",
+    },
+    {
+        title: "Ngày thanh toán",
+        key: "createdAt",
+        dataIndex: "createdAt",
     },
 ];
 
-const data: DataType[] = [
-    {
-        key: "1",
-        name: "John Brown",
-        age: 32,
-        address: "New York No. 1 Lake Park",
-        tags: ["nice", "developer"],
-    },
-    {
-        key: "2",
-        name: "Jim Green",
-        age: 42,
-        address: "London No. 1 Lake Park",
-        tags: ["loser"],
-    },
-    {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sydney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-    },
-    {
-        key: "4",
-        name: "Joe Black",
-        age: 32,
-        address: "Sydney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-    },
-    {
-        key: "5",
-        name: "Joe Black",
-        age: 32,
-        address: "Sydney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
-    },
-];
+interface Props {
+    data: BookedCourts[];
+}
 
-export const TransactionTable = () => {
+export const TransactionTable: React.FC<Props> = (props) => {
+    const { data } = props;
     return (
         <div>
             <Table

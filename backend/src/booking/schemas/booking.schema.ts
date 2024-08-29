@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+
 @Schema()
 export class Booking {
   @Prop()
-  userId: Types.ObjectId;
+  username: string;
 
   @Prop()
   courtId: Types.ObjectId;
@@ -22,5 +23,8 @@ export class Booking {
 
   @Prop({ default: 'Pending' })
   status: string;
+
+  @Prop()
+  createdAt: string;
 }
 export const BookingSchema = SchemaFactory.createForClass(Booking);

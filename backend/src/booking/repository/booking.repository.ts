@@ -113,14 +113,7 @@ export class BookingRepository {
       {
         $match: { status: 'booked' },
       },
-      {
-        $lookup: {
-          from: 'users', // Collection name của user
-          localField: 'userId',
-          foreignField: '_id',
-          as: 'user',
-        },
-      },
+
       {
         $lookup: {
           from: 'courts', // Collection name của court
@@ -146,9 +139,6 @@ export class BookingRepository {
         },
       },
       {
-        $unwind: '$user', // Giải nén mảng nếu lookup trả về nhiều kết quả, nếu chỉ có 1 kết quả, bỏ qua bước này
-      },
-      {
         $unwind: '$court',
       },
       {
@@ -160,14 +150,14 @@ export class BookingRepository {
       {
         $project: {
           _id: 1,
-          userId: 1,
+          username: 1,
           courtId: 1,
           shiftId: 1,
           locationId: 1,
           date: 1,
           price: 1,
           status: 1,
-          user: { username: 1 }, // Chọn các field từ user
+          createdAt: 1,
           court: { courtNumber: 1 }, // Chọn các field từ court
           shift: { startTime: 1, endTime: 1 }, // Chọn các field từ shift
           location: { name: 1 }, // Chọn các field từ location

@@ -3,16 +3,16 @@ import { Types } from 'mongoose';
 
 export class CreateBookingDto {
   @IsNotEmpty()
-  userName: Types.ObjectId;
+  userName: string;
 
   @IsNotEmpty()
-  courtId: Types.ObjectId;
+  courtId: string;
 
   @IsNotEmpty()
-  shiftId: Types.ObjectId;
+  shiftId: string;
 
   @IsNotEmpty()
-  locationId: Types.ObjectId;
+  locationId: string;
 
   @IsNotEmpty()
   date: string;

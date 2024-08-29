@@ -18,5 +18,21 @@ class BookingService extends BaseService {
     getBookingsByUserName(username: string) {
         return this.get(`by-username/${username}`);
     }
+
+    getTransactionInDay(day: string) {
+        return this.get(`/${day}/day/transactions`);
+    }
+
+    getTransactionInMonth(month: number) {
+        return this.get(`/${month}/month/transactions`);
+    }
+
+    getAllTransaction() {
+        return this.get(`/transactions`);
+    }
+
+    getTotalSales(month: number) {
+        return this.get(`${month}/total-sales`);
+    }
 }
 export default BookingService;

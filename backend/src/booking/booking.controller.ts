@@ -39,6 +39,11 @@ export class BookingController {
     return this.bookingService.getTotalSalesInMonth(month, locationId);
   }
 
+  @Get('/transactions')
+  getAllTransactions() {
+    return this.bookingService.getAllTransactions();
+  }
+
   @Get(':month/month/transactions')
   getTransactionsInMonth(@Param('month') month: number) {
     return this.bookingService.getTransactionsInMonth(month);

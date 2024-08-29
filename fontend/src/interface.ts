@@ -130,4 +130,6 @@ export interface BookedCourts {
     shift: Shift;
     userName: string;
     date: string;
+    price: number;
+    createdAt: string;
 }
