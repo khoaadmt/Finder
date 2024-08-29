@@ -14,6 +14,17 @@ export const StatisticsPage: React.FC = () => {
     const bookingService = new BookingService();
     const [data, setData] = useState<BookedCourts[] | undefined>();
 
+    const processData = (data: any[]) => {
+        return data.map((item) => ({
+            "Người thuê": item.username,
+            "Địa điểm": item.location.name,
+            "Sân số": item.court.courtNumber,
+            "Thời gian": `${item.shift.startTime} - ${item.shift.endTime}`,
+            "Giá thuê": item.price,
+            "Ngày thuê": item.date,
+            "Ngày thanh toán": item.createdAt,
+        }));
+    };
     const convertToCSV = (array: any) => {
         const header = Object.keys(array[0]).join(",") + "\n";
         const rows = array.map((obj: any) => Object.values(obj).join(",")).join("\n");
@@ -21,13 +32,18 @@ export const StatisticsPage: React.FC = () => {
     };
 
     const downloadCSV = () => {
-        const csv = convertToCSV(data);
-        const blob = new Blob([csv], { type: "text/csv" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.setAttribute("href", url);
-        a.setAttribute("download", "data.csv");
-        a.click();
+        if (data) {
+            console.log("processData :", processData);
+            const csv = convertToCSV(processData(data));
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" }); // Đảm bảo mã hóa UTF-8
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.setAttribute("href", url);
+            a.setAttribute("download", "data.csv");
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
     };
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -64,14 +80,10 @@ export const StatisticsPage: React.FC = () => {
         setTranSactionTime(value);
     };
 
-    console.log(data);
     return (
         <Layout>
             <Content className="dashboard-content">
                 <div>
-                    <Button onClick={downloadCSV} className="download-btn">
-                        Download CSV <DownloadOutlined />
-                    </Button>
                     <MyBarChart loading={loading} />
                 </div>
 
