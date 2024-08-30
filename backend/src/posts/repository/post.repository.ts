@@ -226,4 +226,8 @@ export class PostRepository {
   async updateImagesOfPost(postId: string, urlImage: string[]) {
     await this.Post.updateOne({ _id: postId }, { images: urlImage });
   }
+
+  async delete(postId: string) {
+    await this.Post.findByIdAndDelete(postId);
+  }
 }

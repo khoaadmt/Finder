@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create_post.dto';
 import { PostsService } from './services/posts.service';
 
@@ -51,5 +60,10 @@ export class PostsController {
     @Body('status') status: string,
   ) {
     return this.postService.updateStatus(postId, status);
+  }
+
+  @Delete(':postId')
+  deletePost(@Param('postId') postId: string) {
+    return this.postService.deletePost(postId);
   }
 }

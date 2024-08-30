@@ -45,5 +45,9 @@ class PostService extends BaseService {
     createPost(values: any, accessToken: string | undefined) {
         return this.post("", values, "", accessToken);
     }
+
+    deletePosst(postId: string, accessToken: string | undefined) {
+        return this.delete(`/${postId}`, accessToken);
+    }
 }
 export default PostService;

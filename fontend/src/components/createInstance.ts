@@ -26,7 +26,7 @@ export const createAxios = (user: any, dispatch: any, stateSuccess: any) => {
                     const data = await refreshToken();
                     const newAccessToken = data.accessToken;
 
-                    config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+                    config.headers["Authorization"] = `${newAccessToken}`;
                     const refreshUser = { ...user, accessToken: newAccessToken };
                     dispatch(stateSuccess(refreshUser));
                 } catch (error) {

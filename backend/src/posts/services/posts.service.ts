@@ -61,6 +61,22 @@ export class PostsService {
     }
   }
 
+  async deletePost(postId: string) {
+    const postExists = await this.postRepository.findById(postId);
+    if (postExists.length == 0) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    }
+    try {
+      await this.postRepository.delete(postId);
+      return { message: 'Delete post success' };
+    } catch (err) {
+      throw new HttpException(
+        'Delete post failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   converBoolean = (value: string) => {
     if (value == 'true') return true;
     else return false;

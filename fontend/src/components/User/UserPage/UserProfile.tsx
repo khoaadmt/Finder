@@ -74,7 +74,6 @@ export const UserProfile = () => {
 
         const avaUrlResponse = await uploadService.uploadAvatar(formData);
         if (avaUrlResponse.data.length > 0) {
-            console.log("avaUrlResponse :", avaUrlResponse);
             values.avaUrl = avaUrlResponse.data[0].url;
         }
 

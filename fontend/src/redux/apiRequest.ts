@@ -61,7 +61,7 @@ export const updateUserInfo = async (dispatch: any, valuesUpdate: any, user: any
                 avaUrl: valuesUpdate.avaUrl,
             },
             {
-                headers: { Authorization: `Bearer ${user?.accessToken}` },
+                headers: { Authorization: `${user?.accessToken}` },
             }
         )
         .then((res: any) => {

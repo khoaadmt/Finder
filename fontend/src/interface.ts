@@ -69,6 +69,7 @@ export interface Post {
     agreement: boolean;
     user: userInfor;
     location: Facility;
+    status: string;
 }
 
 export interface ResponseLocation {
