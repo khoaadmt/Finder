@@ -129,7 +129,7 @@ export interface BookedCourts {
     };
     location: Location;
     shift: Shift;
-    userName: string;
+    username: string;
     date: string;
     price: number;
     createdAt: string;

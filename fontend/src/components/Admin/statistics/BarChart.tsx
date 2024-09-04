@@ -83,7 +83,7 @@ export const MyBarChart: FC<{ loading: boolean }> = ({ loading }) => {
     return (
         <ColCard
             loading={loading}
-            metaName={"Doanh số tháng này"}
+            metaName={"Doanh số"}
             metaCount={totalSales.toString()}
             body={
                 <ResponsiveContainer width="100%" height={300}>

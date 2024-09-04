@@ -96,7 +96,7 @@ export const MyBookedCourts = () => {
                                             readOnly
                                             className="input-right"
                                             style={{ width: "80%" }}
-                                            defaultValue={bookedCourt.userName}
+                                            defaultValue={bookedCourt.username}
                                         />
                                     </Space.Compact>
                                 </div>

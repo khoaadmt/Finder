@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Booking } from '../schemas/booking.schema';
-import { CreateBookingDto } from '../dto/createBooking.dto';
+import { ObjectId } from 'mongodb';
 require('dotenv').config();
 
 @Injectable()
@@ -25,9 +25,11 @@ export class BookingRepository {
   }
 
   async getBookedCourts(data: any) {
+    const locationIdObj = new ObjectId(data.locationId);
+    const shiftIdObj = new ObjectId(data.shiftId);
     return await this.BookingModel.find({
-      locationId: data.locationId,
-      shiftId: data.shiftId,
+      locationId: locationIdObj,
+      shiftId: shiftIdObj,
       date: data.date,
       status: 'booked',
     })
@@ -37,75 +39,60 @@ export class BookingRepository {
   }
 
   async findBookingsByUsername(userName: string) {
-    const bookings = await this.BookingModel.aggregate([
+    return await this.BookingModel.aggregate([
       {
-        $match: {
-          userName: userName,
-          status: 'booked',
-        },
-      },
-      {
-        $addFields: {
-          location_id_ObjectId: { $toObjectId: '$locationId' },
-        },
+        $match: { status: 'booked', username: userName },
       },
       {
         $lookup: {
-          from: 'locations',
-          localField: 'location_id_ObjectId',
-          foreignField: '_id',
-          as: 'location',
-        },
-      },
-
-      {
-        $addFields: {
-          court_id_ObjectId: { $toObjectId: '$courtId' },
-        },
-      },
-      {
-        $lookup: {
-          from: 'courts',
-          localField: 'court_id_ObjectId',
+          from: 'courts', // Collection name của court
+          localField: 'courtId',
           foreignField: '_id',
           as: 'court',
         },
       },
-
-      {
-        $addFields: {
-          shift_id_ObjectId: { $toObjectId: '$shiftId' },
-        },
-      },
       {
         $lookup: {
-          from: 'shifts',
-          localField: 'shift_id_ObjectId',
+          from: 'shifts', // Collection name của shift
+          localField: 'shiftId',
           foreignField: '_id',
           as: 'shift',
         },
       },
       {
-        $unwind: '$location',
-      },
-      {
-        $unwind: '$shift',
+        $lookup: {
+          from: 'locations', // Collection name của location
+          localField: 'locationId',
+          foreignField: '_id',
+          as: 'location',
+        },
       },
       {
         $unwind: '$court',
       },
       {
+        $unwind: '$shift',
+      },
+      {
+        $unwind: '$location',
+      },
+      {
         $project: {
-          location_id_ObjectId: 0,
-          locationId: 0,
-          shiftId: 0,
-          shift_id_ObjectId: 0,
-          court_id_ObjectId: 0,
-          courtId: 0,
+          _id: 1,
+          username: 1,
+          courtId: 1,
+          shiftId: 1,
+          locationId: 1,
+          date: 1,
+          price: 1,
+          status: 1,
+          createdAt: 1,
+          court: { courtNumber: 1 }, // Chọn các field từ court
+          shift: { startTime: 1, endTime: 1 }, // Chọn các field từ shift
+          location: { name: 1, address: 1 }, // Chọn các field từ location
         },
       },
     ]);
-    return bookings;
   }
 
   async findBookingsSuccess() {
@@ -113,7 +100,6 @@ export class BookingRepository {
       {
         $match: { status: 'booked' },
       },
-
       {
         $lookup: {
           from: 'courts', // Collection name của court

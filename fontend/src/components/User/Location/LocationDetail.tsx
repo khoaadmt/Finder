@@ -200,6 +200,8 @@ export const LocationDetail: React.FC = () => {
         setIsModalVisible(false);
         setCancelCount((prevCount) => prevCount + 1);
     };
+    console.log("location details: ", locationDetail);
+    console.log("Booked court: ", bookedCourts);
     return (
         <div>
             <SearchPageHeader defaultSelectedKeys="" />
