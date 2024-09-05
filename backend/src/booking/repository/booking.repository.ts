@@ -146,7 +146,7 @@ export class BookingRepository {
           createdAt: 1,
           court: { courtNumber: 1 }, // Chọn các field từ court
           shift: { startTime: 1, endTime: 1 }, // Chọn các field từ shift
-          location: { name: 1 }, // Chọn các field từ location
+          location: { name: 1, city: 1 }, // Chọn các field từ location
         },
       },
     ]);

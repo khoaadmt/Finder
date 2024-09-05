@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { BookingService } from './services/booking.service';
 import { CreateBookingDto } from './dto/createBooking.dto';
-import { ShiftService } from 'src/shift/services/shift.service';
 
 @Controller('booking')
 export class BookingController {
@@ -35,8 +34,9 @@ export class BookingController {
   getTotalSalesInMonth(
     @Param('month') month: number,
     @Query('locationId') locationId: string,
+    @Query('city') city: string,
   ) {
-    return this.bookingService.getTotalSalesInMonth(month, locationId);
+    return this.bookingService.getTotalSalesInMonth(month, locationId, city);
   }
 
   @Get('/transactions')

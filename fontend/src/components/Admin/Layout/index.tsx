@@ -19,7 +19,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const items: MenuItem[] = [
     getItem("Dashboard", "1", <PieChartOutlined />),
-    getItem("Sân cầu", "sub1", <GroupOutlined />, [getItem("Overview", "2"), getItem("Add", "3")]),
+    getItem("Sân cầu", "sub1", <GroupOutlined />, [getItem("Danh sách", "2"), getItem("Thêm mới", "3")]),
     getItem("Bài viết", "sub2", <ScheduleOutlined />, [
         getItem("Bài viết cần duyệt", "4"),
         getItem("Bài viết đã duyệt", "5"),

@@ -98,8 +98,8 @@ export const StatisticsPage: React.FC = () => {
                                 style={{ width: 120 }}
                                 onChange={handleChange}
                                 options={[
-                                    { value: "day", label: "ngày" },
-                                    { value: "month", label: "tháng" },
+                                    { value: "day", label: "hôm nay" },
+                                    { value: "month", label: "tháng này" },
                                     { value: "all", label: "toàn bộ" },
                                 ]}
                             />
