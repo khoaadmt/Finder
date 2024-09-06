@@ -134,3 +134,8 @@ export interface BookedCourts {
     price: number;
     createdAt: string;
 }
+export interface ChartLineData {
+    name: string;
+    HN: number;
+    HCM: number;
+}

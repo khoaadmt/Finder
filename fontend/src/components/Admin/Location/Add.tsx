@@ -61,7 +61,7 @@ export const AddLocationPage = () => {
 
         values.openHours = {
             start: dayjs(values.openHours[0]).format("HH:mm"),
-            end: dayjs(values.openHours[0]).format("HH:mm"),
+            end: dayjs(values.openHours[1]).format("HH:mm"),
         };
 
         const formData = new FormData();

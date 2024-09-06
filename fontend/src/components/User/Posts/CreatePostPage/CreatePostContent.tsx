@@ -65,7 +65,15 @@ export const CreatePostContent: React.FC = () => {
             });
 
             try {
-                const resPostId = await postService.createPost(values, user?.accessToken);
+                let resPostId;
+                console.log("values.priceMax, ", values.priceMax, typeof values.priceMax);
+                if (values.priceMax == 0 || values.priceMin == 0) {
+                    const { priceMin, priceMax, ...newValues } = values;
+                    console.log("newValues :", newValues);
+                    resPostId = await postService.createPost(newValues, user?.accessToken);
+                } else {
+                    resPostId = await postService.createPost(values, user?.accessToken);
+                }
                 const postId = resPostId.data.post;
 
                 if (Array.from(formData.entries()).length > 0) {
@@ -125,8 +133,8 @@ export const CreatePostContent: React.FC = () => {
     const handleAgreementChange = (e: any) => {
         createPostForm.setFieldValue("agreement", e.target.checked);
         if (e.target.checked) {
-            createPostForm.setFieldValue("priceMin", "");
-            createPostForm.setFieldValue("priceMax", "");
+            createPostForm.setFieldValue("priceMin", 0);
+            createPostForm.setFieldValue("priceMax", 0);
         }
         setDisablePriceInput((prev) => {
             return !prev;

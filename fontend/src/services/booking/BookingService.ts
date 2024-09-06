@@ -31,8 +31,11 @@ class BookingService extends BaseService {
         return this.get(`/transactions`);
     }
 
-    getTotalSales(month: number) {
-        return this.get(`${month}/total-sales`);
+    getTotalSales(month: number, city: string) {
+        if (city !== null) {
+            return this.get(`${month}/total-sales?city=${city}`);
+        }
+        return this.get(`${month}/total-sales`, { city });
     }
 }
 export default BookingService;

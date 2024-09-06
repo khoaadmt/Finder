@@ -66,7 +66,7 @@ export const MyBarChart: FC<{ loading: boolean }> = ({ loading }) => {
             try {
                 const salesPromises = [];
                 for (let i = 1; i <= 12; i++) {
-                    salesPromises.push(bookingService.getTotalSales(i));
+                    salesPromises.push(bookingService.getTotalSales(i, ""));
                 }
                 const salesResults = await Promise.all(salesPromises);
                 const total = salesResults.reduce((acc, sale) => acc + sale.data, 0);

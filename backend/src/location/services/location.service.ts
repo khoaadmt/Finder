@@ -178,11 +178,11 @@ export class LocationService {
       pageNumber,
     );
 
-    // fake data
-    // const distance = { text: '9.86 km', value: '9860' };
-    // return locations.map((locations) => {
-    //   return { ...locations, distance };
-    // });
+    //fake data
+    const distance = { text: '9.86 km', value: '9860' };
+    return locations.map((locations) => {
+      return { ...locations, distance };
+    });
 
     const locationsWithDistance = await Bluebird.map(
       locations,
