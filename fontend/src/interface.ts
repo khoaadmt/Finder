@@ -108,6 +108,7 @@ export interface Token {
     refreshToken: string;
 }
 export interface Optional {
+    index: number;
     label: string;
     value: number;
 }

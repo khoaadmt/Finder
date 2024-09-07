@@ -1,9 +1,10 @@
 import React from "react";
 
-import { FieldTimeOutlined } from "@ant-design/icons";
+import { FieldTimeOutlined, ForwardFilled, InfoCircleFilled } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Post } from "../../../interface";
+import { Level_value } from "../../../utils/Constant";
 
 interface Props {
     post: Post;
@@ -21,7 +22,8 @@ export const PostCard: React.FC<Props> = (props) => {
 
     const dateTimeConvert = new Date(post.startTime);
     const date = dayjs(dateTimeConvert).format("DD-MM-YYYY");
-    const time = dayjs(dateTimeConvert).format("HH:mm");
+    const startTime = dayjs(dateTimeConvert).format("HH:mm");
+    const endTime = dayjs(dateTimeConvert).add(2, "hour").format("HH:mm");
 
     return (
         <Link to={`/post/${post._id}`}>
@@ -84,7 +86,7 @@ export const PostCard: React.FC<Props> = (props) => {
                         <FieldTimeOutlined className="stroke-primary" style={{ fontSize: "18px", marginLeft: "2px" }} />
                         <span>
                             {" "}
-                            Khung giờ: {time} - {time}
+                            Khung giờ: {startTime} - {endTime}
                         </span>
                     </div>
                     <div className="flex pl-1 gap-2 items-center sm:mb-1">
@@ -125,20 +127,12 @@ export const PostCard: React.FC<Props> = (props) => {
                         </svg>
                         <span className="">Ngày: {date}</span>
                     </div>
-                    <div className="flex gap-2 items-start pl-1 sm:mb-1">
-                        <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            strokeWidth="0"
-                            viewBox="0 0 24 24"
-                            className="flex-shrink-0 fill-primary stroke-primary"
-                            height="20"
-                            width="20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill="none" d="M0 0h24v24H0z"></path>
-                            <path d="M21 12V6c0-1.1-.9-2-2-2h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5V10h14v2h2zm-5.36 8a3.504 3.504 0 0 0 6.86-1c0-1.93-1.57-3.5-3.5-3.5-.95 0-1.82.38-2.45 1H18V18h-4v-4h1.5v1.43c.9-.88 2.14-1.43 3.5-1.43 2.76 0 5 2.24 5 5a5.002 5.002 0 0 1-9.9 1h1.54z"></path>
-                        </svg>
-                        <span className="text-wrap line-clamp-2 sm:text-nowrap sm:truncate">{"T2-T3-T5"}</span>
+                    <div className="flex pl-1 gap-2 items-center sm:mb-1">
+                        <InfoCircleFilled style={{ fontSize: "16px", marginLeft: "2px" }} className="stroke-primary" />
+                        <span>
+                            Trình độ: {Level_value[post.levelMemberMin - 1].label} đến
+                            {Level_value[post.levelMemberMax - 1].label}
+                        </span>
                     </div>
                 </div>
             </div>

@@ -66,7 +66,6 @@ export const LocationDetail: React.FC = () => {
                 .getLocationById(locationId)
                 .then((response) => {
                     setLocationDetail(response.data[0]);
-                    console.log("response.data[0] :", response.data[0]);
                 })
                 .catch((error) => {});
         }
@@ -119,6 +118,49 @@ export const LocationDetail: React.FC = () => {
         }
     };
 
+    const handleClick = (buttonValue: number) => {
+        setActiveButtonName(buttonValue);
+    };
+
+    const handleMouseEndter = (i: number) => {
+        setImageBlur(i);
+    };
+
+    const handleMouseLeave = () => {
+        setImageBlur(-1);
+    };
+
+    const handleOnChangeShift = (value: any) => {
+        setShiftSelected(value);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        setCancelCount((prevCount) => prevCount + 1);
+    };
+
+    const handleBooking = (courtId: string) => {
+        const shiftId = locationDetail?.shifts[options[shiftSelected]?.index]._id;
+        const userName = user?.username;
+
+        let data = {
+            locationId,
+            shiftId,
+            userName,
+            courtId,
+            date: dateSelected,
+        };
+
+        bookingService.createBooking(data).then((resUrl) => {
+            setPaymentUrl(resUrl.data);
+        });
+
+        setIsModalVisible(true);
+    };
     useEffect(() => {
         setShiftSelected(0);
         if (locationDetail?.shifts) {
@@ -142,10 +184,12 @@ export const LocationDetail: React.FC = () => {
                 })
                 .map((shift, index) => {
                     return {
-                        value: shift.shiftNumber,
+                        index: shift.shiftNumber - 1,
+                        value: index,
                         label: `Ca ${shift.shiftNumber} - ${shift.startTime} : ${shift.endTime}`,
                     };
                 });
+
             if (optionsTmp.length === 0) {
                 setDisableBtttons((prev) => {
                     return [...prev, activeButtonName];
@@ -158,51 +202,6 @@ export const LocationDetail: React.FC = () => {
         }
     }, [locationDetail, activeButtonName, dateSelected]);
 
-    const handleClick = (buttonValue: number) => {
-        setActiveButtonName(buttonValue);
-    };
-
-    const handleMouseEndter = (i: number) => {
-        setImageBlur(i);
-    };
-
-    const handleMouseLeave = () => {
-        setImageBlur(-1);
-    };
-
-    const handleBooking = (courtId: string) => {
-        const shiftId = locationDetail?.shifts[options[shiftSelected]?.value - 1]._id;
-        const userName = user?.username;
-
-        let data = {
-            locationId,
-            shiftId,
-            userName,
-            courtId,
-            date: dateSelected,
-        };
-
-        bookingService.createBooking(data).then((resUrl) => {
-            setPaymentUrl(resUrl.data);
-        });
-
-        setIsModalVisible(true);
-    };
-
-    const handleOnChangeShift = (value: any) => {
-        setShiftSelected(value - 1);
-    };
-
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-        setCancelCount((prevCount) => prevCount + 1);
-    };
-    console.log("location details: ", locationDetail);
-    console.log("Booked court: ", bookedCourts);
     return (
         <div>
             <SearchPageHeader defaultSelectedKeys="" />
@@ -263,7 +262,7 @@ export const LocationDetail: React.FC = () => {
                                     Giá thuê:
                                     <p className="shift-price">
                                         {locationDetail &&
-                                            locationDetail?.shifts[options[shiftSelected]?.value]?.price.toLocaleString(
+                                            locationDetail?.shifts[options[shiftSelected]?.index]?.price.toLocaleString(
                                                 "vi-VN"
                                             )}
                                     </p>
@@ -276,7 +275,9 @@ export const LocationDetail: React.FC = () => {
                                                 if (bookedCourts.indexOf(court._id) != -1) isDisable = "disabled";
                                             }
                                             return (
-                                                <div className={`badminton-yard-container ${isDisable}`}>
+                                                <div
+                                                    key={court._id}
+                                                    className={`badminton-yard-container ${isDisable}`}>
                                                     <img
                                                         className={`badminton-yard-img mb-4 ${
                                                             imgBlur == court.courtNumber ? "blur" : ""

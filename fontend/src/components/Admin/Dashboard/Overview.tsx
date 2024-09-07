@@ -39,8 +39,14 @@ interface TrendProps {
 }
 
 const Trend: FC<TrendProps> = ({ totalSalesToDay, totalSalesYesterday, style = {} }) => {
-    const percent = (totalSalesToDay / totalSalesYesterday) * 100;
-    if (percent > 100) {
+    let percent;
+
+    if (totalSalesYesterday == 1) {
+        percent = 200;
+    } else {
+        percent = (totalSalesToDay / totalSalesYesterday) * 100;
+    }
+    if (percent >= 100) {
         return (
             <div className="trend" style={style}>
                 <div className="trend-item">
