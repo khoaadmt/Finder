@@ -58,7 +58,6 @@ export const CreatePostContent: React.FC = () => {
             location_id: Yup.string().required("Required"),
         }),
         onSubmit: async (values) => {
-            console.log(values);
             const formData = new FormData();
             fileList.forEach((file) => {
                 formData.append("files", file.originFileObj as File);
@@ -66,14 +65,12 @@ export const CreatePostContent: React.FC = () => {
 
             try {
                 let resPostId;
-                console.log("values.priceMax, ", values.priceMax, typeof values.priceMax);
-                if (values.priceMax == 0 || values.priceMin == 0) {
-                    const { priceMin, priceMax, ...newValues } = values;
-                    console.log("newValues :", newValues);
-                    resPostId = await postService.createPost(newValues, user?.accessToken);
-                } else {
-                    resPostId = await postService.createPost(values, user?.accessToken);
+
+                if (values.agreement == true) {
+                    values.priceMin = 0;
+                    values.priceMax = 0;
                 }
+                resPostId = await postService.createPost(values, user?.accessToken);
                 const postId = resPostId.data.post;
 
                 if (Array.from(formData.entries()).length > 0) {

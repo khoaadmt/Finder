@@ -7,12 +7,67 @@ import { MyBarChart } from "./BarChart";
 import { TransactionTable } from "./TransactionTable";
 import BookingService from "../../../services/booking/BookingService";
 import dayjs, { Dayjs } from "dayjs";
-import { BookedCourts } from "../../../interface";
+import { BookedCourts, Facility } from "../../../interface";
+import LocationService from "../../../services/location/LocationService";
 export const StatisticsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [transactionTime, setTranSactionTime] = useState("day");
     const bookingService = new BookingService();
     const [data, setData] = useState<BookedCourts[] | undefined>();
+    const monthOptions = [
+        {
+            value: "1",
+            label: "Tháng 1",
+        },
+        {
+            value: "2",
+            label: "Tháng 2",
+        },
+        {
+            value: "3",
+            label: "Tháng 3",
+        },
+        {
+            value: "4",
+            label: "Tháng 4",
+        },
+        {
+            value: "5",
+            label: "Tháng 5",
+        },
+        {
+            value: "6",
+            label: "Tháng 6",
+        },
+        {
+            value: "7",
+            label: "Tháng 7",
+        },
+        {
+            value: "8",
+            label: "Tháng 8",
+        },
+        {
+            value: "9",
+            label: "Tháng 9",
+        },
+        {
+            value: "10",
+            label: "Tháng 10",
+        },
+        {
+            value: "11",
+            label: "Tháng 11",
+        },
+        {
+            value: "12",
+            label: "Tháng 12",
+        },
+    ];
+    const [monthSelected, setMonthSelected] = useState<number>();
+    const locationService = new LocationService();
+    const [locationOptions, setLocationOptions] = useState<Facility[]>();
+    const [locationSelected, setLocationSelected] = useState("all");
 
     const processData = (data: any[]) => {
         return data.map((item) => ({
@@ -58,26 +113,50 @@ export const StatisticsPage: React.FC = () => {
         const date = dayjs();
         if (transactionTime === "day") {
             const day = date.format("YYYY-MM-DD");
-            bookingService.getTransactionInDay(day).then((res) => {
+            bookingService.getTransactionInDay(day, locationSelected).then((res) => {
                 setData(res.data);
             });
         }
-        if (transactionTime === "month") {
-            const month = date.month() + 1;
-            bookingService.getTransactionInMonth(month).then((res) => {
+        if (transactionTime === "month" && monthSelected != undefined) {
+            bookingService.getTransactionInMonth(monthSelected, locationSelected).then((res) => {
                 setData(res.data);
             });
         }
         if (transactionTime === "all") {
-            bookingService.getAllTransaction().then((res) => {
+            bookingService.getAllTransaction(locationSelected).then((res) => {
                 setData(res.data);
             });
         }
-    }, [transactionTime]);
+    }, [transactionTime, monthSelected, locationSelected]);
 
     const handleChange = (value: string) => {
         setTranSactionTime(value);
     };
+    const handleMonthSelectedChange = (value: string) => {
+        setMonthSelected(parseInt(value));
+    };
+
+    const handleLocationSelectedChange = (value: string) => {
+        setLocationSelected(value);
+    };
+
+    useEffect(() => {
+        const date = dayjs();
+        setMonthSelected(date.month() + 1);
+        locationService.getAllLocation().then((res) => {
+            const locationOptions = res.data.map((data: any) => {
+                return {
+                    value: data._id,
+                    label: data.name,
+                };
+            });
+            locationOptions.unshift({
+                value: "all",
+                label: "Tất cả",
+            });
+            setLocationOptions(locationOptions);
+        });
+    }, []);
 
     return (
         <Layout>
@@ -90,22 +169,46 @@ export const StatisticsPage: React.FC = () => {
                     <Button onClick={downloadCSV} className="download-btn2">
                         Download CSV <DownloadOutlined />
                     </Button>
-                    <div>
-                        <div className="flex items-center gap-2 pb-2">
-                            <p className="title-table">Các giao dịch trong: </p>
+
+                    <div className="flex items-center gap-2 pb-2">
+                        <div className="flex items-center gap-2">
+                            <p className="title-table">Các giao dịch: </p>
                             <Select
                                 defaultValue="day"
                                 style={{ width: 120 }}
                                 onChange={handleChange}
                                 options={[
                                     { value: "day", label: "hôm nay" },
-                                    { value: "month", label: "tháng này" },
+                                    { value: "month", label: "theo tháng" },
                                     { value: "all", label: "toàn bộ" },
                                 ]}
                             />
                         </div>
-                        {data && <TransactionTable data={data} />}
+                        {monthSelected && transactionTime == "month" && (
+                            <div className="flex items-center gap-2 ml-4">
+                                <p className="title-table">Tháng: </p>
+                                <Select
+                                    defaultValue={monthSelected.toString()}
+                                    style={{ width: 120 }}
+                                    listHeight={130}
+                                    onChange={handleMonthSelectedChange}
+                                    options={monthOptions}
+                                />
+                            </div>
+                        )}
+
+                        <div className="flex items-center gap-2 ml-4">
+                            <p className="title-table">Sân cầu: </p>
+                            <Select
+                                defaultValue="Tất cả"
+                                style={{ width: 150 }}
+                                listHeight={130}
+                                onChange={handleLocationSelectedChange}
+                                options={locationOptions}
+                            />
+                        </div>
                     </div>
+                    {data && <TransactionTable data={data} />}
                 </div>
             </Content>
         </Layout>

@@ -106,13 +106,13 @@ export const Overview: FC<{ loading: boolean }> = ({ loading }) => {
         const toDay = dayjs().format("YYYY-MM-DD");
         const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
-        bookingService.getTransactionInDay(toDay).then((response) => {
+        bookingService.getTransactionInDay(toDay, "all").then((response) => {
             const totalSales = response.data.reduce((acc: number, trans: any) => {
                 return acc + trans.price;
             }, 0);
             setTotalSalesToDay(totalSales);
         });
-        bookingService.getTransactionInDay(yesterday).then((response) => {
+        bookingService.getTransactionInDay(yesterday, "all").then((response) => {
             const totalSales = response.data.reduce((acc: number, trans: any) => {
                 return acc + trans.price;
             }, 0);

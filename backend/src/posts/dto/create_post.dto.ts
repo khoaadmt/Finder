@@ -37,10 +37,12 @@ export class CreatePostDto {
   levelMemberMax: number;
 
   @Optional()
-  priceMin: number = 0;
+  @IsNumber()
+  priceMin: number;
 
   @Optional()
-  priceMax: number = 0;
+  @IsNumber()
+  priceMax: number;
 
   @IsBoolean()
   @IsNotEmpty()

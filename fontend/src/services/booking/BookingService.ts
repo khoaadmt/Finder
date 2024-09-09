@@ -19,16 +19,16 @@ class BookingService extends BaseService {
         return this.get(`by-username/${username}`);
     }
 
-    getTransactionInDay(day: string) {
-        return this.get(`/${day}/day/transactions`);
+    getTransactionInDay(day: string, locationId: string) {
+        return this.get(`/${day}/day/transactions?locationId=${locationId}`);
     }
 
-    getTransactionInMonth(month: number) {
-        return this.get(`/${month}/month/transactions`);
+    getTransactionInMonth(month: number, locationId: string) {
+        return this.get(`/${month}/month/transactions?locationId=${locationId}`);
     }
 
-    getAllTransaction() {
-        return this.get(`/transactions`);
+    getAllTransaction(locationId: string) {
+        return this.get(`/transactions?locationId=${locationId}`);
     }
 
     getTotalSales(month: number, city: string) {

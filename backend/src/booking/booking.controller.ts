@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { BookingService } from './services/booking.service';
 import { CreateBookingDto } from './dto/createBooking.dto';
+import { query } from 'express';
 
 @Controller('booking')
 export class BookingController {
@@ -40,17 +41,23 @@ export class BookingController {
   }
 
   @Get('/transactions')
-  getAllTransactions() {
-    return this.bookingService.getAllTransactions();
+  getAllTransactions(@Query('locationId') locationId: string) {
+    return this.bookingService.getAllTransactions(locationId);
   }
 
   @Get(':month/month/transactions')
-  getTransactionsInMonth(@Param('month') month: number) {
-    return this.bookingService.getTransactionsInMonth(month);
+  getTransactionsInMonth(
+    @Param('month') month: number,
+    @Query('locationId') locationId: string,
+  ) {
+    return this.bookingService.getTransactionsInMonth(month, locationId);
   }
 
   @Get(':day/day/transactions')
-  getTransactionsInDay(@Param('day') day: string) {
-    return this.bookingService.getTransactionsInDay(day);
+  getTransactionsInDay(
+    @Param('day') day: string,
+    @Query('locationId') locationId: string,
+  ) {
+    return this.bookingService.getTransactionsInDay(day, locationId);
   }
 }

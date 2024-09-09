@@ -75,7 +75,7 @@ export class BookingService {
         return booking.location.city === city;
       });
     }
-    console.log('bookings :', filteredBookings);
+
     filteredBookings.forEach((booking) => {
       const date = new Date(booking.createdAt);
       const m = date.getMonth() + 1;
@@ -89,9 +89,13 @@ export class BookingService {
     return totalSales;
   }
 
-  async getTransactionsInMonth(month: number) {
-    const bookings = await this.bookingrepository.findBookingsSuccess();
-    var result = [];
+  async getTransactionsInMonth(month: number, locationId: string) {
+    let bookings = await this.bookingrepository.findBookingsSuccess();
+    if (locationId !== null && locationId != 'all') {
+      bookings = bookings.filter((booking) => {
+        return booking.locationId.toString() === locationId;
+      });
+    }
     var result = [];
     bookings.forEach((booking) => {
       const date = new Date(booking.createdAt);
@@ -104,15 +108,25 @@ export class BookingService {
     return result;
   }
 
-  async getTransactionsInDay(day: string) {
-    const bookings = await this.bookingrepository.findBookingsSuccess();
+  async getTransactionsInDay(day: string, locationId: string) {
+    let bookings = await this.bookingrepository.findBookingsSuccess();
+    if (locationId !== null && locationId != 'all') {
+      bookings = bookings.filter((booking) => {
+        return booking.locationId.toString() === locationId;
+      });
+    }
     const result = bookings.filter((booking) => booking.createdAt == day);
 
     return result;
   }
 
-  async getAllTransactions() {
-    const bookings = await this.bookingrepository.findBookingsSuccess();
+  async getAllTransactions(locationId: string) {
+    let bookings = await this.bookingrepository.findBookingsSuccess();
+    if (locationId !== null && locationId != 'all') {
+      bookings = bookings.filter((booking) => {
+        return booking.locationId.toString() === locationId;
+      });
+    }
     return bookings;
   }
 }
