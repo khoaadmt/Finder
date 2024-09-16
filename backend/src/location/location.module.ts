@@ -37,6 +37,7 @@ import { AuthModule } from 'src/auth/auth.module';
     ShiftService,
     ShiftRepository,
   ],
+  exports: [LocationService],
 })
 export class LocationModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -2,6 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostRepository } from '../repository/post.repository';
 import { CreatePostDto } from '../dto/create_post.dto';
 import * as dayjs from 'dayjs';
+import { LocationService } from 'src/location/services/location.service';
+import * as Bluebird from 'bluebird';
 interface FilterOptions {
   agreement: string;
   date: string;
@@ -16,15 +18,44 @@ interface FilterOptions {
 @Injectable()
 export class PostsService {
   private readonly pageLimit = 6;
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    private readonly postRepository: PostRepository,
+    private readonly locationService: LocationService,
+  ) {}
 
-  async getAllPosts(pageNumber: number, city: string) {
+  async getAllPosts(
+    pageNumber: number,
+    city: string,
+    latitude: number,
+    longitude: number,
+  ) {
     const posts = await this.postRepository.finAllPost(city);
 
     let skip = (pageNumber - 1) * this.pageLimit;
     const result = posts.slice(skip, skip + this.pageLimit);
 
-    return { rows: result, totalPosts: posts.length, page: pageNumber };
+    const postsWithDistance = await Bluebird.map(result, async (post) => {
+      console.log(
+        latitude,
+        longitude,
+        post.location.latitude,
+        post.location.longitude,
+      );
+      const distance = await this.locationService.realDistanceBetween2Points(
+        latitude,
+        longitude,
+        post.location.latitude,
+        post.location.longitude,
+      );
+
+      return { ...post, distance };
+    });
+
+    return {
+      rows: postsWithDistance,
+      totalPosts: posts.length,
+      page: pageNumber,
+    };
   }
 
   async getPostById(id: string) {
@@ -121,6 +152,8 @@ export class PostsService {
     filter: FilterOptions,
     pageNumber: number,
     city: string,
+    latitude: number,
+    longitude: number,
   ) {
     const posts = await this.postRepository.finAllPost(city);
     const filteredPosts = this.filteredPosts(posts, filter);
@@ -128,7 +161,22 @@ export class PostsService {
     let skip = (pageNumber - 1) * this.pageLimit;
     const result = filteredPosts.slice(skip, skip + this.pageLimit);
 
-    return { rows: result, totalPosts: posts.length, page: pageNumber };
+    const postsWithDistance = await Bluebird.map(result, async (post) => {
+      const distance = await this.locationService.realDistanceBetween2Points(
+        latitude,
+        longitude,
+        post.location.latitude,
+        post.location.longitude,
+      );
+
+      return { ...post, distance };
+    });
+
+    return {
+      rows: postsWithDistance,
+      totalPosts: posts.length,
+      page: pageNumber,
+    };
   }
 
   async createPost(createPostDto: CreatePostDto) {

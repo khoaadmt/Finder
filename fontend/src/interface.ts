@@ -70,6 +70,10 @@ export interface Post {
     user: userInfor;
     location: Facility;
     status: string;
+    distance: {
+        text: string;
+        value: number;
+    };
 }
 
 export interface ResponseLocation {

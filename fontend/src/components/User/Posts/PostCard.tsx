@@ -47,7 +47,7 @@ export const PostCard: React.FC<Props> = (props) => {
                 </div>
                 <div className="w-full truncate sm:py-2 text-black-ish-100 text-xs sm:text-sm whitespace-nowrap">
                     <div className="sm:mt-[2px] sm:mb-1 flex justify-between">
-                        <span className="text-[10px] sm:text-sm">Cách bạn ~ {"9km"}</span>
+                        <span className="text-[10px] sm:text-sm">Cách bạn ~ {post.distance.text}</span>
                         <div className="flex items-center gap-2 mr-2"></div>
                     </div>
                     <div className="sm:mb-1">

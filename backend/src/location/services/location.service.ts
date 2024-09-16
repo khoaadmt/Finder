@@ -256,7 +256,7 @@ export class LocationService {
     return d;
   }
 
-  private async realDistanceBetween2Points(la1, lo1, la2, lo2) {
+  async realDistanceBetween2Points(la1, lo1, la2, lo2) {
     // console.log(la1, lo1, lo2, la2);
     const origin = `${la1},${lo1}`;
     const destination = `${la2},${lo2}`;
@@ -264,6 +264,7 @@ export class LocationService {
     const apiKey = process.env.API_KEY_GOONG_MAP;
 
     const url = `https://rsapi.goong.io/Direction?origin=${origin}&destination=${destination}&vehicle=${vehicle}&api_key=${apiKey}`;
+    console.log('url :', url);
 
     const response = await axios.get(url);
     const result = response.data.routes[0].legs[0].distance;

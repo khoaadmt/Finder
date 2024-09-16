@@ -12,7 +12,9 @@ class PostService extends BaseService {
         filterOptions: FilterOptions | null,
         pageNumber: number,
         location: string | null,
-        token: string | undefined
+        token: string | undefined,
+        latitude: number,
+        longitude: number
     ) {
         return this.get(
             "/filter",
@@ -21,6 +23,8 @@ class PostService extends BaseService {
                     filter: filterOptions,
                     page: pageNumber,
                     city: location,
+                    latitude,
+                    longitude,
                 },
             },
             token

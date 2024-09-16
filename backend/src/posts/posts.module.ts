@@ -11,10 +11,12 @@ import { Post, PostSchema } from './shemas/post.schema';
 import { PostsService } from './services/posts.service';
 import { PostRepository } from './repository/post.repository';
 import { VerifyTokenMiddleware } from 'src/middlewares/logging.middleware';
+import { LocationModule } from 'src/location/location.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    LocationModule,
   ],
   controllers: [PostsController],
   providers: [PostsService, PostRepository],

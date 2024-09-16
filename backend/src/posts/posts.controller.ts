@@ -17,14 +17,22 @@ export class PostsController {
 
   @Get('/filter')
   getPostByFilter(@Query() data: any) {
+    console.log('data :', data);
     if (data.filter) {
       return this.postService.getPostsByFilter(
         data.filter,
         data.page,
         data.city,
+        data.latitude,
+        data.longitude,
       );
     } else {
-      return this.postService.getAllPosts(data.page, data.city);
+      return this.postService.getAllPosts(
+        data.page,
+        data.city,
+        data.latitude,
+        data.longitude,
+      );
     }
   }
 
@@ -43,10 +51,10 @@ export class PostsController {
     return this.postService.getPostByUserName(username);
   }
 
-  @Get()
-  getAllPosts(@Query('page') pageNumber: number, @Query('city') city: string) {
-    return this.postService.getAllPosts(pageNumber, city);
-  }
+  // @Get()
+  // getAllPosts(@Query('page') pageNumber: number, @Query('city') city: string) {
+  //   return this.postService.getAllPosts(pageNumber, city);
+  // }
 
   @Post()
   createPost(@Body() createPostDto: CreatePostDto) {

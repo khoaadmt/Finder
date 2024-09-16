@@ -7,6 +7,7 @@ import { message } from "antd";
 import { useSelector } from "react-redux";
 import { Post, FilterOptions, RootState } from "../../../../interface";
 import PostService from "../../../../services/post/PostService";
+import { getLocation } from "../../../../utils/location";
 
 export const SessionsPage = () => {
     const [latitude, setLat] = useState<number | null>(null);
@@ -42,14 +43,17 @@ export const SessionsPage = () => {
 
     useEffect(() => {
         console.log("filterOptions :", filterOptions);
+        getLocation().then((res) => {
+            postService
+                .getPostByFilter(filterOptions, pageNumber, location, "", res.latitude, res.longitude)
+                .then((res) => {
+                    if (res.data.length == 0) {
+                        message.info("không có bài viết nào !");
+                    }
+                    setData(res.data.rows);
 
-        postService.getPostByFilter(filterOptions, pageNumber, location, "").then((res) => {
-            if (res.data.length == 0) {
-                message.info("không có bài viết nào !");
-            }
-            setData(res.data.rows);
-
-            setTotalPosts(res.data.totalPosts);
+                    setTotalPosts(res.data.totalPosts);
+                });
         });
     }, [filterOptions, pageNumber, searchParams]);
 
