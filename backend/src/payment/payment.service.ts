@@ -35,7 +35,7 @@ export class PaymentService {
       bank_code: '',
       mac: '',
       callback_url:
-        'https://1829-171-237-166-24.ngrok-free.app/api/payment/zalopayCallback',
+        'https://9700-2402-800-61b3-fc79-35e1-7059-ed6e-afdf.ngrok-free.app/api/payment/zalopayCallback',
     };
 
     // appid|app_trans_id|appuser|amount|apptime|embeddata|item

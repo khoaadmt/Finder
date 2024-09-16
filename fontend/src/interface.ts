@@ -125,7 +125,7 @@ export interface FilterOptions {
 }
 export interface BookedCourts {
     _id: string;
-    courts: {
+    court: {
         courtNumber: number;
     };
     location: Location;
@@ -134,6 +134,8 @@ export interface BookedCourts {
     date: string;
     price: number;
     createdAt: string;
+    status: string;
+    isFutureBooking: string;
 }
 export interface ChartLineData {
     name: string;

@@ -37,5 +37,9 @@ class BookingService extends BaseService {
         }
         return this.get(`${month}/total-sales`, { city });
     }
+
+    updateStatus(bookingId: string) {
+        return this.put(`/status`, { bookingId });
+    }
 }
 export default BookingService;

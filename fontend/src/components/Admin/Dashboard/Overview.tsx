@@ -135,7 +135,7 @@ export const Overview: FC<{ loading: boolean }> = ({ loading }) => {
                     }
                     footer={<Field name={"Doanh số hôm qua"} number={numeral(totalSalesYesterday).format("0.0a")} />}
                 />
-                <ColCard
+                {/* <ColCard
                     loading={loading}
                     metaName={"visits"}
                     metaCount="8846"
@@ -149,7 +149,7 @@ export const Overview: FC<{ loading: boolean }> = ({ loading }) => {
                         </ResponsiveContainer>
                     }
                     footer={<Field name={"dailySales"} number="1234" />}
-                />
+                /> */}
                 {/* <ColCard
                     loading={loading}
                     metaName={"operationalEffect"}

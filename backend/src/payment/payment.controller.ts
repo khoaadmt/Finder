@@ -17,6 +17,5 @@ export class PaymentController {
       req,
       res,
     );
-    console.log('result :', result);
   }
 }

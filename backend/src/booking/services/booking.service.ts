@@ -4,6 +4,7 @@ import { CreateBookingDto } from '../dto/createBooking.dto';
 import { ShiftService } from 'src/shift/services/shift.service';
 import { PaymentService } from 'src/payment/payment.service';
 import { ObjectId } from 'mongodb';
+
 const dayjs = require('dayjs');
 
 @Injectable()
@@ -16,7 +17,6 @@ export class BookingService {
   ) {}
 
   async createBooking(createBookingDto: CreateBookingDto) {
-    console.log('createBookingDto :', createBookingDto);
     const shift = await this.shiftService.getShiftById(
       createBookingDto.shiftId.toString(),
     );
@@ -48,6 +48,15 @@ export class BookingService {
     return await this.bookingrepository.updateBookingById(id);
   }
 
+  async updateStatus(bookingId: string) {
+    try {
+      const status = 'cancel';
+      await this.bookingrepository.updateStatus(bookingId, status);
+      return { message: 'update status success' };
+    } catch (err) {
+      console.log('Error:', err);
+    }
+  }
   async getBookedCourts(data: any) {
     const bookedCourts = await this.bookingrepository.getBookedCourts(data);
     return bookedCourts.map((bookedCourt) => {
@@ -56,7 +65,24 @@ export class BookingService {
   }
 
   async getBookingByUsername(username: string) {
-    return await this.bookingrepository.findBookingsByUsername(username);
+    const bookings =
+      await this.bookingrepository.findBookingsByUsername(username);
+
+    const now = new Date();
+    const updatedBookings = bookings.map((booking) => {
+      const bookingDate = new Date(
+        `${booking.date}T${booking.shift.startTime}:00`,
+      );
+
+      const isFutureBooking = bookingDate > now;
+
+      return {
+        ...booking,
+        isFutureBooking,
+      };
+    });
+
+    return updatedBookings;
   }
 
   async getTotalSalesInMonth(month: number, locationId: string, city: string) {

@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Req,
   Res,
@@ -59,5 +60,10 @@ export class BookingController {
     @Query('locationId') locationId: string,
   ) {
     return this.bookingService.getTransactionsInDay(day, locationId);
+  }
+
+  @Put('/status')
+  updateStatus(@Body('bookingId') bookingId: string) {
+    return this.bookingService.updateStatus(bookingId);
   }
 }

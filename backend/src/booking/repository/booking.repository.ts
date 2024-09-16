@@ -24,6 +24,12 @@ export class BookingRepository {
     );
   }
 
+  async updateStatus(bookingId: string, status: string) {
+    return await this.BookingModel.findByIdAndUpdate(bookingId, {
+      status: 'cancel',
+    });
+  }
+
   async getBookedCourts(data: any) {
     const locationIdObj = new ObjectId(data.locationId);
     const shiftIdObj = new ObjectId(data.shiftId);
@@ -40,9 +46,9 @@ export class BookingRepository {
 
   async findBookingsByUsername(userName: string) {
     return await this.BookingModel.aggregate([
-      {
-        $match: { status: 'booked', username: userName },
-      },
+      // {
+      //   $match: { status: 'booked', username: userName },
+      // },
       {
         $lookup: {
           from: 'courts', // Collection name của court
@@ -88,7 +94,7 @@ export class BookingRepository {
           status: 1,
           createdAt: 1,
           court: { courtNumber: 1 }, // Chọn các field từ court
-          shift: { startTime: 1, endTime: 1 }, // Chọn các field từ shift
+          shift: { shiftNumber: 1, startTime: 1, endTime: 1 }, // Chọn các field từ shift
           location: { name: 1, address: 1 }, // Chọn các field từ location
         },
       },
