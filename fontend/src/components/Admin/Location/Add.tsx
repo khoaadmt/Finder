@@ -1,19 +1,6 @@
-import {
-    Button,
-    Cascader,
-    DatePicker,
-    Form,
-    FormProps,
-    Input,
-    InputNumber,
-    message,
-    Space,
-    TimePicker,
-    UploadFile,
-} from "antd";
+import { Button, Form, Input, InputNumber, message, Space, TimePicker, UploadFile } from "antd";
 import { PicturesWall } from "../../User/Posts/PictureWall/PicturesWall";
 import { useState } from "react";
-import "./index.css";
 import { MyFormItem } from "../../common/InputFIeld/MyFormItem";
 import { AutoCompleteLocation } from "./AutoCompleteLocation";
 import LocationService from "../../../services/location/LocationService";
@@ -21,6 +8,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../interface";
 import dayjs, { Dayjs } from "dayjs";
 import UpLoadService from "./../../../services/uploads/UploadService";
+import "./index.css";
+import { useNavigate } from "react-router-dom";
 export const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -44,6 +33,7 @@ export const AddLocationPage = () => {
     const locationService = new LocationService();
     const upLoadService = new UpLoadService();
     const user = useSelector((state: RootState) => state.auth.login.currentUser);
+    const navigate = useNavigate();
 
     const formatTime = (value: Dayjs[]) => {
         if (value && value.length > 0) {
@@ -52,9 +42,6 @@ export const AddLocationPage = () => {
         return [];
     };
     const onFinish = async (values: any) => {
-        // console.log("Success:", values);
-        // console.log("addres: ", address);
-        // console.log("coordinates: ", coordinates);
         values.address = address;
         values.latitude = coordinates?.lat;
         values.longitude = coordinates?.lng;
@@ -73,6 +60,9 @@ export const AddLocationPage = () => {
 
         locationService.createLocation(values, user?.accessToken).then(() => {
             message.success("Thêm sân cầu thành công");
+            setTimeout(() => {
+                navigate("/admin/location/overview");
+            }, 500);
         });
     };
 

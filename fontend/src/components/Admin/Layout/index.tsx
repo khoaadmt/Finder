@@ -62,6 +62,20 @@ export const LayoutPage = () => {
                 break;
         }
     };
+    const getSelectedKey = () => {
+        const path = location.pathname;
+
+        if (path.includes("dashboard")) return "1";
+        if (path.includes("location/add")) return "3";
+        if (path.includes("location")) return "2";
+        if (path.includes("post/review")) return "4";
+        if (path.includes("post/checked")) return "5";
+        if (path.includes("post/reject")) return "6";
+        if (path.includes("statistics")) return "7";
+
+        return "1"; // Mặc định là "Dashboard"
+    };
+
     return (
         <Layout hasSider>
             <Sider
@@ -75,7 +89,7 @@ export const LayoutPage = () => {
                     onSelect={handleMenuOnChange}
                     className="sider"
                     theme="light"
-                    defaultSelectedKeys={["1"]}
+                    selectedKeys={[getSelectedKey()]}
                     mode="inline"
                     items={items}
                 />

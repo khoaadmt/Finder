@@ -22,7 +22,7 @@ import { AddLocationPage } from "./components/Admin/Location/Add";
 import { ReviewPostPage } from "./components/Admin/Post/ReviewPostPage";
 import { RejectPostPage } from "./components/Admin/Post/RejectPostPage";
 import { CheckedPostPage } from "./components/Admin/Post/CheckedPostPage";
-import { StatisticsPage } from "./components/Admin/statistics";
+import { StatisticsPage } from "./components/Admin/Statistics";
 
 const App: React.FC = () => {
     return (

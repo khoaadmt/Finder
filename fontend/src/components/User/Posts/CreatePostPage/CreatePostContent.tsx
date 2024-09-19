@@ -16,6 +16,7 @@ import { notJustNumber } from "../../../Auth/validationSchema";
 import { CustomDynamicForm } from "../form/CustomDynamicForm";
 import { tagRender } from "../tagRender";
 import "./createpost.css";
+import { useNavigate } from "react-router-dom";
 
 export const CreatePostContent: React.FC = () => {
     const [phones, setPhones] = useState([""]);
@@ -27,6 +28,7 @@ export const CreatePostContent: React.FC = () => {
     const uploadService = new UpLoadService();
     const locationService = new LocationService();
     const [disablePriceInput, setDisablePriceInput] = useState(false);
+    const navigate = useNavigate();
 
     const createPostForm = useFormik({
         initialValues: {
@@ -78,6 +80,9 @@ export const CreatePostContent: React.FC = () => {
                     const res = await uploadService.uploadPostImage(formData);
                 }
                 message.success("Tin của bạn đã được tải lên !");
+                setTimeout(() => {
+                    navigate("/user/my-post");
+                }, 500);
             } catch (error) {
                 console.log(error);
             }
