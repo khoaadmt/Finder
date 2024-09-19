@@ -155,12 +155,25 @@ export const LocationDetail: React.FC = () => {
             date: dateSelected,
         };
 
-        bookingService.createBooking(data).then((resUrl) => {
-            setPaymentUrl(resUrl.data);
-        });
-
-        setIsModalVisible(true);
+        bookingService
+            .createBooking(data)
+            .then((resUrl) => {
+                setPaymentUrl(resUrl.data);
+            })
+            .catch((err) => {
+                if (err.response && err.response.status === 409) {
+                    message.error("Rất tiếc, sân này vừa được người khác đặt rồi !");
+                    window.location.reload();
+                }
+            });
     };
+
+    useEffect(() => {
+        if (paymentUrl) {
+            setIsModalVisible(true);
+        }
+    }, [paymentUrl]);
+
     useEffect(() => {
         setShiftSelected(0);
         if (locationDetail?.shifts) {

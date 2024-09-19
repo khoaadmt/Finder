@@ -1,4 +1,12 @@
-import { Inject, Injectable, Req, Res, forwardRef } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Req,
+  Res,
+  forwardRef,
+} from '@nestjs/common';
 import { BookingRepository } from '../repository/booking.repository';
 import { CreateBookingDto } from '../dto/createBooking.dto';
 import { ShiftService } from 'src/shift/services/shift.service';
@@ -17,13 +25,24 @@ export class BookingService {
   ) {}
 
   async createBooking(createBookingDto: CreateBookingDto) {
+    const courtIdObj = new ObjectId(createBookingDto.courtId);
+    const locationIdObj = new ObjectId(createBookingDto.locationId);
+    const shiftIdObj = new ObjectId(createBookingDto.shiftId);
+
+    const isBooked = await this.bookingrepository.findBooking(
+      locationIdObj,
+      courtIdObj,
+      shiftIdObj,
+      createBookingDto.date,
+    );
+
+    if (isBooked) {
+      throw new HttpException('Sân vừa có người đặt rồi!', HttpStatus.CONFLICT);
+    }
     const shift = await this.shiftService.getShiftById(
       createBookingDto.shiftId.toString(),
     );
     const price = shift.price;
-    const courtIdObj = new ObjectId(createBookingDto.courtId);
-    const locationIdObj = new ObjectId(createBookingDto.locationId);
-    const shiftIdObj = new ObjectId(createBookingDto.shiftId);
     const date = dayjs().format('YYYY-MM-DD');
 
     const data = {

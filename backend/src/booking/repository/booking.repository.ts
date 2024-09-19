@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Booking } from '../schemas/booking.schema';
 import { ObjectId } from 'mongodb';
+import { Shift } from './../../shift/schemas/Shift.schema';
 require('dotenv').config();
 
 @Injectable()
@@ -156,5 +157,20 @@ export class BookingRepository {
         },
       },
     ]);
+  }
+
+  async findBooking(
+    locationId: ObjectId,
+    courtId: ObjectId,
+    shiftId: ObjectId,
+    date: string,
+  ) {
+    return await this.BookingModel.findOne({
+      locationId,
+      courtId,
+      shiftId,
+      date,
+      status: 'booked',
+    });
   }
 }
