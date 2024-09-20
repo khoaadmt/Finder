@@ -174,6 +174,9 @@ export class PostRepository {
         $match: { username: username },
       },
       {
+        $sort: { createdAt: -1 },
+      },
+      {
         $lookup: {
           from: 'locations',
           localField: 'location_id_ObjectId',

@@ -37,6 +37,7 @@ export const LocationDetail: React.FC = () => {
     const bookingService = new BookingService();
     const [options, setOptions] = useState<any>("");
     const { token } = theme.useToken();
+    const [shiftId, setShiftId] = useState();
 
     const wrapperStyle: React.CSSProperties = {
         width: "100%",
@@ -72,11 +73,14 @@ export const LocationDetail: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (locationDetail) {
+        if (locationDetail && options[shiftSelected]) {
+            {
+                console.log("options[shiftSelected] :", options[shiftSelected].index);
+            }
             const params = {
                 params: {
                     locationId: locationDetail._id,
-                    shiftId: locationDetail.shifts[shiftSelected]._id,
+                    shiftId: locationDetail.shifts[options[shiftSelected].index]._id,
                     date: dateSelected,
                 },
             };
@@ -89,7 +93,7 @@ export const LocationDetail: React.FC = () => {
                     message.error(error.message);
                 });
         }
-    }, [shiftSelected, dateSelected, locationDetail, cancelCount]);
+    }, [options, shiftSelected, dateSelected, locationDetail, cancelCount]);
 
     const handleBtnFindAddressClick = () => {
         window.open(
@@ -163,7 +167,9 @@ export const LocationDetail: React.FC = () => {
             .catch((err) => {
                 if (err.response && err.response.status === 409) {
                     message.error("Rất tiếc, sân này vừa được người khác đặt rồi !");
-                    window.location.reload();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 }
             });
     };

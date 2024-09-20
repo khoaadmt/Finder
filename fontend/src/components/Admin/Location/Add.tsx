@@ -59,10 +59,10 @@ export const AddLocationPage = () => {
         values.img = img?.data;
 
         locationService.createLocation(values, user?.accessToken).then(() => {
-            message.success("Thêm sân cầu thành công");
+            message.success("Thêm sân cầu thành công.");
             setTimeout(() => {
                 navigate("/admin/location/overview");
-            }, 500);
+            }, 2000);
         });
     };
 

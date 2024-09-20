@@ -82,7 +82,7 @@ export const CreatePostContent: React.FC = () => {
                 message.success("Tin của bạn đã được tải lên !");
                 setTimeout(() => {
                     navigate("/user/my-post");
-                }, 500);
+                }, 2000);
             } catch (error) {
                 console.log(error);
             }

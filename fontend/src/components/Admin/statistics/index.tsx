@@ -3,12 +3,14 @@ import Layout, { Content, Header } from "antd/es/layout/layout";
 import { Button, Select } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import "./index.css";
-import { MyBarChart } from "./BarChart";
-import { TransactionTable } from "./TransactionTable";
+
 import BookingService from "../../../services/booking/BookingService";
 import dayjs, { Dayjs } from "dayjs";
 import { BookedCourts, Facility } from "../../../interface";
 import LocationService from "../../../services/location/LocationService";
+import { MyBarChart } from "./BarChart";
+import { TransactionTable } from "./TransactionTable";
+
 export const StatisticsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [transactionTime, setTranSactionTime] = useState("day");

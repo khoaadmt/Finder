@@ -2,7 +2,6 @@ import { Layout, Menu, MenuProps, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { useState } from "react";
-import { MyFooter } from "./Footer";
 import { Outlet, useNavigate } from "react-router-dom";
 import { PieChartOutlined, TeamOutlined, FileOutlined, GroupOutlined, ScheduleOutlined } from "@ant-design/icons";
 
@@ -63,7 +62,7 @@ export const LayoutPage = () => {
         }
     };
     const getSelectedKey = () => {
-        const path = location.pathname;
+        const path = window.location.pathname;
 
         if (path.includes("dashboard")) return "1";
         if (path.includes("location/add")) return "3";
