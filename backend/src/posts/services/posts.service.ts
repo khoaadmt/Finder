@@ -116,9 +116,11 @@ export class PostsService {
   filteredPosts = (posts, filter: FilterOptions) => {
     const filteredPosts = posts.filter((post) => {
       const level = filter?.level != null ? parseInt(filter.level, 10) : null;
+
       const agreement =
         filter?.agreement != null ? this.converBoolean(filter.agreement) : null;
       let price = null;
+
       const dateConvert = dayjs(post.startTime, 'YYYY-MM-DD HH:mm');
       const startDate = dateConvert.format('YYYY-MM-DD');
       const startTime = dateConvert.format('HH:mm');
@@ -158,23 +160,32 @@ export class PostsService {
     const posts = await this.postRepository.finAllPost(city);
     const filteredPosts = this.filteredPosts(posts, filter);
 
-    let skip = (pageNumber - 1) * this.pageLimit;
-    const result = filteredPosts.slice(skip, skip + this.pageLimit);
-
-    const postsWithDistance = await Bluebird.map(result, async (post) => {
+    let postsWithDistance = await Bluebird.map(filteredPosts, async (post) => {
       const distance = await this.locationService.realDistanceBetween2Points(
         latitude,
         longitude,
         post.location.latitude,
         post.location.longitude,
       );
-
       return { ...post, distance };
     });
 
+    if (filter.distance != null) {
+      postsWithDistance = await postsWithDistance.filter((post) => {
+        console.log(
+          'first: ',
+          post.distance.value,
+          post.distance.value <= parseInt(filter.distance) * 1000,
+        );
+        return post.distance.value <= parseInt(filter.distance) * 1000;
+      });
+    }
+
+    let skip = (pageNumber - 1) * this.pageLimit;
+    const result = postsWithDistance.slice(skip, skip + this.pageLimit);
     return {
-      rows: postsWithDistance,
-      totalPosts: posts.length,
+      rows: result,
+      totalPosts: postsWithDistance.length,
       page: pageNumber,
     };
   }

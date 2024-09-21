@@ -96,7 +96,11 @@ export const FacilitiesPage: React.FC = () => {
                     </div>
 
                     {/* PAGINATION */}
-                    <PaginationComponent setPageNumber={setPageNumber} totalFacility={totalFacility} />
+                    <PaginationComponent
+                        pageNumber={pageNumber}
+                        setPageNumber={setPageNumber}
+                        totalFacility={totalFacility}
+                    />
                 </div>
             </div>
         </div>

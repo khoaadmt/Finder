@@ -10,6 +10,7 @@ import dayjs, { Dayjs } from "dayjs";
 import UpLoadService from "./../../../services/uploads/UploadService";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import { Response } from "express";
 export const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -58,12 +59,17 @@ export const AddLocationPage = () => {
         const img = await upLoadService.uploadLocationImage(formData);
         values.img = img?.data;
 
-        locationService.createLocation(values, user?.accessToken).then(() => {
-            message.success("Thêm sân cầu thành công.");
-            setTimeout(() => {
-                navigate("/admin/location/overview");
-            }, 2000);
-        });
+        locationService
+            .createLocation(values, user?.accessToken)
+            .then(() => {
+                message.success("Thêm sân cầu thành công.");
+                setTimeout(() => {
+                    navigate("/admin/location/overview");
+                }, 2000);
+            })
+            .catch((err) => {
+                message.error("Thêm sân cầu thất bại.");
+            });
     };
 
     return (

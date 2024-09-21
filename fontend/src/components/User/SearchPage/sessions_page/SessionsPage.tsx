@@ -57,6 +57,10 @@ export const SessionsPage = () => {
         });
     }, [filterOptions, pageNumber, searchParams]);
 
+    useEffect(() => {
+        setPageNumber(1);
+    }, [filterOptions]);
+
     return (
         <div className="sessions-content-page min-h-screen flex gap-4">
             <div className="relative w-full">
@@ -75,7 +79,11 @@ export const SessionsPage = () => {
                     </div>
 
                     {/* PAGINATION */}
-                    <PaginationComponent setPageNumber={setPageNumber} totalFacility={totalPosts} />
+                    <PaginationComponent
+                        pageNumber={pageNumber}
+                        setPageNumber={setPageNumber}
+                        totalFacility={totalPosts}
+                    />
                 </div>
             </div>
         </div>
